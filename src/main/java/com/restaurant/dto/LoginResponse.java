@@ -1,3 +1,4 @@
+
 package com.restaurant.dto;
 
 public class LoginResponse {
@@ -10,7 +11,12 @@ public class LoginResponse {
     public LoginResponse() {
     }
 
-    public LoginResponse(String token, Integer userId, String username, String role) {
+    public LoginResponse(
+            String token,
+            Integer userId,
+            String username,
+            String role) {
+
         this.token = token;
         this.userId = userId;
         this.username = username;
@@ -49,3 +55,4 @@ public class LoginResponse {
         this.role = role;
     }
 }
+

@@ -16,61 +16,87 @@ public class DashboardController {
 
     private final DashboardService service;
 
-    public DashboardController(DashboardService service) {
+
+    public DashboardController(
+            DashboardService service) {
+
         this.service = service;
     }
 
-    // =====================================
-    // Dashboard Summary
-    // GET : /api/dashboard/summary
-    // =====================================
+
+    // =====================================================
+    // DASHBOARD SUMMARY
+    // GET /api/dashboard/summary
+    // =====================================================
+
     @GetMapping("/summary")
-    public ResponseEntity<DashboardDTO> getDashboardSummary() {
+    public ResponseEntity<DashboardDTO>
+    getDashboardSummary() {
 
-        DashboardDTO dashboard = service.getDashboardSummary();
+        DashboardDTO dashboard =
+                service.getDashboardSummary();
 
         return ResponseEntity.ok(dashboard);
     }
 
-    // =====================================
-    // Total Counts
-    // GET : /api/dashboard/count
-    // =====================================
+
+    // =====================================================
+    // TOTAL COUNTS
+    // GET /api/dashboard/count
+    // =====================================================
+
     @GetMapping("/count")
-    public ResponseEntity<DashboardDTO> getCounts() {
+    public ResponseEntity<DashboardDTO>
+    getCounts() {
 
-        DashboardDTO dashboard = service.getCounts();
+        DashboardDTO dashboard =
+                service.getCounts();
 
         return ResponseEntity.ok(dashboard);
     }
 
-    // =====================================
-    // Today's Sales
-    // GET : /api/dashboard/today-sales
-    // =====================================
+
+    // =====================================================
+    // TODAY SALES
+    // GET /api/dashboard/today-sales
+    // =====================================================
+
     @GetMapping("/today-sales")
-    public ResponseEntity<Double> getTodaySales() {
+    public ResponseEntity<Double>
+    getTodaySales() {
 
-        return ResponseEntity.ok(service.getTodaySales());
+        return ResponseEntity.ok(
+                service.getTodaySales()
+        );
     }
 
-    // =====================================
-    // Today's Orders
-    // GET : /api/dashboard/today-orders
-    // =====================================
+
+    // =====================================================
+    // TODAY ORDERS
+    // GET /api/dashboard/today-orders
+    // =====================================================
+
     @GetMapping("/today-orders")
-    public ResponseEntity<Integer> getTodayOrders() {
+    public ResponseEntity<Integer>
+    getTodayOrders() {
 
-        return ResponseEntity.ok(service.getTodayOrders());
+        return ResponseEntity.ok(
+                service.getTodayOrders()
+        );
     }
 
-    // =====================================
-    // Total Revenue
-    // GET : /api/dashboard/revenue
-    // =====================================
-    @GetMapping("/revenue")
-    public ResponseEntity<Double> getRevenue() {
 
-        return ResponseEntity.ok(service.getRevenue());
+    // =====================================================
+    // TOTAL REVENUE
+    // GET /api/dashboard/revenue
+    // =====================================================
+
+    @GetMapping("/revenue")
+    public ResponseEntity<Double>
+    getRevenue() {
+
+        return ResponseEntity.ok(
+                service.getRevenue()
+        );
     }
 }

@@ -2,19 +2,13 @@ package com.restaurant.dto;
 
 import java.util.List;
 
-/**
- * Generic pagination wrapper for list endpoints.
- *
- * Repositories that can grow without bound (orders, bills, customers)
- * should expose a paginated query alongside (or instead of) an
- * unbounded findAll(), to avoid loading the entire table into memory
- * on every request.
- */
 public class PageResponse<T> {
 
     private List<T> content;
+
     private int page;
     private int size;
+
     private long totalElements;
     private int totalPages;
 
@@ -31,10 +25,13 @@ public class PageResponse<T> {
         this.page = page;
         this.size = size;
         this.totalElements = totalElements;
+
         this.totalPages =
-                size == 0
+                size <= 0
                         ? 0
-                        : (int) Math.ceil((double) totalElements / size);
+                        : (int) Math.ceil(
+                                (double) totalElements / size
+                        );
     }
 
     public List<T> getContent() {

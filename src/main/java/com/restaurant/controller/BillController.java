@@ -1,8 +1,8 @@
 package com.restaurant.controller;
 
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +21,10 @@ import com.restaurant.service.BillService;
 
 @RestController
 @RequestMapping("/api/bill")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class BillController {
 
     private final BillService service;
-
 
     public BillController(
             BillService service) {
@@ -33,13 +32,11 @@ public class BillController {
         this.service = service;
     }
 
-
     // =====================================================
     // CREATE BILL
-    // POST /api/bill/create
     // =====================================================
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createBill(
             @RequestBody BillDTO dto) {
 
@@ -48,36 +45,85 @@ public class BillController {
             int billId =
                     service.createBill(dto);
 
-
-            return ResponseEntity.ok(
-                    Map.of(
-                            "message",
-                            "Bill Generated Successfully",
-
-                            "billId",
+            Bill bill =
+                    service.getBillById(
                             billId
-                    )
-            );
+                    );
 
-        }
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(bill);
 
-        catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
 
             return ResponseEntity
                     .badRequest()
+                    .body(ex.getMessage());
+
+        } catch (Exception ex) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
                     .body(
-                            Map.of(
-                                    "message",
-                                    e.getMessage()
-                            )
+                            "Failed to create bill: "
+                                    + ex.getMessage()
                     );
         }
     }
 
+    // =====================================================
+    // GET ALL
+    // =====================================================
+
+    @GetMapping
+    public ResponseEntity<List<Bill>>
+    getAllBills() {
+
+        return ResponseEntity.ok(
+                service.getAllBills()
+        );
+    }
 
     // =====================================================
-    // GET BILL BY BILL ID
-    // GET /api/bill/{id}
+    // PAGINATION
+    // =====================================================
+
+    @GetMapping("/page")
+    public ResponseEntity<PageResponse<Bill>>
+    getBillsPage(
+            @RequestParam(
+                    defaultValue = "0"
+            ) int page,
+
+            @RequestParam(
+                    defaultValue = "10"
+            ) int size) {
+
+        return ResponseEntity.ok(
+                service.getBillsPage(
+                        page,
+                        size
+                )
+        );
+    }
+
+    // =====================================================
+    // TODAY
+    // =====================================================
+
+    @GetMapping("/today")
+    public ResponseEntity<List<Bill>>
+    getTodayBills() {
+
+        return ResponseEntity.ok(
+                service.getTodayBills()
+        );
+    }
+
+    // =====================================================
+    // GET BY ID
     // =====================================================
 
     @GetMapping("/{id}")
@@ -89,25 +135,29 @@ public class BillController {
             Bill bill =
                     service.getBillById(id);
 
+            if (bill == null) {
 
-            return ResponseEntity.ok(
-                    bill
-            );
+                return ResponseEntity
+                        .status(
+                                HttpStatus.NOT_FOUND
+                        )
+                        .body(
+                                "Bill not found"
+                        );
+            }
 
-        }
+            return ResponseEntity.ok(bill);
 
-        catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
 
             return ResponseEntity
-                    .notFound()
-                    .build();
+                    .badRequest()
+                    .body(ex.getMessage());
         }
     }
 
-
     // =====================================================
-    // GET BILL BY ORDER ID
-    // GET /api/bill/order/{orderId}
+    // GET BY ORDER ID
     // =====================================================
 
     @GetMapping("/order/{orderId}")
@@ -121,95 +171,60 @@ public class BillController {
                             orderId
                     );
 
+            if (bill == null) {
 
-            return ResponseEntity.ok(
-                    bill
-            );
+                return ResponseEntity
+                        .status(
+                                HttpStatus.NOT_FOUND
+                        )
+                        .body(
+                                "Bill not found"
+                        );
+            }
 
-        }
+            return ResponseEntity.ok(bill);
 
-        catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
 
             return ResponseEntity
-                    .notFound()
-                    .build();
+                    .badRequest()
+                    .body(ex.getMessage());
         }
     }
-
-
-    // =====================================================
-    // GET ALL BILLS
-    // GET /api/bill/all
-    // =====================================================
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Bill>> getAllBills() {
-
-        return ResponseEntity.ok(
-                service.getAllBills()
-        );
-    }
-
-
-    // =====================================================
-    // GET BILLS - PAGINATED
-    // GET /api/bill/page?page=0&size=20
-    // =====================================================
-
-    @GetMapping("/page")
-    public ResponseEntity<PageResponse<Bill>> getBillsPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-
-        return ResponseEntity.ok(
-                service.getBillsPage(page, size)
-        );
-    }
-
 
     // =====================================================
     // UPDATE PAYMENT
-    // PUT /api/bill/payment/{billId}
     // =====================================================
 
-    @PutMapping("/payment/{billId}")
-    public ResponseEntity<?> updatePayment(
+    @PutMapping("/{billId}/payment")
+    public ResponseEntity<String>
+    updatePayment(
+
             @PathVariable int billId,
-            @RequestParam String paymentMethod) {
+
+            @RequestParam
+            String paymentMethod,
+
+            @RequestParam(
+                    defaultValue = "PAID"
+            )
+            String paymentStatus) {
 
         String result =
                 service.updatePayment(
                         billId,
-                        paymentMethod
+                        paymentMethod,
+                        paymentStatus
                 );
 
+        if ("Payment Updated Successfully"
+                .equals(result)) {
 
-        if (result.equals(
-                "Payment Updated Successfully")) {
-
-            return ResponseEntity.ok(
-                    result
-            );
+            return ResponseEntity.ok(result);
         }
-
 
         return ResponseEntity
                 .badRequest()
                 .body(result);
     }
-
-
-    // =====================================================
-    // TODAY BILLS
-    // GET /api/bill/today
-    // =====================================================
-
-    @GetMapping("/today")
-    public ResponseEntity<List<Bill>> getTodayBills() {
-
-        return ResponseEntity.ok(
-                service.getTodayBills()
-        );
-    }
-
 }

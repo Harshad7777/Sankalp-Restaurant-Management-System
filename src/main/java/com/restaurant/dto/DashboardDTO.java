@@ -16,8 +16,20 @@ public class DashboardDTO {
 
     private List<RecentOrderDTO> recentOrders;
 
+    private List<TopSellingItemDTO> topSellingItems;
+
+
+    // =========================================
+    // CONSTRUCTOR
+    // =========================================
+
     public DashboardDTO() {
     }
+
+
+    // =========================================
+    // TOTAL CATEGORIES
+    // =========================================
 
     public int getTotalCategories() {
         return totalCategories;
@@ -27,6 +39,11 @@ public class DashboardDTO {
         this.totalCategories = totalCategories;
     }
 
+
+    // =========================================
+    // TOTAL CUSTOMERS
+    // =========================================
+
     public int getTotalCustomers() {
         return totalCustomers;
     }
@@ -34,6 +51,11 @@ public class DashboardDTO {
     public void setTotalCustomers(int totalCustomers) {
         this.totalCustomers = totalCustomers;
     }
+
+
+    // =========================================
+    // TOTAL MENU ITEMS
+    // =========================================
 
     public int getTotalMenuItems() {
         return totalMenuItems;
@@ -43,6 +65,11 @@ public class DashboardDTO {
         this.totalMenuItems = totalMenuItems;
     }
 
+
+    // =========================================
+    // TOTAL ORDERS
+    // =========================================
+
     public int getTotalOrders() {
         return totalOrders;
     }
@@ -50,6 +77,11 @@ public class DashboardDTO {
     public void setTotalOrders(int totalOrders) {
         this.totalOrders = totalOrders;
     }
+
+
+    // =========================================
+    // TODAY ORDERS
+    // =========================================
 
     public int getTodayOrders() {
         return todayOrders;
@@ -59,6 +91,11 @@ public class DashboardDTO {
         this.todayOrders = todayOrders;
     }
 
+
+    // =========================================
+    // TODAY SALES
+    // =========================================
+
     public double getTodaySales() {
         return todaySales;
     }
@@ -66,6 +103,11 @@ public class DashboardDTO {
     public void setTodaySales(double todaySales) {
         this.todaySales = todaySales;
     }
+
+
+    // =========================================
+    // TOTAL REVENUE
+    // =========================================
 
     public double getTotalRevenue() {
         return totalRevenue;
@@ -75,12 +117,33 @@ public class DashboardDTO {
         this.totalRevenue = totalRevenue;
     }
 
+
+    // =========================================
+    // RECENT ORDERS
+    // =========================================
+
     public List<RecentOrderDTO> getRecentOrders() {
         return recentOrders;
     }
 
-    public void setRecentOrders(List<RecentOrderDTO> recentOrders) {
+    public void setRecentOrders(
+            List<RecentOrderDTO> recentOrders) {
+
         this.recentOrders = recentOrders;
     }
 
+
+    // =========================================
+    // TOP SELLING ITEMS
+    // =========================================
+
+    public List<TopSellingItemDTO> getTopSellingItems() {
+        return topSellingItems;
+    }
+
+    public void setTopSellingItems(
+            List<TopSellingItemDTO> topSellingItems) {
+
+        this.topSellingItems = topSellingItems;
+    }
 }

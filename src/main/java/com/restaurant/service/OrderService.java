@@ -42,25 +42,42 @@ public class OrderService {
     // GET ORDERS - PAGINATED
     // =====================================================
 
-    public PageResponse<Orders> getOrdersPage(int page, int size) {
+    public PageResponse<Orders> getOrdersPage(
+            int page,
+            int size) {
 
         int safePage = Math.max(page, 0);
-        int safeSize = Math.min(Math.max(size, 1), 100);
-        int offset = safePage * safeSize;
+
+        int safeSize =
+                Math.min(
+                        Math.max(size, 1),
+                        100);
+
+        int offset =
+                safePage * safeSize;
 
         List<Orders> content =
-                repository.getOrdersPage(safeSize, offset);
+                repository.getOrdersPage(
+                        safeSize,
+                        offset);
 
-        long total = repository.countOrders();
+        long total =
+                repository.countOrders();
 
-        return new PageResponse<>(content, safePage, safeSize, total);
+        return new PageResponse<>(
+                content,
+                safePage,
+                safeSize,
+                total);
     }
 
     // =====================================================
     // GET ORDER BY ID
     // =====================================================
 
-    public Orders getOrderById(Integer orderId) {
+    public Orders getOrderById(
+            Integer orderId) {
+
         return repository.getOrderById(orderId);
     }
 
@@ -71,7 +88,8 @@ public class OrderService {
     public List<OrderDetails> getOrderDetails(
             Integer orderId) {
 
-        return repository.getOrderDetails(orderId);
+        return repository.getOrderDetails(
+                orderId);
     }
 
     // =====================================================
@@ -81,6 +99,16 @@ public class OrderService {
     public String updateStatus(
             Integer orderId,
             String status) {
+
+        if (orderId == null) {
+            return "Order Id is required";
+        }
+
+        if (status == null ||
+                status.isBlank()) {
+
+            return "Order status is required";
+        }
 
         int result =
                 repository.updateStatus(
@@ -98,10 +126,12 @@ public class OrderService {
     // CANCEL ORDER
     // =====================================================
 
-    public String cancelOrder(Integer orderId) {
+    public String cancelOrder(
+            Integer orderId) {
 
         int result =
-                repository.cancelOrder(orderId);
+                repository.cancelOrder(
+                        orderId);
 
         if (result > 0) {
             return "Order Cancelled Successfully";
@@ -111,7 +141,7 @@ public class OrderService {
     }
 
     // =====================================================
-    // CUSTOMER ORDER HISTORY
+    // CUSTOMER ORDERS
     // =====================================================
 
     public List<Orders> getCustomerOrders(
@@ -130,102 +160,86 @@ public class OrderService {
         return repository.getTodayOrders();
     }
 
- // =====================================================
- // TODAY'S KITCHEN ORDERS
- // =====================================================
+    // =====================================================
+    // TODAY'S KITCHEN ORDERS
+    // =====================================================
 
- public List<KitchenOrderDTO> getTodayKitchenOrders() {
+    public List<KitchenOrderDTO>
+    getTodayKitchenOrders() {
 
-     return repository.getTodayKitchenOrders();
+        return repository.getTodayKitchenOrders();
+    }
 
- }
+    // =====================================================
+    // KITCHEN STATISTICS
+    // =====================================================
 
+    public KitchenStatsDTO
+    getKitchenStats() {
 
- // =====================================================
- // KITCHEN STATISTICS
- // =====================================================
+        return repository.getKitchenStats();
+    }
 
- public KitchenStatsDTO getKitchenStats() {
+    // =====================================================
+    // GET KITCHEN ORDER DETAIL
+    // =====================================================
 
-     return repository.getKitchenStats();
+    public KitchenOrderDTO
+    getKitchenOrderDetail(
+            Integer orderDetailId) {
 
- }
+        return repository.getKitchenOrderDetail(
+                orderDetailId);
+    }
 
+    // =====================================================
+    // UPDATE KITCHEN STATUS
+    // =====================================================
 
- // =====================================================
- // GET KITCHEN ORDER DETAIL
- // =====================================================
+    public String updateKitchenStatus(
+            Integer orderDetailId,
+            String status,
+            Integer chefId) {
 
- public KitchenOrderDTO getKitchenOrderDetail(
-         Integer orderDetailId) {
+        if (orderDetailId == null) {
+            return "Order Detail ID is required";
+        }
 
-     return repository.getKitchenOrderDetail(
-             orderDetailId
-     );
+        if (status == null ||
+                status.trim().isEmpty()) {
 
- }
+            return "Kitchen status is required";
+        }
 
+        if (chefId == null) {
+            return "Chef ID is required";
+        }
 
- // =====================================================
- // UPDATE KITCHEN STATUS
- // =====================================================
+        String normalizedStatus =
+                status.trim().toUpperCase();
 
- public String updateKitchenStatus(
-         Integer orderDetailId,
-         String status,
-         Integer chefId) {
+        if (!normalizedStatus.equals("NEW") &&
+            !normalizedStatus.equals("ACCEPTED") &&
+            !normalizedStatus.equals("PREPARING") &&
+            !normalizedStatus.equals("READY") &&
+            !normalizedStatus.equals("SERVED") &&
+            !normalizedStatus.equals("CANCELLED")) {
 
-     if (orderDetailId == null) {
+            return "Invalid Kitchen Status";
+        }
 
-         return "Order Detail ID is required";
+        int result =
+                repository.updateKitchenStatus(
+                        orderDetailId,
+                        normalizedStatus,
+                        chefId);
 
-     }
+        if (result > 0) {
 
-     if (status == null ||
-         status.trim().isEmpty()) {
+            return "Kitchen Status Updated Successfully";
+        }
 
-         return "Kitchen status is required";
-
-     }
-
-     if (chefId == null) {
-
-         return "Chef ID is required";
-
-     }
-
-
-     String normalizedStatus =
-             status.trim().toUpperCase();
-
-
-     if (!normalizedStatus.equals("NEW") &&
-         !normalizedStatus.equals("ACCEPTED") &&
-         !normalizedStatus.equals("PREPARING") &&
-         !normalizedStatus.equals("READY") &&
-         !normalizedStatus.equals("SERVED")) {
-
-         return "Invalid Kitchen Status";
-
-     }
-
-
-     int result =
-             repository.updateKitchenStatus(
-                     orderDetailId,
-                     normalizedStatus,
-                     chefId
-             );
-
-
-     if (result > 0) {
-
-         return "Kitchen Status Updated Successfully";
-
-     }
-
-
-     return "Kitchen Order Not Found";
-
- }
+        return "Kitchen Order Not Found";
+    }
 }
+

@@ -7,17 +7,20 @@ public class Orders {
     private Integer orderId;
     private Integer customerId;
     private String customerName;
+
+    private Integer tableId;
+    private String tableNumber;
+
     private Integer staffId;
     private LocalDateTime orderDate;
     private Double totalAmount;
     private String orderStatus;
 
+    private String orderType;
+    private String remarks;
+
     public Orders() {
     }
-
-    // ============================
-    // Order ID
-    // ============================
 
     public Integer getOrderId() {
         return orderId;
@@ -27,10 +30,6 @@ public class Orders {
         this.orderId = orderId;
     }
 
-    // ============================
-    // Customer ID
-    // ============================
-
     public Integer getCustomerId() {
         return customerId;
     }
@@ -38,10 +37,6 @@ public class Orders {
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
-
-    // ============================
-    // Customer Name
-    // ============================
 
     public String getCustomerName() {
         return customerName;
@@ -51,9 +46,21 @@ public class Orders {
         this.customerName = customerName;
     }
 
-    // ============================
-    // Staff ID
-    // ============================
+    public Integer getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Integer tableId) {
+        this.tableId = tableId;
+    }
+
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(String tableNumber) {
+        this.tableNumber = tableNumber;
+    }
 
     public Integer getStaffId() {
         return staffId;
@@ -63,10 +70,6 @@ public class Orders {
         this.staffId = staffId;
     }
 
-    // ============================
-    // Order Date
-    // ============================
-
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
@@ -74,10 +77,6 @@ public class Orders {
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
-
-    // ============================
-    // Total Amount
-    // ============================
 
     public Double getTotalAmount() {
         return totalAmount;
@@ -87,10 +86,6 @@ public class Orders {
         this.totalAmount = totalAmount;
     }
 
-    // ============================
-    // Order Status
-    // ============================
-
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -99,4 +94,19 @@ public class Orders {
         this.orderStatus = orderStatus;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

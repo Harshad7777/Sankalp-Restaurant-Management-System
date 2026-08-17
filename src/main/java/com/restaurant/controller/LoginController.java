@@ -1,3 +1,4 @@
+
 package com.restaurant.controller;
 
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,7 @@ public class LoginController {
 
     private final AuthService authService;
 
-    public LoginController(
-            AuthService authService) {
-
+    public LoginController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -25,11 +24,12 @@ public class LoginController {
             @RequestBody LoginDTO dto) {
 
         LoginResponse response =
-            authService.login(
-                dto.getUsername(),
-                dto.getPassword()
-            );
+                authService.login(
+                        dto.getUsername(),
+                        dto.getPassword()
+                );
 
         return ResponseEntity.ok(response);
     }
 }
+

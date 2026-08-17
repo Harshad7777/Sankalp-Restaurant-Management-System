@@ -37,6 +37,7 @@ public class OrderController {
 
     // =====================================================
     // CREATE ORDER
+    // POST /api/order
     // =====================================================
 
     @PostMapping
@@ -55,6 +56,7 @@ public class OrderController {
 
     // =====================================================
     // GET ALL ORDERS
+    // GET /api/order
     // =====================================================
 
     @GetMapping
@@ -67,7 +69,7 @@ public class OrderController {
 
     // =====================================================
     // GET ORDERS - PAGINATED
-    // Non-breaking: existing GET /api/order (unbounded) is untouched.
+    // GET /api/order/page
     // =====================================================
 
     @GetMapping("/page")
@@ -82,6 +84,7 @@ public class OrderController {
 
     // =====================================================
     // GET ORDER BY ID
+    // GET /api/order/{id}
     // =====================================================
 
     @GetMapping("/{id}")
@@ -95,6 +98,7 @@ public class OrderController {
 
     // =====================================================
     // GET ORDER DETAILS
+    // GET /api/order/details/{orderId}
     // =====================================================
 
     @GetMapping("/details/{orderId}")
@@ -108,6 +112,7 @@ public class OrderController {
 
     // =====================================================
     // UPDATE ORDER STATUS
+    // PUT /api/order/status/{id}?status=READY
     // =====================================================
 
     @PutMapping("/status/{id}")
@@ -131,6 +136,7 @@ public class OrderController {
 
     // =====================================================
     // CANCEL ORDER
+    // PUT /api/order/cancel/{id}
     // =====================================================
 
     @PutMapping("/cancel/{id}")
@@ -150,6 +156,7 @@ public class OrderController {
 
     // =====================================================
     // CUSTOMER ORDER HISTORY
+    // GET /api/order/customer/{customerId}
     // =====================================================
 
     @GetMapping("/customer/{customerId}")
@@ -163,6 +170,7 @@ public class OrderController {
 
     // =====================================================
     // TODAY'S ORDERS
+    // GET /api/order/today
     // =====================================================
 
     @GetMapping("/today")
@@ -175,10 +183,12 @@ public class OrderController {
 
     // =====================================================
     // TODAY'S KITCHEN ORDERS
+    // GET /api/order/kitchen/today
     // =====================================================
 
     @GetMapping("/kitchen/today")
-    public ResponseEntity<List<KitchenOrderDTO>> getTodayKitchenOrders() {
+    public ResponseEntity<List<KitchenOrderDTO>>
+    getTodayKitchenOrders() {
 
         return ResponseEntity.ok(
                 service.getTodayKitchenOrders()
@@ -187,10 +197,12 @@ public class OrderController {
 
     // =====================================================
     // KITCHEN STATISTICS
+    // GET /api/order/kitchen/stats
     // =====================================================
 
     @GetMapping("/kitchen/stats")
-    public ResponseEntity<KitchenStatsDTO> getKitchenStats() {
+    public ResponseEntity<KitchenStatsDTO>
+    getKitchenStats() {
 
         return ResponseEntity.ok(
                 service.getKitchenStats()
@@ -199,10 +211,12 @@ public class OrderController {
 
     // =====================================================
     // GET KITCHEN ORDER DETAIL
+    // GET /api/order/kitchen/detail/{orderDetailId}
     // =====================================================
 
     @GetMapping("/kitchen/detail/{orderDetailId}")
-    public ResponseEntity<KitchenOrderDTO> getKitchenOrderDetail(
+    public ResponseEntity<KitchenOrderDTO>
+    getKitchenOrderDetail(
             @PathVariable Integer orderDetailId) {
 
         return ResponseEntity.ok(
@@ -214,26 +228,151 @@ public class OrderController {
 
     // =====================================================
     // UPDATE KITCHEN STATUS
+    //
+    // PUT
+    // /api/order/kitchen/detail/{detailId}/status
+    //
+    // Example:
+    //
+    // PUT
+    // /api/order/kitchen/detail/54/status
+    // ?status=SERVED
+    // &chefId=7
     // =====================================================
 
     @PutMapping("/kitchen/detail/{orderDetailId}/status")
-    public ResponseEntity<String> updateKitchenStatus(
+    public ResponseEntity<?> updateKitchenStatus(
+
             @PathVariable Integer orderDetailId,
+
             @RequestParam String status,
-            @RequestParam Integer chefId) {
 
-        String result = service.updateKitchenStatus(
-                orderDetailId,
-                status,
-                chefId
-        );
+            @RequestParam(required = false) Integer chefId) {
 
-        if ("Kitchen Status Updated Successfully".equals(result)) {
-            return ResponseEntity.ok(result);
+        try {
+
+            // =================================================
+            // VALIDATE CHEF ID
+            // =================================================
+
+            if (chefId == null) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Chef ID is required"
+                                )
+                        );
+            }
+
+            // =================================================
+            // VALIDATE STATUS
+            // =================================================
+
+            if (status == null ||
+                status.trim().isEmpty()) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Kitchen status is required"
+                                )
+                        );
+            }
+
+            // =================================================
+            // NORMALIZE STATUS
+            // =================================================
+
+            String kitchenStatus =
+                    status.trim().toUpperCase();
+
+            // =================================================
+            // VALID STATUSES
+            // =================================================
+
+            if (!kitchenStatus.equals("NEW")
+                    && !kitchenStatus.equals("ACCEPTED")
+                    && !kitchenStatus.equals("PREPARING")
+                    && !kitchenStatus.equals("READY")
+                    && !kitchenStatus.equals("SERVED")
+                    && !kitchenStatus.equals("CANCELLED")) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Invalid kitchen status: "
+                                                + kitchenStatus
+                                )
+                        );
+            }
+
+            // =================================================
+            // UPDATE DATABASE
+            // =================================================
+
+            String result =
+                    service.updateKitchenStatus(
+                            orderDetailId,
+                            kitchenStatus,
+                            chefId
+                    );
+
+            // =================================================
+            // SUCCESS
+            // =================================================
+
+            if ("Kitchen Status Updated Successfully"
+                    .equals(result)) {
+
+                return ResponseEntity.ok(
+                        Map.of(
+                                "success", true,
+                                "message", result,
+                                "detailId", orderDetailId,
+                                "status", kitchenStatus,
+                                "chefId", chefId
+                        )
+                );
+            }
+
+            // =================================================
+            // SERVICE ERROR
+            // =================================================
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(
+                            Map.of(
+                                    "success", false,
+                                    "message", result
+                            )
+                    );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .internalServerError()
+                    .body(
+                            Map.of(
+                                    "success", false,
+                                    "message",
+                                    e.getMessage() != null
+                                            ? e.getMessage()
+                                            : "Kitchen status update failed"
+                            )
+                    );
         }
-
-        return ResponseEntity
-                .badRequest()
-                .body(result);
     }
 }

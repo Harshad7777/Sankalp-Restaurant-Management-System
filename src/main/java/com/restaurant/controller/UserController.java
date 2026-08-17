@@ -13,7 +13,7 @@ import com.restaurant.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService service;
@@ -57,17 +57,39 @@ public class UserController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .internalServerError()
                     .body(
                             Map.of(
                                     "success", false,
                                     "message",
-                                    e.getMessage()
+                                    e.getMessage() != null
+                                            ? e.getMessage()
+                                            : "User registration failed"
                             )
                     );
         }
     }
+
+
+    // =====================================================
+    // GET TEAM USERS
+    // GET /api/users/team
+    //
+    // STAFF + CHEF ONLY
+    // ADMIN EXCLUDED
+    // =====================================================
+
+    @GetMapping("/team")
+    public ResponseEntity<List<Users>> getTeamUsers() {
+
+        return ResponseEntity.ok(
+                service.getTeamUsers()
+        );
+    }
+
 
     // =====================================================
     // GET ALL USERS
@@ -82,8 +104,195 @@ public class UserController {
         );
     }
 
+
     // =====================================================
-    // GET USER
+    // PROFILE
+    // GET /api/users/profile
+    // =====================================================
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile(
+            Authentication authentication) {
+
+        Users user =
+                service.getProfile(
+                        authentication.getName()
+                );
+
+        if (user == null) {
+
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        return ResponseEntity.ok(user);
+    }
+
+
+    // =====================================================
+    // UPDATE PROFILE
+    // PUT /api/users/profile
+    // =====================================================
+
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(
+            Authentication authentication,
+            @RequestBody Users profile) {
+
+        String result =
+                service.updateProfile(
+                        authentication.getName(),
+                        profile
+                );
+
+        if ("User Not Found".equals(result)) {
+
+            return ResponseEntity.badRequest()
+                    .body(result);
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+
+    // =====================================================
+    // CHANGE OWN PASSWORD
+    // PUT /api/users/profile/change-password
+    // =====================================================
+
+    @PutMapping("/profile/change-password")
+    public ResponseEntity<?> changePassword(
+            Authentication authentication,
+            @RequestBody ChangePasswordDTO dto) {
+
+        String result =
+                service.changePassword(
+                        authentication.getName(),
+                        dto
+                );
+
+        if (
+                "User Not Found".equals(result)
+                ||
+                "Old Password Incorrect".equals(result)
+                ||
+                "New Password and Confirm Password do not match"
+                        .equals(result)
+        ) {
+
+            return ResponseEntity.badRequest()
+                    .body(result);
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+
+    // =====================================================
+    // ADMIN CHANGE PASSWORD
+    // PUT /api/users/{id}/password
+    // =====================================================
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> changeUserPassword(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+
+        try {
+
+            if (id == null || id <= 0) {
+
+                return ResponseEntity.badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Invalid user ID"
+                                )
+                        );
+            }
+
+
+            if (body == null) {
+
+                return ResponseEntity.badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Password request cannot be null"
+                                )
+                        );
+            }
+
+
+            String password =
+                    body.get("password");
+
+
+            if (password == null ||
+                password.trim().isEmpty()) {
+
+                return ResponseEntity.badRequest()
+                        .body(
+                                Map.of(
+                                        "success", false,
+                                        "message",
+                                        "Password is required"
+                                )
+                        );
+            }
+
+
+            String result =
+                    service.updateUserPassword(
+                            id,
+                            password
+                    );
+
+
+            if ("Password Updated Successfully"
+                    .equals(result)) {
+
+                return ResponseEntity.ok(
+                        Map.of(
+                                "success", true,
+                                "message", result
+                        )
+                );
+            }
+
+
+            return ResponseEntity.badRequest()
+                    .body(
+                            Map.of(
+                                    "success", false,
+                                    "message", result
+                            )
+                    );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .internalServerError()
+                    .body(
+                            Map.of(
+                                    "success", false,
+                                    "message",
+                                    e.getMessage() != null
+                                            ? e.getMessage()
+                                            : "Password update failed"
+                            )
+                    );
+        }
+    }
+
+
+    // =====================================================
+    // GET USER BY ID
     // GET /api/users/{id}
     // =====================================================
 
@@ -104,6 +313,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+
     // =====================================================
     // UPDATE USER
     // PUT /api/users/{id}
@@ -115,17 +325,41 @@ public class UserController {
             @RequestBody Users user) {
 
         String result =
-                service.updateUser(id, user);
+                service.updateUser(
+                        id,
+                        user
+                );
 
-        if ("User Not Found".equals(result) ||
-            "Username Already Exists".equals(result)) {
+
+        if (
+                "User Not Found".equals(result)
+                ||
+                "Username Already Exists".equals(result)
+        ) {
 
             return ResponseEntity.badRequest()
                     .body(result);
         }
 
+
+        if (
+                result.startsWith("Invalid")
+                ||
+                result.endsWith("required")
+                ||
+                result.contains("Password")
+                ||
+                result.contains("Failed")
+        ) {
+
+            return ResponseEntity.badRequest()
+                    .body(result);
+        }
+
+
         return ResponseEntity.ok(result);
     }
+
 
     // =====================================================
     // DELETE USER
@@ -139,89 +373,20 @@ public class UserController {
         String result =
                 service.deleteUser(id);
 
-        if ("User Not Found".equals(result)) {
+
+        if (
+                "User Not Found".equals(result)
+                ||
+                result.startsWith("Invalid")
+                ||
+                result.endsWith("Failed")
+        ) {
 
             return ResponseEntity.badRequest()
                     .body(result);
         }
 
-        return ResponseEntity.ok(result);
-    }
-
-    // =====================================================
-    // PROFILE
-    // GET /api/users/profile
-    // =====================================================
-
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile(
-            Authentication authentication) {
-
-        Users user =
-                service.getProfile(
-                        authentication.getName());
-
-        if (user == null) {
-
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
-
-        return ResponseEntity.ok(user);
-    }
-
-    // =====================================================
-    // UPDATE PROFILE
-    // PUT /api/users/profile
-    // =====================================================
-
-    @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(
-            Authentication authentication,
-            @RequestBody Users profile) {
-
-        String result =
-                service.updateProfile(
-                        authentication.getName(),
-                        profile);
-
-        if ("User Not Found".equals(result)) {
-
-            return ResponseEntity.badRequest()
-                    .body(result);
-        }
 
         return ResponseEntity.ok(result);
-    }
-
-    // =====================================================
-    // CHANGE PASSWORD
-    // PUT /api/users/profile/change-password
-    // =====================================================
-
-    @PutMapping("/profile/change-password")
-    public ResponseEntity<?> changePassword(
-            Authentication authentication,
-            @RequestBody ChangePasswordDTO dto) {
-
-        String result =
-                service.changePassword(
-                        authentication.getName(),
-                        dto);
-
-        switch (result) {
-
-            case "User Not Found":
-            case "Old Password Incorrect":
-            case "New Password and Confirm Password do not match":
-
-                return ResponseEntity.badRequest()
-                        .body(result);
-
-            default:
-
-                return ResponseEntity.ok(result);
-        }
     }
 }

@@ -13,15 +13,20 @@ public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public UserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public UserRepository(
+            JdbcTemplate jdbcTemplate) {
+
+        this.jdbcTemplate =
+                jdbcTemplate;
     }
+
 
     // =====================================================
     // FIND BY USERNAME
     // =====================================================
 
-    public Users findByUsername(String username) {
+    public Users findByUsername(
+            String username) {
 
         String sql = """
                 SELECT
@@ -37,11 +42,16 @@ public class UserRepository {
                 WHERE username = ?
                 """;
 
-        List<Users> list = jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(Users.class),
-                username
-        );
+
+        List<Users> list =
+                jdbcTemplate.query(
+                        sql,
+                        new BeanPropertyRowMapper<>(
+                                Users.class
+                        ),
+                        username
+                );
+
 
         if (list.isEmpty()) {
             return null;
@@ -50,11 +60,13 @@ public class UserRepository {
         return list.get(0);
     }
 
+
     // =====================================================
     // CHECK USERNAME
     // =====================================================
 
-    public boolean existsByUsername(String username) {
+    public boolean existsByUsername(
+            String username) {
 
         String sql = """
                 SELECT COUNT(*)
@@ -62,20 +74,27 @@ public class UserRepository {
                 WHERE username = ?
                 """;
 
-        Integer count = jdbcTemplate.queryForObject(
-                sql,
-                Integer.class,
-                username
-        );
 
-        return count != null && count > 0;
+        Integer count =
+                jdbcTemplate.queryForObject(
+                        sql,
+                        Integer.class,
+                        username
+                );
+
+
+        return
+                count != null &&
+                count > 0;
     }
+
 
     // =====================================================
     // SAVE USER
     // =====================================================
 
-    public int save(Users user) {
+    public int save(
+            Users user) {
 
         String sql = """
                 INSERT INTO users
@@ -91,17 +110,26 @@ public class UserRepository {
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
 
+
         return jdbcTemplate.update(
                 sql,
+
                 user.getFullName(),
+
                 user.getUsername(),
+
                 user.getPassword(),
+
                 user.getRole(),
+
                 user.getMobile(),
+
                 user.getEmail(),
+
                 user.getStatus()
         );
     }
+
 
     // =====================================================
     // GET ALL USERS
@@ -123,17 +151,54 @@ public class UserRepository {
                 ORDER BY user_id DESC
                 """;
 
+
         return jdbcTemplate.query(
                 sql,
-                new BeanPropertyRowMapper<>(Users.class)
+                new BeanPropertyRowMapper<>(
+                        Users.class
+                )
         );
     }
+
+
+    // =====================================================
+    // GET TEAM USERS
+    // STAFF + CHEF ONLY
+    // =====================================================
+
+    public List<Users> findTeamUsers() {
+
+        String sql = """
+                SELECT
+                    user_id AS userId,
+                    full_name AS fullName,
+                    username,
+                    password,
+                    role,
+                    mobile,
+                    email,
+                    status
+                FROM users
+                WHERE role IN ('STAFF', 'CHEF')
+                ORDER BY user_id DESC
+                """;
+
+
+        return jdbcTemplate.query(
+                sql,
+                new BeanPropertyRowMapper<>(
+                        Users.class
+                )
+        );
+    }
+
 
     // =====================================================
     // GET USER BY ID
     // =====================================================
 
-    public Users findById(Integer id) {
+    public Users findById(
+            Integer id) {
 
         String sql = """
                 SELECT
@@ -149,24 +214,33 @@ public class UserRepository {
                 WHERE user_id = ?
                 """;
 
-        List<Users> list = jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(Users.class),
-                id
-        );
+
+        List<Users> list =
+                jdbcTemplate.query(
+                        sql,
+                        new BeanPropertyRowMapper<>(
+                                Users.class
+                        ),
+                        id
+                );
+
 
         if (list.isEmpty()) {
+
             return null;
         }
+
 
         return list.get(0);
     }
 
+
     // =====================================================
-    // UPDATE USER
+    // UPDATE WITH PASSWORD
     // =====================================================
 
-    public int update(Users user) {
+    public int update(
+            Users user) {
 
         String sql = """
                 UPDATE users
@@ -181,24 +255,35 @@ public class UserRepository {
                 WHERE user_id = ?
                 """;
 
+
         return jdbcTemplate.update(
                 sql,
+
                 user.getFullName(),
+
                 user.getUsername(),
+
                 user.getPassword(),
+
                 user.getRole(),
+
                 user.getMobile(),
+
                 user.getEmail(),
+
                 user.getStatus(),
+
                 user.getUserId()
         );
     }
 
+
     // =====================================================
-    // UPDATE USER WITHOUT PASSWORD
+    // UPDATE WITHOUT PASSWORD
     // =====================================================
 
-    public int updateWithoutPassword(Users user) {
+    public int updateWithoutPassword(
+            Users user) {
 
         String sql = """
                 UPDATE users
@@ -212,17 +297,26 @@ public class UserRepository {
                 WHERE user_id = ?
                 """;
 
+
         return jdbcTemplate.update(
                 sql,
+
                 user.getFullName(),
+
                 user.getUsername(),
+
                 user.getRole(),
+
                 user.getMobile(),
+
                 user.getEmail(),
+
                 user.getStatus(),
+
                 user.getUserId()
         );
     }
+
 
     // =====================================================
     // UPDATE PASSWORD
@@ -238,23 +332,29 @@ public class UserRepository {
                 WHERE user_id = ?
                 """;
 
+
         return jdbcTemplate.update(
                 sql,
+
                 password,
+
                 id
         );
     }
 
+
     // =====================================================
-    // DELETE USER
+    // DELETE
     // =====================================================
 
-    public int delete(Integer id) {
+    public int delete(
+            Integer id) {
 
         String sql = """
                 DELETE FROM users
                 WHERE user_id = ?
                 """;
+
 
         return jdbcTemplate.update(
                 sql,

@@ -45,8 +45,6 @@ public class SecurityConfig {
             // =================================================
             // CORS
             // =================================================
-            // CorsConfig.java provides corsConfigurationSource()
-            // =================================================
 
             .cors(cors -> {
             })
@@ -81,16 +79,14 @@ public class SecurityConfig {
                     "/api/login",
                     "/api/auth/login",
                     "/api/users/register",
-
                     "/uploads/**",
-
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-
                     "/v3/api-docs/**",
                     "/v3/api-docs"
                 )
                 .permitAll()
+
 
                 // =================================================
                 // PROFILE
@@ -107,6 +103,7 @@ public class SecurityConfig {
                     "CHEF"
                 )
 
+
                 // =================================================
                 // ADMIN ONLY - USERS
                 // =================================================
@@ -114,12 +111,14 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/**")
                 .hasRole("ADMIN")
 
+
                 // =================================================
                 // CATEGORY
                 // =================================================
 
                 .requestMatchers("/api/category/**")
                 .hasRole("ADMIN")
+
 
                 // =================================================
                 // MENU
@@ -158,6 +157,7 @@ public class SecurityConfig {
                 )
                 .hasRole("ADMIN")
 
+
                 // =================================================
                 // REPORT
                 // =================================================
@@ -165,12 +165,14 @@ public class SecurityConfig {
                 .requestMatchers("/api/report/**")
                 .hasRole("ADMIN")
 
+
                 // =================================================
                 // UPLOAD
                 // =================================================
 
                 .requestMatchers("/api/upload/**")
                 .hasRole("ADMIN")
+
 
                 // =================================================
                 // CUSTOMER
@@ -183,8 +185,21 @@ public class SecurityConfig {
                     "STAFF"
                 )
 
+
                 // =================================================
-                // ORDER
+                // CHEF KITCHEN STATUS UPDATE
+                // CHEF ONLY
+                // =================================================
+
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/order/kitchen/detail/**"
+                )
+                .hasRole("CHEF")
+
+
+                // =================================================
+                // NORMAL ORDER APIs
                 // ADMIN + STAFF
                 // =================================================
 
@@ -193,6 +208,7 @@ public class SecurityConfig {
                     "ADMIN",
                     "STAFF"
                 )
+
 
                 // =================================================
                 // BILL
@@ -205,6 +221,7 @@ public class SecurityConfig {
                     "STAFF"
                 )
 
+
                 // =================================================
                 // DASHBOARD
                 // ADMIN + STAFF
@@ -216,13 +233,46 @@ public class SecurityConfig {
                     "STAFF"
                 )
 
+
                 // =================================================
-                // KITCHEN
+                // KITCHEN DASHBOARD VIEW
+                // ADMIN + CHEF
+                // =================================================
+
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/kitchen",
+                    "/api/kitchen/**"
+                )
+                .hasAnyRole(
+                    "ADMIN",
+                    "CHEF"
+                )
+
+
+                // =================================================
+                // KITCHEN ACTIONS
                 // CHEF ONLY
                 // =================================================
 
-                .requestMatchers("/api/kitchen/**")
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/kitchen/**"
+                )
                 .hasRole("CHEF")
+
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/kitchen/**"
+                )
+                .hasRole("CHEF")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/kitchen/**"
+                )
+                .hasRole("CHEF")
+
 
                 // =================================================
                 // EVERYTHING ELSE
@@ -231,6 +281,7 @@ public class SecurityConfig {
                 .anyRequest()
                 .authenticated()
             )
+
 
             // =================================================
             // JWT FILTER
@@ -243,6 +294,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     // =====================================================
     // AUTHENTICATION MANAGER

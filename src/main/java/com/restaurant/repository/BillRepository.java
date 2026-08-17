@@ -1,9 +1,11 @@
+
 package com.restaurant.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
-import java.util.UUID;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -18,12 +20,9 @@ public class BillRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-
     public BillRepository(JdbcTemplate jdbcTemplate) {
-
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
     // =====================================================
     // CREATE BILL
@@ -32,180 +31,148 @@ public class BillRepository {
     @Transactional
     public int createBill(BillDTO dto) {
 
+        if (dto == null) {
+            throw new IllegalArgumentException(
+                    "Bill request cannot be null"
+            );
+        }
+
         int orderId = dto.getOrderId();
 
-
-        // -------------------------------------------------
-        // CHECK ORDER EXISTS
-        // -------------------------------------------------
-
-        Integer orderExists =
-                jdbcTemplate.queryForObject(
-                        """
-                        SELECT COUNT(*)
-                        FROM orders
-                        WHERE order_id=?
-                        """,
-                        Integer.class,
-                        orderId
-                );
-
-
-        if (orderExists == null ||
-            orderExists == 0) {
-
-            throw new RuntimeException(
-                    "Order not found: " + orderId
+        if (orderId <= 0) {
+            throw new IllegalArgumentException(
+                    "Invalid Order ID"
             );
         }
 
-
         // -------------------------------------------------
-        // CHECK WHETHER BILL ALREADY EXISTS
+        // CHECK ORDER
         // -------------------------------------------------
 
-        Integer billExists =
-                jdbcTemplate.queryForObject(
-                        """
-                        SELECT COUNT(*)
-                        FROM bill
-                        WHERE order_id=?
-                        """,
-                        Integer.class,
-                        orderId
-                );
+        Integer orderCount = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM orders WHERE order_id = ?",
+                Integer.class,
+                orderId
+        );
 
-
-        if (billExists != null &&
-            billExists > 0) {
-
-            throw new RuntimeException(
-                    "Bill already exists for Order #" +
-                    orderId
+        if (orderCount == null || orderCount == 0) {
+            throw new IllegalArgumentException(
+                    "Order not found"
             );
         }
 
-
         // -------------------------------------------------
-        // GET ORDER STATUS
+        // CHECK EXISTING BILL
         // -------------------------------------------------
 
-        String orderStatus =
-                jdbcTemplate.queryForObject(
-                        """
-                        SELECT order_status
-                        FROM orders
-                        WHERE order_id=?
-                        """,
-                        String.class,
-                        orderId
-                );
+        Integer billCount = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM bill WHERE order_id = ?",
+                Integer.class,
+                orderId
+        );
 
-
-        if ("CANCELLED".equalsIgnoreCase(orderStatus)) {
-
-            throw new RuntimeException(
-                    "Cancelled orders cannot be billed."
+        if (billCount != null && billCount > 0) {
+            throw new IllegalArgumentException(
+                    "A bill already exists for this order"
             );
         }
 
-
-        if ("BILLED".equalsIgnoreCase(orderStatus)) {
-
-            throw new RuntimeException(
-                    "Order #" +
-                    orderId +
-                    " is already billed."
-            );
-        }
-
-
         // -------------------------------------------------
-        // GET ORDER AMOUNT
+        // CALCULATE SUBTOTAL FROM ORDER DETAILS
         // -------------------------------------------------
+
+        Double dbSubtotal = jdbcTemplate.queryForObject(
+                """
+                SELECT COALESCE(
+                    SUM(subtotal),
+                    0
+                )
+                FROM order_details
+                WHERE order_id = ?
+                """,
+                Double.class,
+                orderId
+        );
 
         double subtotal =
-                getOrderAmount(orderId);
-
-
-        if (subtotal <= 0) {
-
-            throw new RuntimeException(
-                    "Order amount must be greater than zero."
-            );
-        }
-
-
-        // -------------------------------------------------
-        // GST 5%
-        // -------------------------------------------------
-
-        double gst =
-                subtotal * 0.05;
-
+                dbSubtotal == null ? 0.0 : dbSubtotal;
 
         // -------------------------------------------------
         // DISCOUNT
         // -------------------------------------------------
 
-        double discount =
-                dto.getDiscount();
+        double calculatedDiscount = Math.max(
+                0.0,
+                dto.getDiscount()
+        );
 
-
-        if (discount < 0) {
-
-            discount = 0;
+        if (calculatedDiscount > subtotal) {
+            calculatedDiscount = subtotal;
         }
 
+        /*
+         * IMPORTANT:
+         * discount is never modified after this point.
+         * Therefore it is effectively final and can safely
+         * be used inside the jdbcTemplate lambda.
+         */
+        final double discount = calculatedDiscount;
 
-        if (discount > subtotal + gst) {
+        // -------------------------------------------------
+        // TAXABLE AMOUNT
+        // -------------------------------------------------
 
-            discount =
-                    subtotal + gst;
-        }
+        double taxable = Math.max(
+                0.0,
+                subtotal - discount
+        );
 
+        // -------------------------------------------------
+        // GST 5%
+        // -------------------------------------------------
 
-     // -------------------------------------------------
-     // GRAND TOTAL
-     // -------------------------------------------------
+        double gst = Math.round(
+                taxable * 0.05 * 100.0
+        ) / 100.0;
 
-     double grandTotal =
-             subtotal +
-             gst -
-             discount;
+        // -------------------------------------------------
+        // GRAND TOTAL
+        // -------------------------------------------------
 
-     // -------------------------------------------------
-     // FINAL DISCOUNT FOR LAMBDA
-     // -------------------------------------------------
+        double grandTotal = Math.round(
+                (taxable + gst) * 100.0
+        ) / 100.0;
 
-     final double finalDiscount = discount;
+        // -------------------------------------------------
+        // PAYMENT
+        // -------------------------------------------------
 
-     // -------------------------------------------------
-     // BILL NUMBER
-     // -------------------------------------------------
+        String paymentMethod =
+                normalizePaymentMethod(
+                        dto.getPaymentMethod()
+                );
+
+        String paymentStatus =
+                normalizePaymentStatus(
+                        dto.getPaymentStatus()
+                );
 
         // -------------------------------------------------
         // BILL NUMBER
         // -------------------------------------------------
 
-        String billNo =
-                "BILL-" +
-                UUID.randomUUID()
-                     .toString()
-                     .substring(0, 8)
-                     .toUpperCase();
-
+        String billNo = generateBillNumber();
 
         // -------------------------------------------------
         // INSERT BILL
         // -------------------------------------------------
 
-        String sql = """
+        String sql =
+                """
                 INSERT INTO bill
                 (
                     bill_no,
                     order_id,
-                    bill_date,
                     subtotal,
                     gst,
                     discount,
@@ -217,7 +184,6 @@ public class BillRepository {
                 (
                     ?,
                     ?,
-                    NOW(),
                     ?,
                     ?,
                     ?,
@@ -227,132 +193,105 @@ public class BillRepository {
                 )
                 """;
 
-
         KeyHolder keyHolder =
                 new GeneratedKeyHolder();
 
-
         jdbcTemplate.update(connection -> {
 
-            var ps =
-                    connection.prepareStatement(
-                            sql,
-                            java.sql.Statement
-                                .RETURN_GENERATED_KEYS
-                    );
-
+            var ps = connection.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS
+            );
 
             ps.setString(
                     1,
                     billNo
             );
 
-
             ps.setInt(
                     2,
                     orderId
             );
-
 
             ps.setDouble(
                     3,
                     subtotal
             );
 
-
             ps.setDouble(
                     4,
                     gst
             );
 
-
             ps.setDouble(
                     5,
-                    finalDiscount
+                    discount
             );
-
 
             ps.setDouble(
                     6,
                     grandTotal
             );
 
+            if (paymentMethod == null) {
 
-            ps.setString(
-                    7,
-                    dto.getPaymentMethod()
-            );
+                ps.setNull(
+                        7,
+                        java.sql.Types.VARCHAR
+                );
 
+            } else {
+
+                ps.setString(
+                        7,
+                        paymentMethod
+                );
+            }
 
             ps.setString(
                     8,
-                    "PAID"
+                    paymentStatus
             );
-
 
             return ps;
 
         }, keyHolder);
 
+        // -------------------------------------------------
+        // GENERATED BILL ID
+        // -------------------------------------------------
 
         Number generatedKey =
                 keyHolder.getKey();
 
-
         if (generatedKey == null) {
 
-            throw new RuntimeException(
-                    "Unable to generate Bill ID."
+            throw new IllegalStateException(
+                    "Bill ID was not generated"
             );
         }
-
 
         int billId =
                 generatedKey.intValue();
 
-
         // -------------------------------------------------
-        // UPDATE ORDER STATUS
+        // UPDATE ORDER
         // -------------------------------------------------
 
         jdbcTemplate.update(
                 """
                 UPDATE orders
-                SET order_status='BILLED'
-                WHERE order_id=?
+                SET
+                    total_amount = ?,
+                    order_status = 'BILLED'
+                WHERE order_id = ?
                 """,
+                grandTotal,
                 orderId
         );
 
-
         return billId;
     }
-
-
-    // =====================================================
-    // GET ORDER AMOUNT
-    // =====================================================
-
-    public double getOrderAmount(
-            int orderId) {
-
-        Double amount =
-                jdbcTemplate.queryForObject(
-                        """
-                        SELECT total_amount
-                        FROM orders
-                        WHERE order_id=?
-                        """,
-                        Double.class,
-                        orderId
-                );
-
-
-        return amount != null
-                ? amount
-                : 0.0;
-    }
-
 
     // =====================================================
     // GET ALL BILLS
@@ -360,138 +299,132 @@ public class BillRepository {
 
     public List<Bill> getAllBills() {
 
-        String sql = """
+        return jdbcTemplate.query(
+                """
                 SELECT
-                    bill_id AS billId,
-                    bill_no AS billNo,
-                    order_id AS orderId,
-                    bill_date AS billDate,
+                    bill_id,
+                    bill_no,
+                    order_id,
+                    bill_date,
                     subtotal,
                     gst,
                     discount,
-                    grand_total AS grandTotal,
-                    payment_method AS paymentMethod,
-                    payment_status AS paymentStatus
+                    grand_total,
+                    payment_method,
+                    payment_status
                 FROM bill
                 ORDER BY bill_id DESC
-                """;
-
-
-        return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Bill.class
-                )
+                """,
+                this::mapBill
         );
     }
 
-
     // =====================================================
-    // GET BILLS - PAGINATED
+    // GET PAGINATED BILLS
     // =====================================================
 
-    public List<Bill> getBillsPage(int limit, int offset) {
+    public List<Bill> getBillsPage(
+            int size,
+            int offset) {
 
-        String sql = """
+        return jdbcTemplate.query(
+                """
                 SELECT
-                    bill_id AS billId,
-                    bill_no AS billNo,
-                    order_id AS orderId,
-                    bill_date AS billDate,
+                    bill_id,
+                    bill_no,
+                    order_id,
+                    bill_date,
                     subtotal,
                     gst,
                     discount,
-                    grand_total AS grandTotal,
-                    payment_method AS paymentMethod,
-                    payment_status AS paymentStatus
+                    grand_total,
+                    payment_method,
+                    payment_status
                 FROM bill
                 ORDER BY bill_id DESC
                 LIMIT ? OFFSET ?
-                """;
-
-        return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(Bill.class),
-                limit,
-                offset);
+                """,
+                this::mapBill,
+                size,
+                offset
+        );
     }
+
+    // =====================================================
+    // COUNT BILLS
+    // =====================================================
 
     public long countBills() {
 
         Long count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM bill",
-                Long.class);
+                Long.class
+        );
 
-        return count != null ? count : 0L;
+        return count == null ? 0 : count;
     }
 
-
     // =====================================================
-    // GET BILL BY BILL ID
+    // GET BILL BY ID
     // =====================================================
 
-    public Bill getBillById(int id) {
+    public Bill getBillById(int billId) {
 
-        String sql = """
+        List<Bill> bills = jdbcTemplate.query(
+                """
                 SELECT
-                    bill_id AS billId,
-                    bill_no AS billNo,
-                    order_id AS orderId,
-                    bill_date AS billDate,
+                    bill_id,
+                    bill_no,
+                    order_id,
+                    bill_date,
                     subtotal,
                     gst,
                     discount,
-                    grand_total AS grandTotal,
-                    payment_method AS paymentMethod,
-                    payment_status AS paymentStatus
+                    grand_total,
+                    payment_method,
+                    payment_status
                 FROM bill
-                WHERE bill_id=?
-                """;
-
-
-        return jdbcTemplate.queryForObject(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Bill.class
-                ),
-                id
+                WHERE bill_id = ?
+                """,
+                this::mapBill,
+                billId
         );
-    }
 
+        return bills.isEmpty()
+                ? null
+                : bills.get(0);
+    }
 
     // =====================================================
     // GET BILL BY ORDER ID
     // =====================================================
 
-    public Bill getBillByOrderId(
-            int orderId) {
+    public Bill getBillByOrderId(int orderId) {
 
-        String sql = """
+        List<Bill> bills = jdbcTemplate.query(
+                """
                 SELECT
-                    bill_id AS billId,
-                    bill_no AS billNo,
-                    order_id AS orderId,
-                    bill_date AS billDate,
+                    bill_id,
+                    bill_no,
+                    order_id,
+                    bill_date,
                     subtotal,
                     gst,
                     discount,
-                    grand_total AS grandTotal,
-                    payment_method AS paymentMethod,
-                    payment_status AS paymentStatus
+                    grand_total,
+                    payment_method,
+                    payment_status
                 FROM bill
-                WHERE order_id=?
-                """;
-
-
-        return jdbcTemplate.queryForObject(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Bill.class
-                ),
+                WHERE order_id = ?
+                """,
+                this::mapBill,
                 orderId
         );
-    }
 
+        return bills.isEmpty()
+                ? null
+                : bills.get(0);
+    }
 
     // =====================================================
     // UPDATE PAYMENT
@@ -499,24 +432,32 @@ public class BillRepository {
 
     public int updatePayment(
             int billId,
-            String paymentMethod) {
+            String paymentMethod,
+            String paymentStatus) {
 
-        String sql = """
-                UPDATE bill
-                SET
-                    payment_method=?,
-                    payment_status='PAID'
-                WHERE bill_id=?
-                """;
+        String method =
+                normalizePaymentMethod(
+                        paymentMethod
+                );
 
+        String status =
+                normalizePaymentStatus(
+                        paymentStatus
+                );
 
         return jdbcTemplate.update(
-                sql,
-                paymentMethod,
+                """
+                UPDATE bill
+                SET
+                    payment_method = ?,
+                    payment_status = ?
+                WHERE bill_id = ?
+                """,
+                method,
+                status,
                 billId
         );
     }
-
 
     // =====================================================
     // TODAY BILLS
@@ -524,30 +465,176 @@ public class BillRepository {
 
     public List<Bill> getTodayBills() {
 
-        String sql = """
+        return jdbcTemplate.query(
+                """
                 SELECT
-                    bill_id AS billId,
-                    bill_no AS billNo,
-                    order_id AS orderId,
-                    bill_date AS billDate,
+                    bill_id,
+                    bill_no,
+                    order_id,
+                    bill_date,
                     subtotal,
                     gst,
                     discount,
-                    grand_total AS grandTotal,
-                    payment_method AS paymentMethod,
-                    payment_status AS paymentStatus
+                    grand_total,
+                    payment_method,
+                    payment_status
                 FROM bill
-                WHERE DATE(bill_date)=CURDATE()
-                ORDER BY bill_date DESC
-                """;
-
-
-        return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Bill.class
-                )
+                WHERE DATE(bill_date) = CURDATE()
+                ORDER BY bill_id DESC
+                """,
+                this::mapBill
         );
     }
 
+    // =====================================================
+    // GENERATE BILL NUMBER
+    // =====================================================
+
+    private String generateBillNumber() {
+
+        Integer maxNumber =
+                jdbcTemplate.queryForObject(
+                        """
+                        SELECT COALESCE(
+                            MAX(
+                                CAST(
+                                    SUBSTRING_INDEX(
+                                        bill_no,
+                                        '-',
+                                        -1
+                                    ) AS UNSIGNED
+                                )
+                            ),
+                            0
+                        )
+                        FROM bill
+                        WHERE bill_no LIKE 'BILL-%'
+                        """,
+                        Integer.class
+                );
+
+        int nextNumber =
+                (maxNumber == null
+                        ? 0
+                        : maxNumber) + 1;
+
+        return String.format(
+                "BILL-%06d",
+                nextNumber
+        );
+    }
+
+    // =====================================================
+    // NORMALIZE PAYMENT METHOD
+    // =====================================================
+
+    private String normalizePaymentMethod(
+            String value) {
+
+        if (value == null ||
+                value.trim().isEmpty()) {
+
+            return null;
+        }
+
+        String method =
+                value.trim().toUpperCase();
+
+        if (!method.equals("CASH") &&
+                !method.equals("CARD") &&
+                !method.equals("UPI")) {
+
+            throw new IllegalArgumentException(
+                    "Invalid payment method. Use CASH, CARD or UPI"
+            );
+        }
+
+        return method;
+    }
+
+    // =====================================================
+    // NORMALIZE PAYMENT STATUS
+    // =====================================================
+
+    private String normalizePaymentStatus(
+            String value) {
+
+        if (value == null ||
+                value.trim().isEmpty()) {
+
+            return "PENDING";
+        }
+
+        String status =
+                value.trim().toUpperCase();
+
+        if (!status.equals("PENDING") &&
+                !status.equals("PAID")) {
+
+            throw new IllegalArgumentException(
+                    "Invalid payment status. Use PENDING or PAID"
+            );
+        }
+
+        return status;
+    }
+
+    // =====================================================
+    // MAP RESULT SET
+    // =====================================================
+
+    private Bill mapBill(
+            ResultSet rs,
+            int rowNum)
+            throws SQLException {
+
+        Bill bill = new Bill();
+
+        bill.setBillId(
+                rs.getInt("bill_id")
+        );
+
+        bill.setBillNo(
+                rs.getString("bill_no")
+        );
+
+        bill.setOrderId(
+                rs.getInt("order_id")
+        );
+
+        if (rs.getTimestamp("bill_date") != null) {
+
+            bill.setBillDate(
+                    rs.getTimestamp("bill_date")
+                            .toLocalDateTime()
+            );
+        }
+
+        bill.setSubtotal(
+                rs.getDouble("subtotal")
+        );
+
+        bill.setGst(
+                rs.getDouble("gst")
+        );
+
+        bill.setDiscount(
+                rs.getDouble("discount")
+        );
+
+        bill.setGrandTotal(
+                rs.getDouble("grand_total")
+        );
+
+        bill.setPaymentMethod(
+                rs.getString("payment_method")
+        );
+
+        bill.setPaymentStatus(
+                rs.getString("payment_status")
+        );
+
+        return bill;
+    }
 }
+
