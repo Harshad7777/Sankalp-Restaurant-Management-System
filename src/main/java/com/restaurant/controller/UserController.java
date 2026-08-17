@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @RequestBody Users user) {
+            @jakarta.validation.Valid @RequestBody Users user) {
 
         try {
 
@@ -164,7 +164,7 @@ public class UserController {
     @PutMapping("/profile/change-password")
     public ResponseEntity<?> changePassword(
             Authentication authentication,
-            @RequestBody ChangePasswordDTO dto) {
+            @jakarta.validation.Valid @RequestBody ChangePasswordDTO dto) {
 
         String result =
                 service.changePassword(
@@ -388,5 +388,33 @@ public class UserController {
 
 
         return ResponseEntity.ok(result);
+    }
+
+    // =====================================================
+    // GET PAGINATED, FILTERED, SORTED USERS
+    // GET /api/users/page
+    // =====================================================
+
+    @GetMapping("/page")
+    public ResponseEntity<com.restaurant.dto.PageResponse<Users>> getUsersPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String status) {
+
+        com.restaurant.dto.PageRequestDTO req = com.restaurant.dto.PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .search(search)
+                .role(role)
+                .status(status)
+                .build();
+
+        return ResponseEntity.ok(service.getUsersFilteredPage(req));
     }
 }

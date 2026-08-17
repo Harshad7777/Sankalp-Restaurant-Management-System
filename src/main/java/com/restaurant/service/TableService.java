@@ -203,6 +203,8 @@ public class TableService {
 
         return "AVAILABLE".equals(status)
                 || "OCCUPIED".equals(status)
-                || "RESERVED".equals(status);
+                || "RESERVED".equals(status)
+                || "CLEANING".equals(status)
+                || "BILLED".equals(status);
     }
 }

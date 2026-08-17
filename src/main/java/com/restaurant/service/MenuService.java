@@ -131,6 +131,12 @@ public class MenuService {
 		return repository.findByCategory(categoryId);
 	}
 
+	public com.restaurant.dto.PageResponse<Menu> getMenuFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+		List<Menu> content = repository.getMenuFilteredPage(req);
+		long total = repository.countMenuFiltered(req);
+		return new com.restaurant.dto.PageResponse<>(content, req.getPage(), req.getSize(), total);
+	}
+
 	// ==========================
 	// Save Image
 	// ==========================

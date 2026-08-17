@@ -72,7 +72,7 @@ public class TableController {
 
     @PostMapping
     public ResponseEntity<String> addTable(
-            @RequestBody Table table) {
+            @jakarta.validation.Valid @RequestBody Table table) {
 
         String result =
                 service.addTable(table);
@@ -98,7 +98,7 @@ public class TableController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateTable(
             @PathVariable int id,
-            @RequestBody Table table) {
+            @jakarta.validation.Valid @RequestBody Table table) {
 
         table.setTableId(id);
 

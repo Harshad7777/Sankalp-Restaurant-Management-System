@@ -117,4 +117,34 @@ public class MenuController {
         return ResponseEntity.ok(service.getCategoryMenu(categoryId));
     }
 
+    // ==========================
+    // Get Paginated, Filtered, Sorted Menu
+    // ==========================
+    @GetMapping("/page")
+    public ResponseEntity<com.restaurant.dto.PageResponse<Menu>> getMenuPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection,
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String search) {
+
+        com.restaurant.dto.PageRequestDTO req = com.restaurant.dto.PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .categoryId(categoryId)
+                .status(status)
+                .minPrice(minPrice)
+                .maxPrice(maxPrice)
+                .search(search)
+                .build();
+
+        return ResponseEntity.ok(service.getMenuFilteredPage(req));
+    }
+
 }

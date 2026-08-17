@@ -114,10 +114,55 @@ public class SecurityConfig {
 
                 // =================================================
                 // CATEGORY
+                // GET = ADMIN + STAFF
+                // POST/PUT/DELETE = ADMIN
                 // =================================================
 
-                .requestMatchers("/api/category/**")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/category",
+                    "/api/category/**"
+                )
+                .hasAnyRole(
+                    "ADMIN",
+                    "STAFF"
+                )
+
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/category",
+                    "/api/category/**"
+                )
                 .hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/category",
+                    "/api/category/**"
+                )
+                .hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/category",
+                    "/api/category/**"
+                )
+                .hasRole("ADMIN")
+
+
+                // =================================================
+                // TABLE
+                // ADMIN + STAFF
+                // =================================================
+
+                .requestMatchers(
+                    "/api/table",
+                    "/api/table/**"
+                )
+                .hasAnyRole(
+                    "ADMIN",
+                    "STAFF"
+                )
 
 
                 // =================================================
@@ -187,26 +232,29 @@ public class SecurityConfig {
 
 
                 // =================================================
-                // CHEF KITCHEN STATUS UPDATE
-                // CHEF ONLY
+                // CHEF & KITCHEN ORDER APIs
+                // CHEF + ADMIN + STAFF
                 // =================================================
 
                 .requestMatchers(
-                    HttpMethod.PUT,
-                    "/api/order/kitchen/detail/**"
+                    "/api/order/kitchen/**"
                 )
-                .hasRole("CHEF")
-
+                .hasAnyRole(
+                    "CHEF",
+                    "ADMIN",
+                    "STAFF"
+                )
 
                 // =================================================
                 // NORMAL ORDER APIs
-                // ADMIN + STAFF
+                // ADMIN + STAFF + CHEF
                 // =================================================
 
                 .requestMatchers("/api/order/**")
                 .hasAnyRole(
                     "ADMIN",
-                    "STAFF"
+                    "STAFF",
+                    "CHEF"
                 )
 
 

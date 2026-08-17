@@ -1,0 +1,117 @@
+# =====================================================
+# SANKALP RESTAURANT MANAGEMENT SYSTEM (RMS)
+# APPLICATION CONFIGURATION (YAML)
+# =====================================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: RMS_springboot_jdbc_restapi
+
+  # ---------------------------------------------------
+  # Database Configuration (Encrypted with Jasypt)
+  # ---------------------------------------------------
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/RMS?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:ENC(dPz6Xi7p5/wRNNTjPCB6Wg==)}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ---------------------------------------------------
+  # Database Schema & Data Initialization
+  # ---------------------------------------------------
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+
+  # ---------------------------------------------------
+  # Multipart / File Upload Settings
+  # ---------------------------------------------------
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # ---------------------------------------------------
+  # Artemis JMS Embedded Messaging
+  # ---------------------------------------------------
+  artemis:
+    mode: embedded
+    embedded:
+      enabled: true
+      persistent: false
+      queues: restaurant.mail.queue
+
+  # ---------------------------------------------------
+  # Java Mail Sender Configuration
+  # ---------------------------------------------------
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  # ---------------------------------------------------
+  # Jackson JSON Serialization
+  # ---------------------------------------------------
+  jackson:
+    serialization:
+      indent-output: true
+
+# -----------------------------------------------------
+# Jasypt Encryption Configuration
+# -----------------------------------------------------
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:SankalpRMSSecretKey2026!}
+    bean: jasyptStringEncryptor
+
+# -----------------------------------------------------
+# JWT Token Configuration
+# -----------------------------------------------------
+jwt:
+  secret: ${JWT_SECRET:local-dev-only-secret-change-me-32bytes-min}
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000} # 1 hour
+
+# -----------------------------------------------------
+# File Upload Storage Directory
+# -----------------------------------------------------
+file:
+  upload-dir: C:/restaurant/uploads
+
+# -----------------------------------------------------
+# Restaurant Application Features
+# -----------------------------------------------------
+restaurant:
+  mail:
+    enabled: ${MAIL_ENABLED:false}
+
+# -----------------------------------------------------
+# Logging Configuration
+# -----------------------------------------------------
+logging:
+  level:
+    root: INFO
+    com.restaurant: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.jdbc.core: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+  file:
+    name: logs/rms.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"

@@ -13,18 +13,17 @@ import com.restaurant.repository.UserRepository;
 public class UserService {
 
     private final UserRepository repository;
-
     private final PasswordEncoder passwordEncoder;
-
+    private final com.restaurant.service.mail.JmsMailProducer mailProducer;
 
     public UserService(
             UserRepository repository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            com.restaurant.service.mail.JmsMailProducer mailProducer) {
 
         this.repository = repository;
-
-        this.passwordEncoder =
-                passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
+        this.mailProducer = mailProducer;
     }
 
 
@@ -168,10 +167,16 @@ public class UserService {
 
 
         if (result <= 0) {
-
             return "User Creation Failed";
         }
 
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            try {
+                mailProducer.sendWelcomeEmail(user.getEmail(), user.getFullName(), user.getUsername(), user.getRole());
+            } catch (Exception e) {
+                // Log and ignore to prevent transaction failure if queue has issues
+            }
+        }
 
         return "User Added Successfully";
     }
@@ -739,10 +744,16 @@ public class UserService {
 
 
         if (result <= 0) {
-
             return "Password Update Failed";
         }
 
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            try {
+                mailProducer.sendPasswordResetAlert(user.getEmail(), user.getFullName(), user.getUsername());
+            } catch (Exception e) {
+                // Log and continue
+            }
+        }
 
         return "Password Changed Successfully";
     }
@@ -775,5 +786,11 @@ public class UserService {
                 "ACTIVE".equals(status)
                 ||
                 "INACTIVE".equals(status);
+    }
+
+    public com.restaurant.dto.PageResponse<Users> getUsersFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+        List<Users> content = repository.getUsersFilteredPage(req);
+        long total = repository.countUsersFiltered(req);
+        return new com.restaurant.dto.PageResponse<>(content, req.getPage(), req.getSize(), total);
     }
 }

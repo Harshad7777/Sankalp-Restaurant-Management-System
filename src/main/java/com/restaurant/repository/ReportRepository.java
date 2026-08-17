@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.restaurant.dto.SalesReportDTO;
 import com.restaurant.dto.TopMenuDTO;
+import com.restaurant.repository.query.ReportQueries;
 
 @Repository
 public class ReportRepository {
@@ -19,158 +20,41 @@ public class ReportRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
-    // =====================================================
-    // TOTAL SALES
-    // GET /api/report/sales
-    // =====================================================
-
     public double getTotalSales() {
-
-        String sql = """
-                SELECT IFNULL(SUM(grand_total), 0)
-                FROM bill
-                WHERE payment_status = 'PAID'
-                """;
-
         return jdbcTemplate.queryForObject(
-                sql,
-                Double.class
-        );
+                ReportQueries.GET_TOTAL_SALES,
+                Double.class);
     }
-
-
-    // =====================================================
-    // DATE WISE SALES
-    // GET /api/report/sales/date
-    // =====================================================
 
     public List<SalesReportDTO> getDateWiseSales() {
-
-        String sql = """
-                SELECT
-                    DATE(bill_date) AS reportDate,
-                    COUNT(order_id) AS totalOrders,
-                    IFNULL(SUM(grand_total), 0) AS totalSales
-                FROM bill
-                WHERE payment_status = 'PAID'
-                GROUP BY DATE(bill_date)
-                ORDER BY reportDate DESC
-                """;
-
         return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        SalesReportDTO.class
-                )
-        );
+                ReportQueries.GET_DATE_WISE_SALES,
+                new BeanPropertyRowMapper<>(SalesReportDTO.class));
     }
 
+    public List<SalesReportDTO> getSalesByDateRange(LocalDate startDate, LocalDate endDate) {
+        return jdbcTemplate.query(
+                ReportQueries.GET_SALES_BY_DATE_RANGE,
+                new BeanPropertyRowMapper<>(SalesReportDTO.class),
+                startDate,
+                endDate);
+    }
 
- // =====================================================
- // TOTAL PAID ORDERS
- // GET /api/report/orders
- // =====================================================
-
- // =====================================================
- // DATE-RANGE SALES
- // GET /api/report/sales/range?startDate=&endDate=
- // =====================================================
-
- public List<SalesReportDTO> getSalesByDateRange(
-         LocalDate startDate,
-         LocalDate endDate) {
-
-     String sql = """
-             SELECT
-                 DATE(bill_date) AS reportDate,
-                 COUNT(order_id) AS totalOrders,
-                 IFNULL(SUM(grand_total), 0) AS totalSales
-             FROM bill
-             WHERE payment_status = 'PAID'
-             AND DATE(bill_date) BETWEEN ? AND ?
-             GROUP BY DATE(bill_date)
-             ORDER BY reportDate DESC
-             """;
-
-     return jdbcTemplate.query(
-             sql,
-             new BeanPropertyRowMapper<>(
-                     SalesReportDTO.class
-             ),
-             startDate,
-             endDate
-     );
- }
-
-
- public int getTotalOrders() {
-
-     String sql = """
-             SELECT COUNT(*)
-             FROM bill
-             WHERE payment_status = 'PAID'
-             """;
-
-     return jdbcTemplate.queryForObject(
-             sql,
-             Integer.class
-     );
- }
-
-
-    // =====================================================
-    // TOTAL CUSTOMERS
-    // GET /api/report/customer
-    // =====================================================
+    public int getTotalOrders() {
+        return jdbcTemplate.queryForObject(
+                ReportQueries.GET_TOTAL_ORDERS,
+                Integer.class);
+    }
 
     public int getTotalCustomers() {
-
-        String sql = """
-                SELECT COUNT(*)
-                FROM customer
-                WHERE status = 'ACTIVE'
-                """;
-
         return jdbcTemplate.queryForObject(
-                sql,
-                Integer.class
-        );
+                ReportQueries.GET_TOTAL_CUSTOMERS,
+                Integer.class);
     }
 
-
-    // =====================================================
-    // TOP SELLING MENU
-    // GET /api/report/top-menu
-    // =====================================================
-
     public List<TopMenuDTO> getTopMenu() {
-
-        String sql = """
-                SELECT
-                    m.item_name AS itemName,
-                    SUM(od.quantity) AS totalQuantity,
-                    IFNULL(SUM(od.subtotal), 0) AS totalSales
-                FROM order_details od
-                JOIN menu m
-                    ON od.item_id = m.item_id
-                JOIN orders o
-                    ON od.order_id = o.order_id
-                JOIN bill b
-                    ON o.order_id = b.order_id
-                WHERE b.payment_status = 'PAID'
-                GROUP BY
-                    m.item_id,
-                    m.item_name
-                ORDER BY totalQuantity DESC
-                LIMIT 5
-                """;
-
         return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        TopMenuDTO.class
-                )
-        );
+                ReportQueries.GET_TOP_MENU,
+                new BeanPropertyRowMapper<>(TopMenuDTO.class));
     }
 }

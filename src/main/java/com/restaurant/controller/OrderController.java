@@ -68,18 +68,37 @@ public class OrderController {
     }
 
     // =====================================================
-    // GET ORDERS - PAGINATED
+    // GET ORDERS - PAGINATED, FILTERED, SORTED
     // GET /api/order/page
     // =====================================================
 
     @GetMapping("/page")
     public ResponseEntity<PageResponse<Orders>> getOrdersPage(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Integer customerId,
+            @RequestParam(required = false) Integer tableId,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String search) {
 
-        return ResponseEntity.ok(
-                service.getOrdersPage(page, size)
-        );
+        com.restaurant.dto.PageRequestDTO req = com.restaurant.dto.PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .status(status)
+                .customerId(customerId)
+                .tableId(tableId)
+                .startDate(startDate)
+                .endDate(endDate)
+                .search(search)
+                .build();
+
+        return ResponseEntity.ok(service.getOrdersFilteredPage(req));
     }
 
     // =====================================================

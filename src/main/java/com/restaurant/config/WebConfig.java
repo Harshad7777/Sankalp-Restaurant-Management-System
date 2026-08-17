@@ -32,4 +32,14 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(location);
     }
+
+    @org.springframework.context.annotation.Bean
+    public org.springframework.context.MessageSource messageSource() {
+        org.springframework.context.support.ResourceBundleMessageSource messageSource =
+                new org.springframework.context.support.ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setUseCodeAsDefaultMessage(true);
+        return messageSource;
+    }
 }

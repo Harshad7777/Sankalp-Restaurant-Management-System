@@ -7,358 +7,166 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.restaurant.model.Users;
+import com.restaurant.repository.query.UserQueries;
 
 @Repository
 public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public UserRepository(
-            JdbcTemplate jdbcTemplate) {
-
-        this.jdbcTemplate =
-                jdbcTemplate;
+    public UserRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
+    public Users findByUsername(String username) {
+        List<Users> list = jdbcTemplate.query(
+                UserQueries.FIND_BY_USERNAME,
+                new BeanPropertyRowMapper<>(Users.class),
+                username);
 
-    // =====================================================
-    // FIND BY USERNAME
-    // =====================================================
-
-    public Users findByUsername(
-            String username) {
-
-        String sql = """
-                SELECT
-                    user_id AS userId,
-                    full_name AS fullName,
-                    username,
-                    password,
-                    role,
-                    mobile,
-                    email,
-                    status
-                FROM users
-                WHERE username = ?
-                """;
-
-
-        List<Users> list =
-                jdbcTemplate.query(
-                        sql,
-                        new BeanPropertyRowMapper<>(
-                                Users.class
-                        ),
-                        username
-                );
-
-
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        return list.get(0);
+        return list.isEmpty() ? null : list.get(0);
     }
 
+    public boolean existsByUsername(String username) {
+        Integer count = jdbcTemplate.queryForObject(
+                UserQueries.EXISTS_BY_USERNAME,
+                Integer.class,
+                username);
 
-    // =====================================================
-    // CHECK USERNAME
-    // =====================================================
-
-    public boolean existsByUsername(
-            String username) {
-
-        String sql = """
-                SELECT COUNT(*)
-                FROM users
-                WHERE username = ?
-                """;
-
-
-        Integer count =
-                jdbcTemplate.queryForObject(
-                        sql,
-                        Integer.class,
-                        username
-                );
-
-
-        return
-                count != null &&
-                count > 0;
+        return count != null && count > 0;
     }
 
-
-    // =====================================================
-    // SAVE USER
-    // =====================================================
-
-    public int save(
-            Users user) {
-
-        String sql = """
-                INSERT INTO users
-                (
-                    full_name,
-                    username,
-                    password,
-                    role,
-                    mobile,
-                    email,
-                    status
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """;
-
-
+    public int save(Users user) {
         return jdbcTemplate.update(
-                sql,
-
+                UserQueries.INSERT_USER,
                 user.getFullName(),
-
                 user.getUsername(),
-
                 user.getPassword(),
-
                 user.getRole(),
-
                 user.getMobile(),
-
                 user.getEmail(),
-
-                user.getStatus()
-        );
+                user.getStatus());
     }
-
-
-    // =====================================================
-    // GET ALL USERS
-    // =====================================================
 
     public List<Users> findAll() {
-
-        String sql = """
-                SELECT
-                    user_id AS userId,
-                    full_name AS fullName,
-                    username,
-                    password,
-                    role,
-                    mobile,
-                    email,
-                    status
-                FROM users
-                ORDER BY user_id DESC
-                """;
-
-
         return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Users.class
-                )
-        );
+                UserQueries.FIND_ALL,
+                new BeanPropertyRowMapper<>(Users.class));
     }
-
-
-    // =====================================================
-    // GET TEAM USERS
-    // STAFF + CHEF ONLY
-    // =====================================================
 
     public List<Users> findTeamUsers() {
-
-        String sql = """
-                SELECT
-                    user_id AS userId,
-                    full_name AS fullName,
-                    username,
-                    password,
-                    role,
-                    mobile,
-                    email,
-                    status
-                FROM users
-                WHERE role IN ('STAFF', 'CHEF')
-                ORDER BY user_id DESC
-                """;
-
-
         return jdbcTemplate.query(
-                sql,
-                new BeanPropertyRowMapper<>(
-                        Users.class
-                )
-        );
+                UserQueries.FIND_TEAM_USERS,
+                new BeanPropertyRowMapper<>(Users.class));
     }
 
+    public Users findById(Integer id) {
+        List<Users> list = jdbcTemplate.query(
+                UserQueries.FIND_BY_ID,
+                new BeanPropertyRowMapper<>(Users.class),
+                id);
 
-    // =====================================================
-    // GET USER BY ID
-    // =====================================================
+        return list.isEmpty() ? null : list.get(0);
+    }
 
-    public Users findById(
-            Integer id) {
+    public int update(Users user) {
+        return jdbcTemplate.update(
+                UserQueries.UPDATE_USER,
+                user.getFullName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole(),
+                user.getMobile(),
+                user.getEmail(),
+                user.getStatus(),
+                user.getUserId());
+    }
 
-        String sql = """
-                SELECT
-                    user_id AS userId,
-                    full_name AS fullName,
-                    username,
-                    password,
-                    role,
-                    mobile,
-                    email,
-                    status
-                FROM users
-                WHERE user_id = ?
-                """;
+    public int updateWithoutPassword(Users user) {
+        return jdbcTemplate.update(
+                UserQueries.UPDATE_WITHOUT_PASSWORD,
+                user.getFullName(),
+                user.getUsername(),
+                user.getRole(),
+                user.getMobile(),
+                user.getEmail(),
+                user.getStatus(),
+                user.getUserId());
+    }
 
+    public int updatePassword(Integer id, String password) {
+        return jdbcTemplate.update(
+                UserQueries.UPDATE_PASSWORD,
+                password,
+                id);
+    }
 
-        List<Users> list =
-                jdbcTemplate.query(
-                        sql,
-                        new BeanPropertyRowMapper<>(
-                                Users.class
-                        ),
-                        id
-                );
+    public int delete(Integer id) {
+        return jdbcTemplate.update(
+                UserQueries.DELETE_USER,
+                id);
+    }
 
+    public List<Users> getUsersFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+        StringBuilder sql = new StringBuilder("""
+                SELECT user_id AS userId, full_name AS fullName, username, password, role, mobile, email, status
+                FROM users WHERE 1=1
+                """);
+        java.util.List<Object> params = new java.util.ArrayList<>();
 
-        if (list.isEmpty()) {
-
-            return null;
+        if (req.getRole() != null && !req.getRole().isBlank()) {
+            sql.append(" AND role = ?");
+            params.add(req.getRole().trim().toUpperCase());
+        }
+        if (req.getStatus() != null && !req.getStatus().isBlank()) {
+            sql.append(" AND status = ?");
+            params.add(req.getStatus().trim().toUpperCase());
+        }
+        if (req.getSearch() != null && !req.getSearch().isBlank()) {
+            sql.append(" AND (full_name LIKE ? OR username LIKE ? OR email LIKE ? OR mobile LIKE ?)");
+            String term = "%" + req.getSearch().trim() + "%";
+            params.add(term);
+            params.add(term);
+            params.add(term);
+            params.add(term);
         }
 
+        String sortColumn = "user_id";
+        if ("username".equalsIgnoreCase(req.getSortBy())) sortColumn = "username";
+        else if ("fullName".equalsIgnoreCase(req.getSortBy())) sortColumn = "full_name";
+        else if ("role".equalsIgnoreCase(req.getSortBy())) sortColumn = "role";
+        else if ("status".equalsIgnoreCase(req.getSortBy())) sortColumn = "status";
 
-        return list.get(0);
+        sql.append(" ORDER BY ").append(sortColumn).append(" ").append(req.getSafeSortDirection());
+        sql.append(" LIMIT ? OFFSET ?");
+        params.add(req.getLimit());
+        params.add(req.getOffset());
+
+        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(Users.class), params.toArray());
     }
 
+    public long countUsersFiltered(com.restaurant.dto.PageRequestDTO req) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
 
-    // =====================================================
-    // UPDATE WITH PASSWORD
-    // =====================================================
+        if (req.getRole() != null && !req.getRole().isBlank()) {
+            sql.append(" AND role = ?");
+            params.add(req.getRole().trim().toUpperCase());
+        }
+        if (req.getStatus() != null && !req.getStatus().isBlank()) {
+            sql.append(" AND status = ?");
+            params.add(req.getStatus().trim().toUpperCase());
+        }
+        if (req.getSearch() != null && !req.getSearch().isBlank()) {
+            sql.append(" AND (full_name LIKE ? OR username LIKE ? OR email LIKE ? OR mobile LIKE ?)");
+            String term = "%" + req.getSearch().trim() + "%";
+            params.add(term);
+            params.add(term);
+            params.add(term);
+            params.add(term);
+        }
 
-    public int update(
-            Users user) {
-
-        String sql = """
-                UPDATE users
-                SET
-                    full_name = ?,
-                    username = ?,
-                    password = ?,
-                    role = ?,
-                    mobile = ?,
-                    email = ?,
-                    status = ?
-                WHERE user_id = ?
-                """;
-
-
-        return jdbcTemplate.update(
-                sql,
-
-                user.getFullName(),
-
-                user.getUsername(),
-
-                user.getPassword(),
-
-                user.getRole(),
-
-                user.getMobile(),
-
-                user.getEmail(),
-
-                user.getStatus(),
-
-                user.getUserId()
-        );
-    }
-
-
-    // =====================================================
-    // UPDATE WITHOUT PASSWORD
-    // =====================================================
-
-    public int updateWithoutPassword(
-            Users user) {
-
-        String sql = """
-                UPDATE users
-                SET
-                    full_name = ?,
-                    username = ?,
-                    role = ?,
-                    mobile = ?,
-                    email = ?,
-                    status = ?
-                WHERE user_id = ?
-                """;
-
-
-        return jdbcTemplate.update(
-                sql,
-
-                user.getFullName(),
-
-                user.getUsername(),
-
-                user.getRole(),
-
-                user.getMobile(),
-
-                user.getEmail(),
-
-                user.getStatus(),
-
-                user.getUserId()
-        );
-    }
-
-
-    // =====================================================
-    // UPDATE PASSWORD
-    // =====================================================
-
-    public int updatePassword(
-            Integer id,
-            String password) {
-
-        String sql = """
-                UPDATE users
-                SET password = ?
-                WHERE user_id = ?
-                """;
-
-
-        return jdbcTemplate.update(
-                sql,
-
-                password,
-
-                id
-        );
-    }
-
-
-    // =====================================================
-    // DELETE
-    // =====================================================
-
-    public int delete(
-            Integer id) {
-
-        String sql = """
-                DELETE FROM users
-                WHERE user_id = ?
-                """;
-
-
-        return jdbcTemplate.update(
-                sql,
-                id
-        );
+        Long count = jdbcTemplate.queryForObject(sql.toString(), Long.class, params.toArray());
+        return count != null ? count : 0L;
     }
 }

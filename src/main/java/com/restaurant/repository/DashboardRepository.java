@@ -7,311 +7,109 @@ import org.springframework.stereotype.Repository;
 
 import com.restaurant.dto.RecentOrderDTO;
 import com.restaurant.dto.TopSellingItemDTO;
+import com.restaurant.repository.query.DashboardQueries;
 
 @Repository
 public class DashboardRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-
     public DashboardRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
-    // =====================================================
-    // TOTAL USERS
-    // =====================================================
-
     public int getTotalUsers() {
-
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM users",
-                Integer.class
-        );
+                DashboardQueries.COUNT_USERS,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // TOTAL CUSTOMERS
-    // =====================================================
 
     public int getTotalCustomers() {
-
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM customer",
-                Integer.class
-        );
+                DashboardQueries.COUNT_CUSTOMERS,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // TOTAL MENU ITEMS
-    // =====================================================
 
     public int getTotalMenuItems() {
-
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM menu",
-                Integer.class
-        );
+                DashboardQueries.COUNT_MENU_ITEMS,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // TOTAL ORDERS
-    // =====================================================
 
     public int getTotalOrders() {
-
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM orders",
-                Integer.class
-        );
+                DashboardQueries.COUNT_ORDERS,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // TODAY ORDERS
-    // =====================================================
 
     public int getTodayOrders() {
-
-        String sql = """
-                SELECT COUNT(*)
-                FROM orders
-                WHERE DATE(order_date) = CURDATE()
-                """;
-
         return jdbcTemplate.queryForObject(
-                sql,
-                Integer.class
-        );
+                DashboardQueries.COUNT_TODAY_ORDERS,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // TODAY SALES
-    // =====================================================
 
     public double getTodaySales() {
-
-        String sql = """
-                SELECT IFNULL(SUM(grand_total), 0)
-                FROM bill
-                WHERE DATE(bill_date) = CURDATE()
-                """;
-
-        Double result =
-                jdbcTemplate.queryForObject(
-                        sql,
-                        Double.class
-                );
-
+        Double result = jdbcTemplate.queryForObject(
+                DashboardQueries.SUM_TODAY_SALES,
+                Double.class);
         return result != null ? result : 0.0;
     }
-
-
-    // =====================================================
-    // TOTAL REVENUE
-    // =====================================================
 
     public double getTotalRevenue() {
-
-        String sql = """
-                SELECT IFNULL(SUM(grand_total), 0)
-                FROM bill
-                WHERE payment_status = 'PAID'
-                """;
-
-        Double result =
-                jdbcTemplate.queryForObject(
-                        sql,
-                        Double.class
-                );
-
+        Double result = jdbcTemplate.queryForObject(
+                DashboardQueries.SUM_TOTAL_REVENUE,
+                Double.class);
         return result != null ? result : 0.0;
     }
 
-
-    // =====================================================
-    // TOTAL CATEGORIES
-    // =====================================================
-
     public int getTotalCategories() {
-
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM category",
-                Integer.class
-        );
+                DashboardQueries.COUNT_CATEGORIES,
+                Integer.class);
     }
-
-
-    // =====================================================
-    // RECENT ORDERS
-    // =====================================================
 
     public List<RecentOrderDTO> getRecentOrders() {
-
-        String sql = """
-                SELECT
-                    o.order_id,
-                    c.customer_name,
-                    o.total_amount,
-                    o.order_status,
-                    o.order_date
-                FROM orders o
-                INNER JOIN customer c
-                    ON o.customer_id = c.customer_id
-                ORDER BY o.order_date DESC
-                LIMIT 5
-                """;
-
         return jdbcTemplate.query(
-                sql,
+                DashboardQueries.FIND_RECENT_ORDERS,
                 (rs, rowNum) -> {
-
-                    RecentOrderDTO dto =
-                            new RecentOrderDTO();
-
-                    dto.setOrderId(
-                            rs.getInt("order_id")
-                    );
-
-                    dto.setCustomerName(
-                            rs.getString("customer_name")
-                    );
-
-                    dto.setTotalAmount(
-                            rs.getDouble("total_amount")
-                    );
-
-                    dto.setStatus(
-                            rs.getString("order_status")
-                    );
-
+                    RecentOrderDTO dto = new RecentOrderDTO();
+                    dto.setOrderId(rs.getInt("order_id"));
+                    dto.setCustomerName(rs.getString("customer_name"));
+                    dto.setTotalAmount(rs.getDouble("total_amount"));
+                    dto.setStatus(rs.getString("order_status"));
                     if (rs.getTimestamp("order_date") != null) {
-
-                        dto.setOrderDate(
-                                rs.getTimestamp(
-                                        "order_date"
-                                ).toString()
-                        );
-
+                        dto.setOrderDate(rs.getTimestamp("order_date").toString());
                     }
-
                     return dto;
-                }
-        );
+                });
     }
 
-
-    // =====================================================
-    // TOP SELLING ITEMS
-    // =====================================================
-
     public List<TopSellingItemDTO> getTopSellingItems() {
-
-        String sql = """
-                SELECT
-                    m.item_id,
-                    m.item_name,
-                    m.image,
-
-                    COUNT(DISTINCT od.order_id) AS total_orders,
-
-                    COALESCE(SUM(od.quantity), 0) AS sold_quantity
-
-                FROM order_details od
-
-                INNER JOIN menu m
-                    ON od.item_id = m.item_id
-
-                INNER JOIN orders o
-                    ON od.order_id = o.order_id
-
-                WHERE o.order_status <> 'CANCELLED'
-
-                GROUP BY
-                    m.item_id,
-                    m.item_name,
-                    m.image
-
-                ORDER BY
-                    total_orders DESC,
-                    sold_quantity DESC
-
-                LIMIT 5
-                """;
-
-
-        List<TopSellingItemDTO> items =
-                jdbcTemplate.query(
-                        sql,
-                        (rs, rowNum) -> {
-
-                            TopSellingItemDTO dto =
-                                    new TopSellingItemDTO();
-
-                            dto.setItemId(
-                                    rs.getInt("item_id")
-                            );
-
-                            dto.setItemName(
-                                    rs.getString("item_name")
-                            );
-
-                            dto.setImage(
-                                    rs.getString("image")
-                            );
-
-                            dto.setOrders(
-                                    rs.getInt("total_orders")
-                            );
-
-                            dto.setSoldQuantity(
-                                    rs.getInt("sold_quantity")
-                            );
-
-                            return dto;
-                        }
-                );
-
-
-        // =================================================
-        // CALCULATE PERCENTAGE
-        // =================================================
+        List<TopSellingItemDTO> items = jdbcTemplate.query(
+                DashboardQueries.FIND_TOP_SELLING_ITEMS,
+                (rs, rowNum) -> {
+                    TopSellingItemDTO dto = new TopSellingItemDTO();
+                    dto.setItemId(rs.getInt("item_id"));
+                    dto.setItemName(rs.getString("item_name"));
+                    dto.setImage(rs.getString("image"));
+                    dto.setOrders(rs.getInt("total_orders"));
+                    dto.setSoldQuantity(rs.getInt("sold_quantity"));
+                    return dto;
+                });
 
         int maxOrders = 0;
-
         for (TopSellingItemDTO item : items) {
-
             if (item.getOrders() > maxOrders) {
-
-                maxOrders =
-                        item.getOrders();
+                maxOrders = item.getOrders();
             }
         }
-
 
         if (maxOrders > 0) {
-
             for (TopSellingItemDTO item : items) {
-
-                double percentage =
-                        (
-                            (double) item.getOrders()
-                            /
-                            maxOrders
-                        ) * 100.0;
-
-
-                item.setPercentage(
-                        Math.round(percentage)
-                );
+                double percentage = ((double) item.getOrders() / maxOrders) * 100.0;
+                item.setPercentage(Math.round(percentage));
             }
         }
-
 
         return items;
     }

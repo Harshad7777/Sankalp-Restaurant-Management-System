@@ -29,7 +29,7 @@ public class CategoryController {
     // ==========================
     @PostMapping
     public ResponseEntity<String> save(
-            @RequestBody Category category) {
+            @jakarta.validation.Valid @RequestBody Category category) {
 
         logger.info("Add Category Request");
 
@@ -48,7 +48,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(
             @PathVariable int id,
-            @RequestBody Category category) {
+            @jakarta.validation.Valid @RequestBody Category category) {
 
         category.setCategoryId(id);
 

@@ -38,7 +38,7 @@ public class BillController {
 
     @PostMapping
     public ResponseEntity<?> createBill(
-            @RequestBody BillDTO dto) {
+            @jakarta.validation.Valid @RequestBody BillDTO dto) {
 
         try {
 
@@ -91,22 +91,30 @@ public class BillController {
     // =====================================================
 
     @GetMapping("/page")
-    public ResponseEntity<PageResponse<Bill>>
-    getBillsPage(
-            @RequestParam(
-                    defaultValue = "0"
-            ) int page,
+    public ResponseEntity<PageResponse<Bill>> getBillsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String paymentMethod,
+            @RequestParam(required = false) String paymentStatus,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String search) {
 
-            @RequestParam(
-                    defaultValue = "10"
-            ) int size) {
+        com.restaurant.dto.PageRequestDTO req = com.restaurant.dto.PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .paymentMethod(paymentMethod)
+                .paymentStatus(paymentStatus)
+                .startDate(startDate)
+                .endDate(endDate)
+                .search(search)
+                .build();
 
-        return ResponseEntity.ok(
-                service.getBillsPage(
-                        page,
-                        size
-                )
-        );
+        return ResponseEntity.ok(service.getBillsFilteredPage(req));
     }
 
     // =====================================================

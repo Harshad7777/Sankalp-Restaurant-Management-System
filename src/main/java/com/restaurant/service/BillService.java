@@ -13,11 +13,20 @@ import com.restaurant.repository.BillRepository;
 public class BillService {
 
     private final BillRepository repository;
+    private final com.restaurant.repository.OrderRepository orderRepository;
+    private final com.restaurant.repository.CustomerRepository customerRepository;
+    private final com.restaurant.service.mail.JmsMailProducer mailProducer;
 
     public BillService(
-            BillRepository repository) {
+            BillRepository repository,
+            com.restaurant.repository.OrderRepository orderRepository,
+            com.restaurant.repository.CustomerRepository customerRepository,
+            com.restaurant.service.mail.JmsMailProducer mailProducer) {
 
         this.repository = repository;
+        this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.mailProducer = mailProducer;
     }
 
     // =====================================================
@@ -27,27 +36,51 @@ public class BillService {
     public int createBill(BillDTO dto) {
 
         if (dto == null) {
-
             throw new IllegalArgumentException(
                     "Bill request cannot be null"
             );
         }
 
         if (dto.getOrderId() <= 0) {
-
             throw new IllegalArgumentException(
                     "Invalid Order ID"
             );
         }
 
         if (dto.getDiscount() < 0) {
-
             throw new IllegalArgumentException(
                     "Discount cannot be negative"
             );
         }
 
-        return repository.createBill(dto);
+        int billId = repository.createBill(dto);
+
+        // Asynchronously enqueue invoice receipt email via JMS
+        try {
+            Bill bill = repository.getBillById(billId);
+            if (bill != null) {
+                com.restaurant.model.Orders order = orderRepository.getOrderById(bill.getOrderId());
+                if (order != null && order.getCustomerId() != null) {
+                    com.restaurant.model.Customer customer = customerRepository.findById(order.getCustomerId());
+                    if (customer != null && customer.getEmail() != null && !customer.getEmail().isBlank()) {
+                        mailProducer.sendBillInvoiceEmail(
+                                customer.getEmail(),
+                                customer.getCustomerName(),
+                                bill.getBillNo(),
+                                bill.getSubtotal(),
+                                bill.getGst(),
+                                bill.getDiscount(),
+                                bill.getGrandTotal(),
+                                bill.getPaymentMethod()
+                        );
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Non-blocking: failures in mailing do not break billing transaction
+        }
+
+        return billId;
     }
 
     // =====================================================
@@ -97,6 +130,12 @@ public class BillService {
                 safeSize,
                 total
         );
+    }
+
+    public PageResponse<Bill> getBillsFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+        List<Bill> content = repository.getBillsFilteredPage(req);
+        long total = repository.countBillsFiltered(req);
+        return new PageResponse<>(content, req.getPage(), req.getSize(), total);
     }
 
     // =====================================================

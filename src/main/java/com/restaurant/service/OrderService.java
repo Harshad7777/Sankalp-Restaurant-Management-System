@@ -71,6 +71,12 @@ public class OrderService {
                 total);
     }
 
+    public PageResponse<Orders> getOrdersFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+        List<Orders> content = repository.getOrdersFilteredPage(req);
+        long total = repository.countOrdersFiltered(req);
+        return new PageResponse<>(content, req.getPage(), req.getSize(), total);
+    }
+
     // =====================================================
     // GET ORDER BY ID
     // =====================================================

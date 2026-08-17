@@ -36,7 +36,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<String> addCustomer(
-            @RequestBody Customer customer) {
+            @jakarta.validation.Valid @RequestBody Customer customer) {
 
         try {
 
@@ -64,7 +64,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCustomer(
             @PathVariable("id") int id,
-            @RequestBody Customer customer) {
+            @jakarta.validation.Valid @RequestBody Customer customer) {
 
         try {
 
@@ -167,6 +167,32 @@ public class CustomerController {
         return ResponseEntity
                 .ok(customers);
 
+    }
+
+    /* =====================================================
+       GET PAGINATED, FILTERED, SORTED CUSTOMERS
+       GET /api/customer/page
+    ===================================================== */
+
+    @GetMapping("/page")
+    public ResponseEntity<com.restaurant.dto.PageResponse<Customer>> getCustomersPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status) {
+
+        com.restaurant.dto.PageRequestDTO req = com.restaurant.dto.PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .search(search)
+                .status(status)
+                .build();
+
+        return ResponseEntity.ok(service.getCustomersFilteredPage(req));
     }
 
 }

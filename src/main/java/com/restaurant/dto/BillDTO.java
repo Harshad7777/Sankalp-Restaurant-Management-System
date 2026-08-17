@@ -1,101 +1,33 @@
 package com.restaurant.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BillDTO {
 
+    @Positive(message = "Order ID must be positive")
     private int orderId;
 
     private double subtotal;
     private double gst;
+
+    @Min(value = 0, message = "Discount cannot be negative")
     private double discount;
+
     private double grandTotal;
 
+    @Pattern(regexp = "^(CASH|CARD|UPI)$", message = "Payment method must be CASH, CARD or UPI")
     private String paymentMethod;
+
+    @Pattern(regexp = "^(PENDING|PAID)$", message = "Payment status must be PENDING or PAID")
     private String paymentStatus;
-
-    public BillDTO() {
-    }
-
-    // =====================================================
-    // ORDER ID
-    // =====================================================
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    // =====================================================
-    // SUBTOTAL
-    // =====================================================
-
-    public double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    // =====================================================
-    // GST
-    // =====================================================
-
-    public double getGst() {
-        return gst;
-    }
-
-    public void setGst(double gst) {
-        this.gst = gst;
-    }
-
-    // =====================================================
-    // DISCOUNT
-    // =====================================================
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    // =====================================================
-    // GRAND TOTAL
-    // =====================================================
-
-    public double getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(double grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
-    // =====================================================
-    // PAYMENT METHOD
-    // =====================================================
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    // =====================================================
-    // PAYMENT STATUS
-    // =====================================================
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
 }

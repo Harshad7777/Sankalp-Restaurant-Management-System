@@ -25,23 +25,36 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleValidationError(
             MethodArgumentNotValidException ex) {
 
-        logger.warn("Validation failed");
+        logger.warn("Validation failed for method argument");
 
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(error -> {
-
                     errors.put(
                             error.getField(),
                             error.getDefaultMessage());
-
                 });
 
         return new ResponseEntity<>(
                 errors,
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolation(
+            jakarta.validation.ConstraintViolationException ex) {
+
+        logger.warn("Constraint violation: {}", ex.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> {
+            String property = violation.getPropertyPath().toString();
+            errors.put(property, violation.getMessage());
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

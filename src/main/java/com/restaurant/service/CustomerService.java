@@ -62,4 +62,10 @@ public class CustomerService {
     public List<Customer> searchCustomer(String keyword) {
         return repository.search(keyword);
     }
+
+    public com.restaurant.dto.PageResponse<Customer> getCustomersFilteredPage(com.restaurant.dto.PageRequestDTO req) {
+        List<Customer> content = repository.getCustomersFilteredPage(req);
+        long total = repository.countCustomersFiltered(req);
+        return new com.restaurant.dto.PageResponse<>(content, req.getPage(), req.getSize(), total);
+    }
 }
