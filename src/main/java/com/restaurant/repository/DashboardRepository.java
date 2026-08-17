@@ -113,4 +113,39 @@ public class DashboardRepository {
 
         return items;
     }
+
+    public List<com.restaurant.dto.RevenueOverviewDTO> getRevenueOverview() {
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.format.DateTimeFormatter dayFormatter = java.time.format.DateTimeFormatter.ofPattern("EEE", java.util.Locale.ENGLISH);
+        java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        java.util.Map<String, Double> revenueMap = new java.util.HashMap<>();
+        try {
+            jdbcTemplate.query(
+                    DashboardQueries.GET_WEEKLY_REVENUE_OVERVIEW,
+                    rs -> {
+                        String dateStr = rs.getString("bill_date");
+                        double amount = rs.getDouble("daily_revenue");
+                        revenueMap.put(dateStr, amount);
+                    });
+        } catch (Exception e) {
+            // Ignore if table empty
+        }
+
+        List<com.restaurant.dto.RevenueOverviewDTO> overviewList = new java.util.ArrayList<>();
+        for (int i = 6; i >= 0; i--) {
+            java.time.LocalDate date = today.minusDays(i);
+            String dateStr = date.format(dateFormatter);
+            String dayName = date.format(dayFormatter);
+            double amount = revenueMap.getOrDefault(dateStr, 0.0);
+
+            overviewList.add(com.restaurant.dto.RevenueOverviewDTO.builder()
+                    .day(dayName)
+                    .date(dateStr)
+                    .amount(amount)
+                    .build());
+        }
+
+        return overviewList;
+    }
 }

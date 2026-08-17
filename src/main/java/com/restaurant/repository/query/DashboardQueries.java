@@ -73,4 +73,15 @@ public final class DashboardQueries {
                 sold_quantity DESC
             LIMIT 5
             """;
+
+    public static final String GET_WEEKLY_REVENUE_OVERVIEW = """
+            SELECT
+                DATE(bill_date) AS bill_date,
+                IFNULL(SUM(grand_total), 0) AS daily_revenue
+            FROM bill
+            WHERE payment_status = 'PAID'
+              AND bill_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+            GROUP BY DATE(bill_date)
+            ORDER BY DATE(bill_date) ASC
+            """;
 }

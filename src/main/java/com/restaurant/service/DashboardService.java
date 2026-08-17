@@ -93,6 +93,15 @@ public class DashboardService {
         );
 
 
+        // ---------------------------------------------
+        // REVENUE OVERVIEW (LAST 7 DAYS)
+        // ---------------------------------------------
+
+        dto.setRevenueOverview(
+                repository.getRevenueOverview()
+        );
+
+
         return dto;
     }
 
