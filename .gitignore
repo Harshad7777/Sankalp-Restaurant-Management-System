@@ -1,37 +1,35 @@
-HELP.md
+# Build artifacts
+*.jar
+*.war
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+**/target/
 
-### STS ###
-.apt_generated
+# Apache Tomcat local server & logs
+tomcat10/
+logs/
+**/logs/
+*.log
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
 .classpath
-.factorypath
 .project
-.settings
+.settings/
+.factorypath
+.apt_generated/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# OS generated files
+.DS_Store
+Thumbs.db
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### Logs ###
-logs/
-*.log
-
-### VS Code ###
-.vscode/
+# User uploaded files in backend (except placeholders if needed)
+uploads/*
+!uploads/.gitkeep
+**/uploads/*
+!**/uploads/.gitkeep

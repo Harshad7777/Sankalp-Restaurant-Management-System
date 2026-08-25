@@ -1,0 +1,80 @@
+services:
+  # =====================================================
+  # 1. MySQL Database Service
+  # =====================================================
+  mysql-db:
+    image: mysql:8.0
+    container_name: rms-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: RMS
+    ports:
+      - "3307:3306" # Mapped to 3307 on host to prevent conflict with local MySQL 3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - rms-network
+
+  # =====================================================
+  # 2. Spring Boot REST API Backend
+  # =====================================================
+  backend:
+    build:
+      context: ./Sankalp-Restaurant-Management-System_antigravity
+      dockerfile: Dockerfile
+    container_name: rms-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql-db:3306/RMS?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      JASYPT_ENCRYPTOR_PASSWORD: SankalpRMSSecretKey2026!
+      JWT_SECRET: local-dev-only-secret-change-me-32bytes-min
+      UPLOAD_DIR: /app/uploads
+      MAIL_ENABLED: "true"
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: "587"
+      MAIL_USERNAME: harshadrakshe28@gmail.com
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-"vioa qkuu afto vxvg"}
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_logs:/app/logs
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - rms-network
+
+  # =====================================================
+  # 3. JSP Frontend (Tomcat 10.1)
+  # =====================================================
+  frontend:
+    build:
+      context: ./RMS_front_end_antigravity
+      dockerfile: Dockerfile
+    container_name: rms-frontend
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - backend
+    networks:
+      - rms-network
+
+networks:
+  rms-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  backend_uploads:
+  backend_logs:

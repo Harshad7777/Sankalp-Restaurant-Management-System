@@ -1,0 +1,27 @@
+# Setup Tomcat 10.1 script
+$tomcatUrl = "https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.34/bin/apache-tomcat-10.1.34-windows-x64.zip"
+$zipFile = "tomcat10.zip"
+$destDir = "tomcat10"
+
+Write-Host "Downloading Apache Tomcat 10.1..."
+Invoke-WebRequest -Uri $tomcatUrl -OutFile $zipFile
+
+Write-Host "Extracting Tomcat..."
+if (Test-Path $destDir) { Remove-Item -Recurse -Force $destDir }
+Expand-Archive -Path $zipFile -DestinationPath $destDir -Force
+Remove-Item -Force $zipFile
+
+$tomcatHome = Get-ChildItem -Path $destDir | Where-Object { $_.PSIsContainer } | Select-Object -First 1
+$webappsDir = Join-Path -Path $tomcatHome.FullName -ChildPath "webapps"
+
+Write-Host "Clearing default Tomcat webapps in $webappsDir..."
+Get-ChildItem -Path $webappsDir | Remove-Item -Recurse -Force
+
+Write-Host "Deploying RMS_backend.war to $webappsDir\RMS_backend.war..."
+Copy-Item "RMS_backend.war" -Destination "$webappsDir\RMS_backend.war" -Force
+
+Write-Host "Deploying RMS_frontend.war to $webappsDir\ROOT.war..."
+Copy-Item "RMS_frontend.war" -Destination "$webappsDir\ROOT.war" -Force
+
+Write-Host "Deployment Complete!"
+Write-Host "Tomcat Directory: $($tomcatHome.FullName)"
