@@ -27,7 +27,7 @@ services:
   # =====================================================
   backend:
     build:
-      context: ./Sankalp-Restaurant-Management-System_antigravity
+      context: ./Sankalp-Restaurant-Management-System
       dockerfile: Dockerfile
     container_name: rms-backend
     restart: always
@@ -59,7 +59,7 @@ services:
   # =====================================================
   frontend:
     build:
-      context: ./RMS_front_end_antigravity
+      context: ./RMS_front_end
       dockerfile: Dockerfile
     container_name: rms-frontend
     restart: always
