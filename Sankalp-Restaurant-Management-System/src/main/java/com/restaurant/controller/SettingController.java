@@ -15,7 +15,7 @@ import com.restaurant.model.RestaurantSetting;
 import com.restaurant.service.SettingService;
 
 @RestController
-@RequestMapping("/api/settings")
+@RequestMapping("/settings")
 @CrossOrigin(origins = "*")
 public class SettingController {
 

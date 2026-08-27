@@ -12,7 +12,7 @@ import com.restaurant.model.Users;
 import com.restaurant.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
 

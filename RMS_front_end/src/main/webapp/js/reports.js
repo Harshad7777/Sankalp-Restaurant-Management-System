@@ -20,9 +20,9 @@ const API_BASE = window.location.origin.includes(":8081")
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
 
-const REPORT_API = API_BASE + "/api/report";
-const BILL_API = API_BASE + "/api/bill";
-const ORDER_API = API_BASE + "/api/order";
+const REPORT_API = "/api/report";
+const BILL_API = "/api/bill";
+const ORDER_API = "/api/order";
 
 
 // ============================================================

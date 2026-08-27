@@ -41,8 +41,7 @@ const BACKEND_URL =
    CUSTOMER API
 ========================================================= */
 
-const CUSTOMER_API =
-    BACKEND_URL + "/api/customer";
+const CUSTOMER_API = "/api/customer";
 
 
 console.log(

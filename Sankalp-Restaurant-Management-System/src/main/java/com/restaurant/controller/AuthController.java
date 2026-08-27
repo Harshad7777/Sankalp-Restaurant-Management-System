@@ -12,7 +12,6 @@ import com.restaurant.dto.LoginResponse;
 import com.restaurant.service.AuthService;
 
 @RestController
-@RequestMapping("/api")
 @CrossOrigin("*")
 public class AuthController {
 

@@ -56,7 +56,7 @@ class OrderControllerTest {
 
         when(orderService.createOrder(any(OrderDTO.class))).thenReturn(101);
 
-        mockMvc.perform(post("/api/order")
+        mockMvc.perform(post("/order")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
@@ -74,7 +74,7 @@ class OrderControllerTest {
         List<Orders> list = Collections.singletonList(order);
         when(orderService.getAllOrders()).thenReturn(list);
 
-        mockMvc.perform(get("/api/order"))
+        mockMvc.perform(get("/order"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].orderId").value(101));
@@ -85,7 +85,7 @@ class OrderControllerTest {
         when(orderService.updateStatus(101, "COMPLETED"))
                 .thenReturn("Order Status Updated Successfully");
 
-        mockMvc.perform(put("/api/order/status/101")
+        mockMvc.perform(put("/order/status/101")
                 .param("status", "COMPLETED"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Order Status Updated Successfully"));
@@ -96,7 +96,7 @@ class OrderControllerTest {
         when(orderService.updateStatus(101, "INVALID"))
                 .thenReturn("Failed to update status");
 
-        mockMvc.perform(put("/api/order/status/101")
+        mockMvc.perform(put("/order/status/101")
                 .param("status", "INVALID"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Failed to update status"));

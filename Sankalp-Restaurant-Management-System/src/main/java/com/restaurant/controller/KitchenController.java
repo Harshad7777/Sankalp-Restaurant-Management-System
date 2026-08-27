@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.restaurant.service.KitchenService;
 
 @RestController
-@RequestMapping("/api/kitchen")
+@RequestMapping("/kitchen")
 @CrossOrigin(origins = "*")
 public class KitchenController {
 

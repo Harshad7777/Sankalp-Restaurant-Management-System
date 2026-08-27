@@ -52,7 +52,7 @@ class MenuControllerTest {
         List<Menu> menuList = Arrays.asList(item1, item2);
         when(menuService.getAllMenu()).thenReturn(menuList);
 
-        mockMvc.perform(get("/api/menu"))
+        mockMvc.perform(get("/menu"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].itemName").value("Paneer Butter Masala"))
@@ -68,7 +68,7 @@ class MenuControllerTest {
 
         when(menuService.getMenu(1)).thenReturn(item);
 
-        mockMvc.perform(get("/api/menu/1"))
+        mockMvc.perform(get("/menu/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.itemId").value(1))
                 .andExpect(jsonPath("$.itemName").value("Paneer Butter Masala"));
@@ -78,7 +78,7 @@ class MenuControllerTest {
     void testDeleteMenu() throws Exception {
         when(menuService.deleteMenu(anyInt())).thenReturn("Menu deleted successfully");
 
-        mockMvc.perform(delete("/api/menu/1"))
+        mockMvc.perform(delete("/menu/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Menu deleted successfully"));
     }

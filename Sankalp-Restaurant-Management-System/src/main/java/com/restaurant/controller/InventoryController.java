@@ -26,7 +26,7 @@ import com.restaurant.service.InventoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/inventory")
+@RequestMapping("/inventory")
 @CrossOrigin("*")
 public class InventoryController {
 

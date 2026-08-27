@@ -230,6 +230,7 @@
 </div>
 
 <!-- JAVASCRIPT -->
+<script src="<%= contextPath %>/js/config.js"></script>
 <script src="<%= contextPath %>/js/login.js"></script>
 
 </body>

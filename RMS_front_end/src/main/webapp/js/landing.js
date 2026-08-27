@@ -11,8 +11,8 @@
 const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
-const MENU_API = `${BACKEND_BASE_URL}/api/menu`;
-const CATEGORY_API = `${BACKEND_BASE_URL}/api/category`;
+const MENU_API = "/api/menu";
+const CATEGORY_API = "/api/category";
 
 let allMenuItems = [];
 let allCategories = [];
@@ -273,8 +273,7 @@ function renderMenuCards(items) {
         const price = Number(item.price || 0).toLocaleString("en-IN", { minimumFractionDigits: 0 });
         
         function resolveMenuImageSrc(img) {
-            const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-            const localDefault = contextPrefix + "/images/menu/default-food.jpg";
+            const localDefault = "/images/menu/default-food.jpg";
             
             if (!img || typeof img !== "string" || img.trim() === "" || img === "null" || img === "undefined") {
                 return localDefault;
@@ -290,14 +289,13 @@ function renderMenuCards(items) {
                 trimmed = trimmed.substring(8);
             }
             if (trimmed.startsWith("images/")) {
-                return contextPrefix + "/" + trimmed;
+                return "/" + trimmed;
             }
-            return `${BACKEND_BASE_URL}/uploads/${trimmed}`;
+            return "/api/uploads/" + encodeURIComponent(trimmed);
         }
 
         const imageSrc = resolveMenuImageSrc(item.image);
-        const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-        const fallbackImg = contextPrefix + "/images/menu/default-food.jpg";
+        const fallbackImg = "/images/menu/default-food.jpg";
 
         const categoryBadge = item.categoryName ? `<span class="food-badge">${escapeHtml(item.categoryName)}</span>` : '<span class="food-badge">Chef Choice</span>';
 
@@ -543,7 +541,7 @@ function initializeReservation() {
         }
 
         try {
-            const reservationApi = `${BACKEND_BASE_URL}/api/reservation`;
+            const reservationApi = "/api/reservation";
             const response = await fetch(reservationApi, {
                 method: "POST",
                 headers: {
@@ -684,7 +682,7 @@ async function initializeLandingBrandSettings() {
 
     // 2. Fetch fresh settings from backend REST API
     try {
-        const res = await fetch(`${BACKEND_BASE_URL}/api/settings`);
+        const res = await fetch("/api/settings");
         if (res.ok) {
             const data = await res.json();
             if (data && typeof data === "object") {
@@ -713,10 +711,11 @@ function applyLandingBranding(settings) {
 
     // Format Logo Path
     if (settings.logoPath) {
-        const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-        let fullSrc = settings.logoPath;
+        let fullSrc = settings.logoPath.trim();
         if (!fullSrc.startsWith("http") && !fullSrc.startsWith("data:")) {
-            fullSrc = contextPrefix + fullSrc;
+            if (fullSrc.startsWith("uploads/")) fullSrc = "/api/" + fullSrc;
+            else if (fullSrc.startsWith("/uploads/")) fullSrc = "/api" + fullSrc;
+            else if (!fullSrc.startsWith("/")) fullSrc = "/" + fullSrc;
         }
 
         if (navLogo) navLogo.src = fullSrc;

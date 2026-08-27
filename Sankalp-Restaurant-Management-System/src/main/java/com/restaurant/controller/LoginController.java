@@ -9,7 +9,7 @@ import com.restaurant.dto.LoginResponse;
 import com.restaurant.service.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class LoginController {
 

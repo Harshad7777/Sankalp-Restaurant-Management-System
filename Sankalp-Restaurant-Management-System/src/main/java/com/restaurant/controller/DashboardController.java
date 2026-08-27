@@ -10,7 +10,7 @@ import com.restaurant.dto.DashboardDTO;
 import com.restaurant.service.DashboardService;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/dashboard")
 @CrossOrigin("*")
 public class DashboardController {
 

@@ -25,7 +25,7 @@ import com.restaurant.service.OrderService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/order")
 @CrossOrigin(origins = "*")
 public class OrderController {
 

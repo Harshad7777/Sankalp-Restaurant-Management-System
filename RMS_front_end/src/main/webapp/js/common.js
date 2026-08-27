@@ -50,9 +50,11 @@ document.addEventListener(
    GLOBAL BRAND LOGO SYNC
 ===================================================== */
 
-const RMS_GLOBAL_BACKEND_URL = window.location.origin.includes(":8081") 
-    ? "http://localhost:8080" 
-    : (window.location.origin + "/RMS_backend");
+const RMS_GLOBAL_BACKEND_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
+    ? window.API_BASE_URL
+    : (window.location.origin.includes(":8081") 
+        ? "http://localhost:8080" 
+        : (window.location.origin + "/RMS_backend"));
 
 async function syncGlobalBrandLogo() {
     const sidebarLogo = document.getElementById("sidebarLogoImg");
@@ -71,7 +73,7 @@ async function syncGlobalBrandLogo() {
 
     // 2. Fetch fresh settings from backend API
     try {
-        const res = await fetch(`${RMS_GLOBAL_BACKEND_URL}/api/settings`);
+        const res = await fetch("/api/settings");
         if (res.ok) {
             const settings = await res.json();
             if (settings && settings.logoPath) {
@@ -84,10 +86,11 @@ async function syncGlobalBrandLogo() {
 
 function applySidebarLogo(imgEl, logoPath) {
     if (!logoPath) return;
-    const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-    let fullSrc = logoPath;
-    if (!logoPath.startsWith("http") && !logoPath.startsWith("data:")) {
-        fullSrc = contextPrefix + logoPath;
+    let fullSrc = logoPath.trim();
+    if (!fullSrc.startsWith("http") && !fullSrc.startsWith("data:")) {
+        if (fullSrc.startsWith("uploads/")) fullSrc = "/api/" + fullSrc;
+        else if (fullSrc.startsWith("/uploads/")) fullSrc = "/api" + fullSrc;
+        else if (!fullSrc.startsWith("/")) fullSrc = "/" + fullSrc;
     }
     if (imgEl) {
         imgEl.src = fullSrc;

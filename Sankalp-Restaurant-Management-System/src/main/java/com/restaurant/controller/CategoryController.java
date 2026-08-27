@@ -11,7 +11,7 @@ import com.restaurant.model.Category;
 import com.restaurant.service.CategoryService;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/category")
 @CrossOrigin("*")
 public class CategoryController {
 

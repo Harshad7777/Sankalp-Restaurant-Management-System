@@ -19,7 +19,7 @@ import com.restaurant.model.Menu;
 import com.restaurant.service.MenuService;
 
 @RestController
-@RequestMapping("/api/menu")
+@RequestMapping("/menu")
 @CrossOrigin("*")
 public class MenuController {
 

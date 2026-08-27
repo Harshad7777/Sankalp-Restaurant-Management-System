@@ -16,7 +16,7 @@ import com.restaurant.dto.TopMenuDTO;
 import com.restaurant.service.ReportService;
 
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/report")
 @CrossOrigin("*")
 public class ReportController {
 

@@ -170,6 +170,7 @@
     </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/js/config.js"></script>
 <script src="${pageContext.request.contextPath}/js/register.js"></script>
 
 </body>

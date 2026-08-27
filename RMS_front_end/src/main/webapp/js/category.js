@@ -15,8 +15,7 @@ const API_BASE_URL =
         ? "http://localhost:8080" 
         : (window.location.origin + "/RMS_backend");
 
-const CATEGORY_API =
-    API_BASE_URL + "/api/category";
+const CATEGORY_API = "/api/category";
 
 
 /* =========================================================

@@ -80,11 +80,11 @@ public class SecurityConfig {
                 // =================================================
 
                 .requestMatchers(
-                    "/api/login",
-                    "/api/auth/login",
-                    "/api/auth/forgot-password/**",
-                    "/api/users/register",
-                    "/api/settings/**",
+                    "/login",
+                    "/auth/login",
+                    "/auth/forgot-password/**",
+                    "/users/register",
+                    "/settings/**",
                     "/uploads/**",
                     "/static/**",
                     "/images/**",
@@ -100,15 +100,15 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.POST,
-                    "/api/reservation",
-                    "/api/reservation/"
+                    "/reservation",
+                    "/reservation/"
                 )
                 .permitAll()
 
                 .requestMatchers(
                     HttpMethod.GET,
-                    "/api/reservation",
-                    "/api/reservation/**"
+                    "/reservation",
+                    "/reservation/**"
                 )
                 .permitAll()
 
@@ -119,8 +119,8 @@ public class SecurityConfig {
                 // =================================================
 
                 .requestMatchers(
-                    "/api/users/profile",
-                    "/api/users/profile/change-password"
+                    "/users/profile",
+                    "/users/profile/change-password"
                 )
                 .hasAnyRole(
                     "ADMIN",
@@ -133,7 +133,7 @@ public class SecurityConfig {
                 // ADMIN ONLY - USERS
                 // =================================================
 
-                .requestMatchers("/api/users/**")
+                .requestMatchers("/users/**")
                 .hasRole("ADMIN")
 
 
@@ -145,29 +145,29 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.GET,
-                    "/api/category",
-                    "/api/category/**"
+                    "/category",
+                    "/category/**"
                 )
                 .permitAll()
 
                 .requestMatchers(
                     HttpMethod.POST,
-                    "/api/category",
-                    "/api/category/**"
+                    "/category",
+                    "/category/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.PUT,
-                    "/api/category",
-                    "/api/category/**"
+                    "/category",
+                    "/category/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.DELETE,
-                    "/api/category",
-                    "/api/category/**"
+                    "/category",
+                    "/category/**"
                 )
                 .hasRole("ADMIN")
 
@@ -178,10 +178,10 @@ public class SecurityConfig {
                 // =================================================
 
                 .requestMatchers(
-                    "/api/table",
-                    "/api/table/**",
-                    "/api/reservation",
-                    "/api/reservation/**"
+                    "/table",
+                    "/table/**",
+                    "/reservation",
+                    "/reservation/**"
                 )
                 .hasAnyRole(
                     "ADMIN",
@@ -197,29 +197,29 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.GET,
-                    "/api/menu",
-                    "/api/menu/**"
+                    "/menu",
+                    "/menu/**"
                 )
                 .permitAll()
 
                 .requestMatchers(
                     HttpMethod.POST,
-                    "/api/menu",
-                    "/api/menu/**"
+                    "/menu",
+                    "/menu/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.PUT,
-                    "/api/menu",
-                    "/api/menu/**"
+                    "/menu",
+                    "/menu/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.DELETE,
-                    "/api/menu",
-                    "/api/menu/**"
+                    "/menu",
+                    "/menu/**"
                 )
                 .hasRole("ADMIN")
 
@@ -228,7 +228,7 @@ public class SecurityConfig {
                 // REPORT
                 // =================================================
 
-                .requestMatchers("/api/report/**")
+                .requestMatchers("/report/**")
                 .hasRole("ADMIN")
 
 
@@ -236,7 +236,7 @@ public class SecurityConfig {
                 // UPLOAD
                 // =================================================
 
-                .requestMatchers("/api/upload/**")
+                .requestMatchers("/upload/**")
                 .hasRole("ADMIN")
 
 
@@ -248,14 +248,14 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.DELETE,
-                    "/api/inventory",
-                    "/api/inventory/**"
+                    "/inventory",
+                    "/inventory/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
-                    "/api/inventory",
-                    "/api/inventory/**"
+                    "/inventory",
+                    "/inventory/**"
                 )
                 .hasAnyRole(
                     "ADMIN",
@@ -269,7 +269,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF
                 // =================================================
 
-                .requestMatchers("/api/customer/**")
+                .requestMatchers("/customer/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF"
@@ -282,7 +282,7 @@ public class SecurityConfig {
                 // =================================================
 
                 .requestMatchers(
-                    "/api/order/kitchen/**"
+                    "/order/kitchen/**"
                 )
                 .hasAnyRole(
                     "CHEF",
@@ -295,7 +295,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF + CHEF
                 // =================================================
 
-                .requestMatchers("/api/order/**")
+                .requestMatchers("/order/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF",
@@ -308,7 +308,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF
                 // =================================================
 
-                .requestMatchers("/api/bill/**")
+                .requestMatchers("/bill/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF"
@@ -320,7 +320,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF
                 // =================================================
 
-                .requestMatchers("/api/dashboard/**")
+                .requestMatchers("/dashboard/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF"
@@ -334,8 +334,8 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.GET,
-                    "/api/kitchen",
-                    "/api/kitchen/**"
+                    "/kitchen",
+                    "/kitchen/**"
                 )
                 .hasAnyRole(
                     "ADMIN",
@@ -350,19 +350,19 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     HttpMethod.POST,
-                    "/api/kitchen/**"
+                    "/kitchen/**"
                 )
                 .hasRole("CHEF")
 
                 .requestMatchers(
                     HttpMethod.PUT,
-                    "/api/kitchen/**"
+                    "/kitchen/**"
                 )
                 .hasRole("CHEF")
 
                 .requestMatchers(
                     HttpMethod.DELETE,
-                    "/api/kitchen/**"
+                    "/kitchen/**"
                 )
                 .hasRole("CHEF")
 

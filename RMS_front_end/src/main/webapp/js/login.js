@@ -8,11 +8,13 @@
 
 "use strict";
 
-const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
-    ? "http://localhost:8080/RMS_backend" 
-    : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend"));
+const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
+    ? window.API_BASE_URL
+    : (window.location.origin.includes(":8081") 
+        ? "http://localhost:8080/RMS_backend" 
+        : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend")));
 
-const LOGIN_API_URL = `${BACKEND_BASE_URL}/api/auth/login`;
+const LOGIN_API_URL = "/api/auth/login";
 
 document.addEventListener("DOMContentLoaded", function () {
     initLoginForm();
@@ -40,7 +42,7 @@ async function initBrandIdentity() {
 
     // 2. Fetch fresh settings from backend API
     try {
-        const res = await fetch(`${BACKEND_BASE_URL}/api/settings`);
+        const res = await fetch("/api/settings");
         if (res.ok) {
             const data = await res.json();
             if (data && typeof data === "object") {
@@ -63,10 +65,11 @@ function applyLoginBranding(settings) {
 
     const logoPath = settings.logoPath;
     if (logoPath) {
-        const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-        let fullSrc = logoPath;
-        if (!logoPath.startsWith("http") && !logoPath.startsWith("data:")) {
-            fullSrc = contextPrefix + logoPath;
+        let fullSrc = logoPath.trim();
+        if (!fullSrc.startsWith("http") && !fullSrc.startsWith("data:")) {
+            if (fullSrc.startsWith("uploads/")) fullSrc = "/api/" + fullSrc;
+            else if (fullSrc.startsWith("/uploads/")) fullSrc = "/api" + fullSrc;
+            else if (!fullSrc.startsWith("/")) fullSrc = "/" + fullSrc;
         }
 
         if (showcaseLogo) showcaseLogo.src = fullSrc;
@@ -218,7 +221,7 @@ function initForgotPassword() {
             hideModalAlert();
 
             try {
-                const res = await fetch(`${BACKEND_BASE_URL}/api/auth/forgot-password/request-otp`, {
+                const res = await fetch("/api/auth/forgot-password/request-otp", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ identity: identity })
@@ -276,7 +279,7 @@ function initForgotPassword() {
             hideModalAlert();
 
             try {
-                const res = await fetch(`${BACKEND_BASE_URL}/api/auth/forgot-password/reset-password`, {
+                const res = await fetch("/api/auth/forgot-password/reset-password", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

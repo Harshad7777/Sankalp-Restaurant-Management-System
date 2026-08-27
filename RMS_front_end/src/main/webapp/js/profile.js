@@ -11,7 +11,7 @@
 const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
-const BASE_API_URL = `${BACKEND_BASE_URL}/api/users`;
+const BASE_API_URL = "/api/users";
 const PROFILE_API = `${BASE_API_URL}/profile`;
 const CHANGE_PASSWORD_API = `${BASE_API_URL}/profile/change-password`;
 

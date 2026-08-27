@@ -25,8 +25,7 @@ const API_BASE_URL = window.location.origin.includes(":8081")
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
 
-const KITCHEN_API =
-    API_BASE_URL + "/api/kitchen";
+const KITCHEN_API = "/api/kitchen";
 
 console.log("Context Path:", CONTEXT_PATH);
 console.log("API Base URL:", API_BASE_URL);

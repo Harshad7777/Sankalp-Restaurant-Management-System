@@ -46,11 +46,8 @@
        API URLS
     ===================================================== */
 
-    const BILL_API =
-        `${BACKEND_BASE_URL}/api/bill`;
-
-    const ORDER_API =
-        `${BACKEND_BASE_URL}/api/order`;
+    const BILL_API = "/api/bill";
+    const ORDER_API = "/api/order";
 
 
     /* =====================================================
@@ -3005,10 +3002,11 @@
         const footerNote = settings.billFooterNote || "Thank you for dining with Sankalp! Have a wonderful day.";
         const currencySymbol = settings.currencySymbol || "₹";
 
-        const contextPrefix = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
-        let logoSrc = settings.logoPath || "/images/logo1.png";
+        let logoSrc = (settings.logoPath || "/images/logo1.png").trim();
         if (!logoSrc.startsWith("http") && !logoSrc.startsWith("data:")) {
-            logoSrc = contextPrefix + logoSrc;
+            if (logoSrc.startsWith("uploads/")) logoSrc = "/api/" + logoSrc;
+            else if (logoSrc.startsWith("/uploads/")) logoSrc = "/api" + logoSrc;
+            else if (!logoSrc.startsWith("/")) logoSrc = "/" + logoSrc;
         }
 
         const printWindow =

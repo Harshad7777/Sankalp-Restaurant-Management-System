@@ -18,14 +18,9 @@ const BACKEND_URL =
         ? "http://localhost:8080" 
         : (window.location.origin + "/RMS_backend");
 
-const MENU_API =
-    BACKEND_URL + "/api/menu";
-
-const CATEGORY_API =
-    BACKEND_URL + "/api/category";
-
-const IMAGE_PATH =
-    BACKEND_URL + "/uploads/";
+const MENU_API = "/api/menu";
+const CATEGORY_API = "/api/category";
+const IMAGE_PATH = "/api/uploads/";
 
 const contextPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1)) || "";
 const DEFAULT_IMAGE = contextPath + "/images/menu/default-food.jpg";

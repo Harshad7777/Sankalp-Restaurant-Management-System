@@ -11,7 +11,7 @@
     const BACKEND_BASE = window.location.origin.includes(":8081")
         ? "http://localhost:8080"
         : (window.location.origin + "/RMS_backend");
-    const API = BACKEND_BASE + "/api/users";
+    const API = "/api/users";
 
 
     let teamList = [];

@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const backendBase = window.location.origin.includes(":8081") 
                     ? "http://localhost:8080" 
                     : (window.location.origin + "/RMS_backend");
-                const response = await fetch(`${backendBase}/api/users/register`, {
+                const response = await fetch("/api/users/register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

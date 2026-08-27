@@ -30,12 +30,12 @@ public class FileUploadController {
         this.fileUploadService = fileUploadService;
     }
 
-    @GetMapping("/api/upload/test")
+    @GetMapping("/upload/test")
     public String test() {
         return "Upload Controller Working";
     }
 
-    @PostMapping("/api/upload")
+    @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(
             @RequestParam("file") MultipartFile file)
             throws IOException {

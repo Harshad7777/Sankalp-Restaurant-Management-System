@@ -43,7 +43,7 @@
     </dependencies>
 
     <build>
-        <finalName>RMS_frontend</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
 
             <plugin>

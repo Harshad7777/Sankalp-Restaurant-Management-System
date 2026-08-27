@@ -17,7 +17,7 @@ import com.restaurant.model.Table;
 import com.restaurant.service.TableService;
 
 @RestController
-@RequestMapping("/api/table")
+@RequestMapping("/table")
 @CrossOrigin(origins = "*")
 public class TableController {
 

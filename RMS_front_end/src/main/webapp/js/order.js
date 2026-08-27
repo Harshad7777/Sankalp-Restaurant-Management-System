@@ -18,17 +18,10 @@ const BACKEND_URL =
         ? "http://localhost:8080" 
         : (window.location.origin + "/RMS_backend");
 
-const ORDER_API =
-    BACKEND_URL + "/api/order";
-
-const CUSTOMER_API =
-    BACKEND_URL + "/api/customer";
-
-const MENU_API =
-    BACKEND_URL + "/api/menu";
-
-const TABLE_API =
-    BACKEND_URL + "/api/table";
+const ORDER_API = "/api/order";
+const CUSTOMER_API = "/api/customer";
+const MENU_API = "/api/menu";
+const TABLE_API = "/api/table";
 
 
 /* =========================================================

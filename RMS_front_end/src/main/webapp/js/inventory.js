@@ -12,7 +12,7 @@ const BACKEND_BASE_URL = window.location.origin.includes(":8081")
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
 
-const INVENTORY_API = `${BACKEND_BASE_URL}/api/inventory`;
+const INVENTORY_API = "/api/inventory";
 
 let currentPage = 0;
 const pageSize = 10;

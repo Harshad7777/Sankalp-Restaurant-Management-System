@@ -17,8 +17,7 @@ const BACKEND_URL = window.location.origin.includes(":8081")
     ? "http://localhost:8080"
     : (window.location.origin + "/RMS_backend");
 
-const TABLE_API =
-    BACKEND_URL + "/api/table";
+const TABLE_API = "/api/table";
 
 
 /* =========================================================
@@ -2472,7 +2471,7 @@ function handleUnauthorized() {
    ONLINE TABLE RESERVATION MANAGEMENT
 ========================================================= */
 
-const RESERVATION_API = BACKEND_URL + "/api/reservation";
+const RESERVATION_API = "/api/reservation";
 let allReservations = [];
 
 function setupReservationEvents() {

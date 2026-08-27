@@ -15,7 +15,7 @@ const BACKEND_BASE_URL = window.location.origin.includes(":8081")
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
 
-const DASHBOARD_API = `${BACKEND_BASE_URL}/api/dashboard/summary`;
+const DASHBOARD_API = "/api/dashboard/summary";
 
 
 /* =====================================================
@@ -1005,7 +1005,7 @@ async function loadDashboardStockAlerts() {
     if (!tbody) return;
 
     try {
-        const response = await fetch(`${BACKEND_BASE_URL}/api/inventory`, {
+        const response = await fetch("/api/inventory", {
             headers: {
                 "Authorization": "Bearer " + token,
                 "Content-Type": "application/json"

@@ -289,10 +289,13 @@
 
 </div>
 
+<script src="<%= contextPath %>/js/config.js"></script>
 <script>
-    const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
-        ? "http://localhost:8080/RMS_backend" 
-        : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend"));
+    const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
+        ? window.API_BASE_URL
+        : (window.location.origin.includes(":8081") 
+            ? "http://localhost:8080/RMS_backend" 
+            : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend")));
 
     document.addEventListener("DOMContentLoaded", function () {
         initBrandBranding();
@@ -311,7 +314,7 @@
             hidePageAlert();
 
             try {
-                const res = await fetch(BACKEND_BASE_URL + "/api/auth/forgot-password/request-otp", {
+                const res = await fetch("/api/auth/forgot-password/request-otp", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ identity: identity })
@@ -357,7 +360,7 @@
             hidePageAlert();
 
             try {
-                const res = await fetch(BACKEND_BASE_URL + "/api/auth/forgot-password/reset-password", {
+                const res = await fetch("/api/auth/forgot-password/reset-password", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ identity: identity, otp: otp, newPassword: newPass })
@@ -388,7 +391,7 @@
         try {
             const stored = localStorage.getItem("sankalp_restaurant_settings");
             if (stored) applyBranding(JSON.parse(stored));
-            const res = await fetch(BACKEND_BASE_URL + "/api/settings");
+            const res = await fetch("/api/settings");
             if (res.ok) {
                 const data = await res.json();
                 if (data && typeof data === "object") applyBranding(data);

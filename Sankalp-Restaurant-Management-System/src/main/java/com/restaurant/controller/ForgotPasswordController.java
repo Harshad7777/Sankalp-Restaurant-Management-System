@@ -19,7 +19,7 @@ import com.restaurant.repository.UserRepository;
 import com.restaurant.service.mail.JmsMailProducer;
 
 @RestController
-@RequestMapping("/api/auth/forgot-password")
+@RequestMapping("/auth/forgot-password")
 @CrossOrigin(origins = "*")
 public class ForgotPasswordController {
 
