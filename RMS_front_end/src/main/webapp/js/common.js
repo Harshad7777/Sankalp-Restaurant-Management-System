@@ -73,7 +73,8 @@ async function syncGlobalBrandLogo() {
 
     // 2. Fetch fresh settings from backend API
     try {
-        const res = await fetch("/api/settings");
+        const settingsUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl("/settings") : "/api/settings";
+        const res = await fetch(settingsUrl);
         if (res.ok) {
             const settings = await res.json();
             if (settings && settings.logoPath) {

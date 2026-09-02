@@ -14,6 +14,13 @@ const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.A
         ? "http://localhost:8080/RMS_backend" 
         : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend")));
 
+function getLoginApiUrl() {
+    if (typeof window.getApiUrl === "function") {
+        return window.getApiUrl("/auth/login");
+    }
+    return (window.API_BASE_URL || "/api") + "/auth/login";
+}
+
 const LOGIN_API_URL = "/api/auth/login";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -42,7 +49,8 @@ async function initBrandIdentity() {
 
     // 2. Fetch fresh settings from backend API
     try {
-        const res = await fetch("/api/settings");
+        const settingsUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl("/settings") : "/api/settings";
+        const res = await fetch(settingsUrl);
         if (res.ok) {
             const data = await res.json();
             if (data && typeof data === "object") {
@@ -406,7 +414,7 @@ function initLoginForm() {
         setLoading(true);
 
         try {
-            const response = await fetch(LOGIN_API_URL, {
+            const response = await fetch(getLoginApiUrl(), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -17,11 +17,13 @@ $webappsDir = Join-Path -Path $tomcatHome.FullName -ChildPath "webapps"
 Write-Host "Clearing default Tomcat webapps in $webappsDir..."
 Get-ChildItem -Path $webappsDir | Remove-Item -Recurse -Force
 
-Write-Host "Deploying RMS_backend.war to $webappsDir\RMS_backend.war..."
-Copy-Item "RMS_backend.war" -Destination "$webappsDir\RMS_backend.war" -Force
+Write-Host "Deploying backend WAR to $webappsDir\api.war..."
+if (Test-Path "api.war") { Copy-Item "api.war" -Destination "$webappsDir\api.war" -Force }
+elseif (Test-Path "RMS_backend.war") { Copy-Item "RMS_backend.war" -Destination "$webappsDir\api.war" -Force }
 
-Write-Host "Deploying RMS_frontend.war to $webappsDir\ROOT.war..."
-Copy-Item "RMS_frontend.war" -Destination "$webappsDir\ROOT.war" -Force
+Write-Host "Deploying frontend WAR to $webappsDir\ROOT.war..."
+if (Test-Path "ROOT.war") { Copy-Item "ROOT.war" -Destination "$webappsDir\ROOT.war" -Force }
+elseif (Test-Path "RMS_frontend.war") { Copy-Item "RMS_frontend.war" -Destination "$webappsDir\ROOT.war" -Force }
 
 Write-Host "Deployment Complete!"
 Write-Host "Tomcat Directory: $($tomcatHome.FullName)"

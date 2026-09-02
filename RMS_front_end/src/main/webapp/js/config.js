@@ -48,4 +48,25 @@
     window.API_BASE_URL = CONFIG.API_BASE_URL;
     window.BACKEND_BASE_URL = CONFIG.API_BASE_URL;
 
+    /**
+     * Helper to safely construct full API URLs without duplicate or missing '/api' path segments.
+     * Works across Docker, standalone Tomcat (cPanel/Mochahost), and local dev.
+     */
+    window.getApiUrl = function (path) {
+        if (!path) return window.API_BASE_URL;
+        const base = window.API_BASE_URL || defaultApiBaseUrl || "/api";
+        const cleanBase = base.endsWith("/") ? base.slice(0, -1) : base;
+        const cleanPath = path.startsWith("/") ? path : "/" + path;
+
+        // If base ends with /api and path starts with /api/, strip one /api
+        if (cleanBase.endsWith("/api") && cleanPath.startsWith("/api/")) {
+            return cleanBase + cleanPath.substring(4);
+        }
+        // If base does not end with /api or /RMS_backend and path doesn't start with /api/, add /api
+        if (!cleanBase.endsWith("/api") && !cleanBase.endsWith("/RMS_backend") && !cleanPath.startsWith("/api/")) {
+            return cleanBase + "/api" + cleanPath;
+        }
+        return cleanBase + cleanPath;
+    };
+
 })(window);
