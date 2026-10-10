@@ -96,8 +96,11 @@ public class CategoryService {
     // GET ALL CATEGORY
     // ==========================
     public List<Category> getAllCategory() {
+        return getAllCategory(null);
+    }
 
-        return repository.findAll();
+    public List<Category> getAllCategory(Integer restaurantId) {
+        return repository.findAll(restaurantId);
     }
 
     // ==========================

@@ -4,7 +4,18 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Generic API Response wrapper for consistent JSON responses across all REST endpoints.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> implements Serializable {
 
@@ -21,51 +32,6 @@ public class ApiResponse<T> implements Serializable {
     private String message;
     private T data;
     private LocalDateTime timestamp;
-
-    public ApiResponse() {
-    }
-
-    public ApiResponse(StatusType status, String message, T data, LocalDateTime timestamp) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-        this.timestamp = timestamp;
-    }
-
-    public static <T> Builder<T> builder() {
-        return new Builder<T>();
-    }
-
-    public static class Builder<T> {
-        private StatusType status;
-        private String message;
-        private T data;
-        private LocalDateTime timestamp;
-
-        public Builder<T> status(StatusType status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder<T> message(String message) {
-            this.message = message;
-            return this;
-        }
-
-        public Builder<T> data(T data) {
-            this.data = data;
-            return this;
-        }
-
-        public Builder<T> timestamp(LocalDateTime timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public ApiResponse<T> build() {
-            return new ApiResponse<T>(status, message, data, timestamp);
-        }
-    }
 
     public static <T> ApiResponse<T> success(String message, T data) {
         return ApiResponse.<T>builder()
@@ -108,37 +74,5 @@ public class ApiResponse<T> implements Serializable {
                 .data(data)
                 .timestamp(LocalDateTime.now())
                 .build();
-    }
-
-    public StatusType getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 }

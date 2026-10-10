@@ -7,7 +7,7 @@
 }
 
 body {
-    background: #f5f6f8;
+    background: var(--body-bg);
 }
 
 
@@ -36,7 +36,7 @@ body {
     margin: 0;
     font-size: 30px;
     font-weight: 700;
-    color: #172033;
+    color: var(--text-primary);
 }
 
 .table-breadcrumb {

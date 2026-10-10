@@ -119,6 +119,24 @@
 
         </a>
 
+        <!-- =================================================
+             FLOOR PLAN VISUALIZER
+        ================================================= -->
+
+        <a
+            href="${pageContext.request.contextPath}/floor-plan.jsp"
+            class="sidebar-link <%= currentPage.endsWith("floor-plan.jsp") ? "active" : "" %>"
+            data-roles="ADMIN STAFF"
+            data-page="floor-plan">
+
+            <i class="fa-solid fa-map-location-dot"></i>
+
+            <span>
+                Floor Plan Visualizer
+            </span>
+
+        </a>
+
 
         <!-- =================================================
              MENU MANAGEMENT
@@ -389,7 +407,7 @@
 
         </div>
 
-        <h6>
+        <h6 id="sidebarBottomTitle" class="restaurant-brand-name">
             Sankalp Admin
         </h6>
 

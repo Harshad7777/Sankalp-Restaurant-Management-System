@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.restaurant.model.Users;
 import com.restaurant.repository.query.UserQueries;
+import com.restaurant.security.SecurityUtil;
 
 @Repository
 public class UserRepository {
@@ -28,19 +29,10 @@ public class UserRepository {
     }
 
     public Users findByUsernameOrEmail(String identity) {
-        String sql = "SELECT user_id, full_name, username, password, role, mobile, email, status FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?) LIMIT 1";
+        String sql = "SELECT user_id AS userId, restaurant_id AS restaurantId, full_name AS fullName, username, password, role, mobile, email, status FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?) LIMIT 1";
         List<Users> list = jdbcTemplate.query(
                 sql,
-                (rs, rowNum) -> new Users(
-                        rs.getInt("user_id"),
-                        rs.getString("full_name"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getString("mobile"),
-                        rs.getString("email"),
-                        rs.getString("status")
-                ),
+                new BeanPropertyRowMapper<>(Users.class),
                 identity, identity);
         return list.isEmpty() ? null : list.get(0);
     }
@@ -55,8 +47,16 @@ public class UserRepository {
     }
 
     public int save(Users user) {
+        Integer resId = SecurityUtil.getOptionalCurrentRestaurantId();
+        if (resId == null && user.getRestaurantId() != null && user.getRestaurantId() > 0) {
+            resId = user.getRestaurantId();
+        }
+        if (resId == null) {
+            resId = 1;
+        }
         return jdbcTemplate.update(
                 UserQueries.INSERT_USER,
+                resId,
                 user.getFullName(),
                 user.getUsername(),
                 user.getPassword(),
@@ -68,26 +68,30 @@ public class UserRepository {
 
     public List<Users> findAll() {
         return jdbcTemplate.query(
-                UserQueries.FIND_ALL,
-                new BeanPropertyRowMapper<>(Users.class));
+                UserQueries.FIND_ALL_BY_RESTAURANT,
+                new BeanPropertyRowMapper<>(Users.class),
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<Users> findTeamUsers() {
         return jdbcTemplate.query(
-                UserQueries.FIND_TEAM_USERS,
-                new BeanPropertyRowMapper<>(Users.class));
+                UserQueries.FIND_TEAM_USERS_BY_RESTAURANT,
+                new BeanPropertyRowMapper<>(Users.class),
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public Users findById(Integer id) {
         List<Users> list = jdbcTemplate.query(
                 UserQueries.FIND_BY_ID,
                 new BeanPropertyRowMapper<>(Users.class),
-                id);
+                id,
+                SecurityUtil.getCurrentRestaurantId());
 
         return list.isEmpty() ? null : list.get(0);
     }
 
     public int update(Users user) {
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
         return jdbcTemplate.update(
                 UserQueries.UPDATE_USER,
                 user.getFullName(),
@@ -97,10 +101,12 @@ public class UserRepository {
                 user.getMobile(),
                 user.getEmail(),
                 user.getStatus(),
-                user.getUserId());
+                user.getUserId(),
+                resId);
     }
 
     public int updateWithoutPassword(Users user) {
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
         return jdbcTemplate.update(
                 UserQueries.UPDATE_WITHOUT_PASSWORD,
                 user.getFullName(),
@@ -109,28 +115,32 @@ public class UserRepository {
                 user.getMobile(),
                 user.getEmail(),
                 user.getStatus(),
-                user.getUserId());
+                user.getUserId(),
+                resId);
     }
 
     public int updatePassword(Integer id, String password) {
         return jdbcTemplate.update(
                 UserQueries.UPDATE_PASSWORD,
                 password,
-                id);
+                id,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public int delete(Integer id) {
         return jdbcTemplate.update(
                 UserQueries.DELETE_USER,
-                id);
+                id,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<Users> getUsersFilteredPage(com.restaurant.dto.PageRequestDTO req) {
         StringBuilder sql = new StringBuilder("""
-                SELECT user_id AS userId, full_name AS fullName, username, password, role, mobile, email, status
-                FROM users WHERE 1=1
+                SELECT user_id AS userId, restaurant_id AS restaurantId, full_name AS fullName, username, password, role, mobile, email, status
+                FROM users WHERE restaurant_id = ?
                 """);
         java.util.List<Object> params = new java.util.ArrayList<>();
+        params.add(SecurityUtil.getCurrentRestaurantId());
 
         if (req.getRole() != null && !req.getRole().isBlank()) {
             sql.append(" AND role = ?");
@@ -164,8 +174,9 @@ public class UserRepository {
     }
 
     public long countUsersFiltered(com.restaurant.dto.PageRequestDTO req) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM users WHERE restaurant_id = ?");
         java.util.List<Object> params = new java.util.ArrayList<>();
+        params.add(SecurityUtil.getCurrentRestaurantId());
 
         if (req.getRole() != null && !req.getRole().isBlank()) {
             sql.append(" AND role = ?");

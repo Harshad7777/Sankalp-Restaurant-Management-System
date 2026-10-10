@@ -16,11 +16,51 @@ public class CorsConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false);
+        // =====================================================
+        // FRONTEND & LIVE DOMAINS
+        // =====================================================
+        configuration.setAllowedOriginPatterns(
+                List.of(
+                        "https://restaurantms.co.in",
+                        "http://restaurantms.co.in",
+                        "https://www.restaurantms.co.in",
+                        "http://www.restaurantms.co.in",
+                        "http://localhost:*",
+                        "https://localhost:*",
+                        "http://127.0.0.1:*",
+                        "https://127.0.0.1:*",
+                        "*"
+                )
+        );
 
+        // =====================================================
+        // METHODS
+        // =====================================================
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        // =====================================================
+        // HEADERS
+        // =====================================================
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        // =====================================================
+        // CREDENTIALS
+        // =====================================================
+        configuration.setAllowCredentials(true);
+
+        // =====================================================
+        // REGISTER CONFIGURATION
+        // =====================================================
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 

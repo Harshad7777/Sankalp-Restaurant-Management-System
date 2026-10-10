@@ -29,6 +29,10 @@
             pageTitle = "Table Management";
             pageCss = "table.css";
         }
+        else if (currentUri.endsWith("floor-plan.jsp")) {
+            pageTitle = "Floor Plan Visualizer";
+            pageCss = "table.css";
+        }
         else if (currentUri.endsWith("customer.jsp")) {
             pageTitle = "Customers";
             pageCss = "customer.css";
@@ -220,6 +224,21 @@
 
         </div>
 
+
+        <!-- =================================================
+             THEME TOGGLE (DARK / LIGHT)
+        ================================================== -->
+
+        <button
+            type="button"
+            class="theme-toggle-btn"
+            id="themeToggleBtn"
+            title="Toggle Light / Dark Glass Mode"
+            aria-label="Toggle Theme">
+
+            <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
+
+        </button>
 
         <!-- =================================================
              NOTIFICATION

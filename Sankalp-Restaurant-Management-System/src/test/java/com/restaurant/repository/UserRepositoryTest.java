@@ -82,7 +82,7 @@ class UserRepositoryTest {
         user.setEmail("john@example.com");
         user.setStatus("ACTIVE");
 
-        when(jdbcTemplate.update(anyString(), eq("John Doe"), eq("johndoe"), eq("secret"), eq("STAFF"), eq("9876543210"), eq("john@example.com"), eq("ACTIVE")))
+        when(jdbcTemplate.update(anyString(), any(), eq("John Doe"), eq("johndoe"), eq("secret"), eq("STAFF"), eq("9876543210"), eq("john@example.com"), eq("ACTIVE")))
                 .thenReturn(1);
 
         int rows = userRepository.save(user);
@@ -92,7 +92,7 @@ class UserRepositoryTest {
 
     @Test
     void testDeleteUser() {
-        when(jdbcTemplate.update(anyString(), eq(10)))
+        when(jdbcTemplate.update(anyString(), eq(10), any()))
                 .thenReturn(1);
 
         int rows = userRepository.delete(10);

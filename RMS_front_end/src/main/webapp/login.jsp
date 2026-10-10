@@ -145,10 +145,10 @@
                         <button type="button" class="btn-demo admin" onclick="fillCredentials('admin', 'admin123', 'ADMIN')">
                             <i class="fa-solid fa-shield-halved"></i> Admin
                         </button>
-                        <button type="button" class="btn-demo chef" onclick="fillCredentials('chef', 'chef123', 'CHEF')">
+                        <button type="button" class="btn-demo chef" onclick="fillCredentials('chef', 'admin123', 'CHEF')">
                             <i class="fa-solid fa-hat-chef"></i> Chef
                         </button>
-                        <button type="button" class="btn-demo staff" onclick="fillCredentials('staff', 'staff123', 'STAFF')">
+                        <button type="button" class="btn-demo staff" onclick="fillCredentials('staff', 'admin123', 'STAFF')">
                             <i class="fa-solid fa-user-tie"></i> Staff
                         </button>
                     </div>
@@ -207,6 +207,11 @@
                             <i class="fa-solid fa-circle-notch fa-spin"></i>
                         </span>
                     </button>
+
+                    <div style="text-align: center; margin-top: 15px;">
+                        <span style="color: #aaa; font-size: 0.9rem;">Don't have an account? </span>
+                        <a href="register.jsp" style="color: #d4af37; font-weight: 600; text-decoration: none;">Create Account / Register New Admin</a>
+                    </div>
 
                 </form>
 

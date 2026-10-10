@@ -14,9 +14,6 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class JwtUtil {
 
-    // Secret and expiry come from configuration (application.properties /
-    // environment variables) instead of being hardcoded in source.
-    // See application.properties: jwt.secret, jwt.expiration-ms
     @Value("${jwt.secret:SankalpRestaurantManagementSystemSecretKey2026SecureJwtTokenForProductionAndTestingPurposeOnly}")
     private String secret;
 
@@ -25,12 +22,7 @@ public class JwtUtil {
 
     @PostConstruct
     private void validateSecret() {
-
         if (secret == null || secret.getBytes().length < 32) {
-
-            // HS256 requires a key of at least 256 bits (32 bytes).
-            // Failing fast here prevents accidentally running with a
-            // weak/default key in production.
             throw new IllegalStateException(
                     "jwt.secret must be set and at least 32 bytes long. "
                     + "Set the JWT_SECRET environment variable."
@@ -38,11 +30,13 @@ public class JwtUtil {
         }
     }
 
-    // Generate JWT
-    public String generateToken(String username) {
-
+    // Generate JWT with Username, UserId, Role and RestaurantId
+    public String generateToken(String username, Integer userId, String role, Integer restaurantId) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", userId)
+                .claim("role", role)
+                .claim("restaurantId", restaurantId)
                 .setIssuedAt(new Date())
                 .setExpiration(
                         new Date(System.currentTimeMillis() + expirationMs)
@@ -54,15 +48,33 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Overload with Username & RestaurantId
+    public String generateToken(String username, Integer restaurantId) {
+        return generateToken(username, null, null, restaurantId);
+    }
+
+    // Backward compatibility overload
+    public String generateToken(String username) {
+        return generateToken(username, 1);
+    }
+
     // Extract Username
     public String extractUsername(String token) {
-
         return extractClaims(token).getSubject();
+    }
+
+    // Extract RestaurantId
+    public Integer extractRestaurantId(String token) {
+        Claims claims = extractClaims(token);
+        Object resId = claims.get("restaurantId");
+        if (resId instanceof Number) {
+            return ((Number) resId).intValue();
+        }
+        return null;
     }
 
     // Extract Claims
     public Claims extractClaims(String token) {
-
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
                 .build()
@@ -72,15 +84,10 @@ public class JwtUtil {
 
     // Validate Token
     public boolean validateToken(String token) {
-
         try {
-
             extractClaims(token);
-
             return true;
-
         } catch (Exception e) {
-
             return false;
         }
     }

@@ -1,5 +1,6 @@
 package com.restaurant.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -50,7 +51,7 @@ class MenuControllerTest {
         item2.setPrice(40.0);
 
         List<Menu> menuList = Arrays.asList(item1, item2);
-        when(menuService.getAllMenu()).thenReturn(menuList);
+        when(menuService.getAllMenu(any())).thenReturn(menuList);
 
         mockMvc.perform(get("/menu"))
                 .andExpect(status().isOk())

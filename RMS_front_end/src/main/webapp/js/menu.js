@@ -1618,14 +1618,20 @@ function getImageUrl(image) {
     if (cleanImage.startsWith("/")) {
         cleanImage = cleanImage.substring(1);
     }
+
+    if (cleanImage.startsWith("images/")) {
+        return (window.contextPath || "") + "/" + cleanImage;
+    }
+
     if (cleanImage.startsWith("uploads/")) {
         cleanImage = cleanImage.substring(8);
     }
-    if (cleanImage.startsWith("images/")) {
-        return cleanImage;
+
+    if (typeof window.getApiUrl === "function") {
+        return window.getApiUrl("/uploads/" + cleanImage);
     }
 
-    return IMAGE_PATH + encodeURIComponent(cleanImage);
+    return "/api/uploads/" + cleanImage;
 }
 
 

@@ -9,45 +9,46 @@ public final class DashboardQueries {
         // Prevent instantiation
     }
 
-    public static final String COUNT_USERS = "SELECT COUNT(*) FROM users";
+    public static final String COUNT_USERS = "SELECT COUNT(*) FROM users WHERE restaurant_id = ?";
 
-    public static final String COUNT_CUSTOMERS = "SELECT COUNT(*) FROM customer";
+    public static final String COUNT_CUSTOMERS = "SELECT COUNT(*) FROM customer WHERE restaurant_id = ?";
 
-    public static final String COUNT_MENU_ITEMS = "SELECT COUNT(*) FROM menu";
+    public static final String COUNT_MENU_ITEMS = "SELECT COUNT(*) FROM menu WHERE restaurant_id = ?";
 
-    public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders";
+    public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE restaurant_id = ?";
 
-    public static final String COUNT_CATEGORIES = "SELECT COUNT(*) FROM category";
+    public static final String COUNT_CATEGORIES = "SELECT COUNT(*) FROM category WHERE restaurant_id = ?";
 
     public static final String COUNT_TODAY_ORDERS = """
             SELECT COUNT(*)
             FROM orders
-            WHERE DATE(order_date) = CURDATE()
+            WHERE DATE(order_date) = CURDATE() AND restaurant_id = ?
             """;
 
     public static final String SUM_TODAY_SALES = """
             SELECT IFNULL(SUM(grand_total), 0)
             FROM bill
-            WHERE DATE(bill_date) = CURDATE()
+            WHERE DATE(bill_date) = CURDATE() AND restaurant_id = ?
             """;
 
     public static final String SUM_TOTAL_REVENUE = """
             SELECT IFNULL(SUM(grand_total), 0)
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
             """;
 
     public static final String FIND_RECENT_ORDERS = """
             SELECT
                 o.order_id,
-                c.customer_name,
+                COALESCE(c.customer_name, 'Walk-in Guest') AS customer_name,
                 o.total_amount,
                 o.order_status,
                 o.order_date
             FROM orders o
-            INNER JOIN customer c
+            LEFT JOIN customer c
                 ON o.customer_id = c.customer_id
-            ORDER BY o.order_date DESC
+            WHERE o.restaurant_id = ?
+            ORDER BY o.order_id DESC
             LIMIT 5
             """;
 
@@ -63,7 +64,7 @@ public final class DashboardQueries {
                 ON od.item_id = m.item_id
             INNER JOIN orders o
                 ON od.order_id = o.order_id
-            WHERE o.order_status <> 'CANCELLED'
+            WHERE o.order_status <> 'CANCELLED' AND o.restaurant_id = ?
             GROUP BY
                 m.item_id,
                 m.item_name,
@@ -79,7 +80,7 @@ public final class DashboardQueries {
                 DATE(bill_date) AS bill_date,
                 IFNULL(SUM(grand_total), 0) AS daily_revenue
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
               AND bill_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
             GROUP BY DATE(bill_date)
             ORDER BY DATE(bill_date) ASC

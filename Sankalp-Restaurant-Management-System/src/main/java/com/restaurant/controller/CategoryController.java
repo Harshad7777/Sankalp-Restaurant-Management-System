@@ -11,7 +11,7 @@ import com.restaurant.model.Category;
 import com.restaurant.service.CategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping({"/category", "/categories"})
 @CrossOrigin("*")
 public class CategoryController {
 
@@ -97,10 +97,11 @@ public class CategoryController {
     // GET ALL CATEGORY
     // ==========================
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategory() {
+    public ResponseEntity<List<Category>> getAllCategory(
+            @RequestParam(value = "restaurantId", required = false) Integer restaurantId) {
 
         return ResponseEntity.ok(
-                service.getAllCategory());
+                service.getAllCategory(restaurantId));
     }
 
     // ==========================

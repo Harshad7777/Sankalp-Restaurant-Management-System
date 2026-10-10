@@ -85,6 +85,8 @@ public class SecurityConfig {
                     "/auth/forgot-password/**",
                     "/users/register",
                     "/settings/**",
+                    "/restaurant/**",
+                    "/restaurants/**",
                     "/uploads/**",
                     "/static/**",
                     "/images/**",
@@ -94,7 +96,18 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
-                    "/v3/api-docs"
+                    "/v3/api-docs",
+                    "/integrations/**",
+                    "/payment/verify",
+                    "/payment/qr-code/**",
+                    "/accounting/**",
+                    "/api/accounting/**",
+                    "/notifications/**",
+                    "/api/notifications/**",
+                    "/recipe/**",
+                    "/api/recipe/**",
+                    "/modifiers/**",
+                    "/api/modifiers/**"
                 )
                 .permitAll()
 

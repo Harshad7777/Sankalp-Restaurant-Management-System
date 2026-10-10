@@ -20,7 +20,7 @@
         30px 34px 25px;
 
     background:
-        #f7f8fa;
+        var(--body-bg);
 
     box-sizing:
         border-box;

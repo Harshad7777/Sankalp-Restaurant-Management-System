@@ -12,6 +12,7 @@ public final class OrderQueries {
     public static final String INSERT_ORDER = """
             INSERT INTO orders
             (
+                restaurant_id,
                 order_no,
                 customer_id,
                 table_id,
@@ -20,7 +21,7 @@ public final class OrderQueries {
                 total_amount,
                 order_status
             )
-            VALUES (?, ?, ?, ?, NOW(), ?, ?)
+            VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)
             """;
 
     public static final String INSERT_ORDER_DETAIL = """
@@ -40,18 +41,20 @@ public final class OrderQueries {
     public static final String UPDATE_ORDER_TOTAL = """
             UPDATE orders
             SET total_amount = ?
-            WHERE order_id = ?
+            WHERE order_id = ? AND restaurant_id = ?
             """;
 
     public static final String GET_MENU_PRICE = """
             SELECT price
             FROM menu
-            WHERE item_id = ?
+            WHERE item_id = ? AND restaurant_id = ?
             """;
 
     public static final String FIND_ALL_ORDERS = """
             SELECT
                 o.order_id AS orderId,
+                o.restaurant_id AS restaurantId,
+                o.order_no AS orderNo,
                 o.customer_id AS customerId,
                 c.customer_name AS customerName,
                 o.table_id AS tableId,
@@ -67,12 +70,15 @@ public final class OrderQueries {
                 ON o.customer_id = c.customer_id
             INNER JOIN restaurant_tables rt
                 ON o.table_id = rt.table_id
+            WHERE o.restaurant_id = ?
             ORDER BY o.order_id DESC
             """;
 
     public static final String FIND_ORDERS_PAGE = """
             SELECT
                 o.order_id AS orderId,
+                o.restaurant_id AS restaurantId,
+                o.order_no AS orderNo,
                 o.customer_id AS customerId,
                 c.customer_name AS customerName,
                 o.table_id AS tableId,
@@ -88,15 +94,18 @@ public final class OrderQueries {
                 ON o.customer_id = c.customer_id
             INNER JOIN restaurant_tables rt
                 ON o.table_id = rt.table_id
+            WHERE o.restaurant_id = ?
             ORDER BY o.order_id DESC
             LIMIT ? OFFSET ?
             """;
 
-    public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders";
+    public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE restaurant_id = ?";
 
     public static final String FIND_ORDER_BY_ID = """
             SELECT
                 o.order_id AS orderId,
+                o.restaurant_id AS restaurantId,
+                o.order_no AS orderNo,
                 o.customer_id AS customerId,
                 c.customer_name AS customerName,
                 o.table_id AS tableId,
@@ -112,7 +121,7 @@ public final class OrderQueries {
                 ON o.customer_id = c.customer_id
             INNER JOIN restaurant_tables rt
                 ON o.table_id = rt.table_id
-            WHERE o.order_id = ?
+            WHERE o.order_id = ? AND o.restaurant_id = ?
             """;
 
     public static final String FIND_ORDER_DETAILS = """
@@ -141,18 +150,20 @@ public final class OrderQueries {
     public static final String UPDATE_STATUS = """
             UPDATE orders
             SET order_status = ?
-            WHERE order_id = ?
+            WHERE order_id = ? AND restaurant_id = ?
             """;
 
     public static final String CANCEL_ORDER = """
             UPDATE orders
             SET order_status = 'CANCELLED'
-            WHERE order_id = ?
+            WHERE order_id = ? AND restaurant_id = ?
             """;
 
     public static final String FIND_CUSTOMER_ORDERS = """
             SELECT
                 o.order_id AS orderId,
+                o.restaurant_id AS restaurantId,
+                o.order_no AS orderNo,
                 o.customer_id AS customerId,
                 c.customer_name AS customerName,
                 o.table_id AS tableId,
@@ -168,13 +179,15 @@ public final class OrderQueries {
                 ON o.customer_id = c.customer_id
             INNER JOIN restaurant_tables rt
                 ON o.table_id = rt.table_id
-            WHERE o.customer_id = ?
+            WHERE o.customer_id = ? AND o.restaurant_id = ?
             ORDER BY o.order_date DESC
             """;
 
     public static final String FIND_TODAY_ORDERS = """
             SELECT
                 o.order_id AS orderId,
+                o.restaurant_id AS restaurantId,
+                o.order_no AS orderNo,
                 o.customer_id AS customerId,
                 c.customer_name AS customerName,
                 o.table_id AS tableId,
@@ -190,7 +203,7 @@ public final class OrderQueries {
                 ON o.customer_id = c.customer_id
             INNER JOIN restaurant_tables rt
                 ON o.table_id = rt.table_id
-            WHERE DATE(o.order_date) = CURDATE()
+            WHERE DATE(o.order_date) = CURDATE() AND o.restaurant_id = ?
             ORDER BY o.order_date DESC
             """;
 
@@ -225,6 +238,7 @@ public final class OrderQueries {
                 ON od.prepared_by = u.user_id
             WHERE DATE(o.order_date) = CURDATE()
             AND o.order_status <> 'CANCELLED'
+            AND o.restaurant_id = ?
             ORDER BY
                 CASE od.kitchen_status
                     WHEN 'NEW' THEN 1
@@ -248,6 +262,7 @@ public final class OrderQueries {
                 ON od.order_id = o.order_id
             WHERE DATE(o.order_date) = CURDATE()
             AND o.order_status <> 'CANCELLED'
+            AND o.restaurant_id = ?
             """;
 
     public static final String GET_ORDER_ID_BY_DETAIL_ID = """

@@ -20,7 +20,7 @@ import com.restaurant.model.Bill;
 import com.restaurant.service.BillService;
 
 @RestController
-@RequestMapping("/bill")
+@RequestMapping({"/bill", "/bills"})
 @CrossOrigin(origins = "*")
 public class BillController {
 

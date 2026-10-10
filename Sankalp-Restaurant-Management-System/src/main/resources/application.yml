@@ -16,9 +16,9 @@ spring:
   # Database Configuration (Encrypted with Jasypt)
   # ---------------------------------------------------
   datasource:
-    url: "${DB_URL:jdbc:mysql://localhost:3306/RMS?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}"
-    username: "${DB_USERNAME:root}"
-    password: "${DB_PASSWORD:ENC(dPz6Xi7p5/wRNNTjPCB6Wg==)}"
+    url: "${DB_URL:jdbc:mysql://localhost:3306/smprowor_RMS?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}"
+    username: "${DB_USERNAME:smprowor_harshad}"
+    password: "${DB_PASSWORD:N!63TJd_=N-@aA]!}"
     driver-class-name: "com.mysql.cj.jdbc.Driver"
 
   # ---------------------------------------------------
@@ -26,7 +26,7 @@ spring:
   # ---------------------------------------------------
   sql:
     init:
-      mode: always
+      mode: never
       continue-on-error: true
 
   # ---------------------------------------------------

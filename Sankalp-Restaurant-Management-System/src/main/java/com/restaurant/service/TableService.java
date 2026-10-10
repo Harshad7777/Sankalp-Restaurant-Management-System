@@ -21,6 +21,10 @@ public class TableService {
         return repository.findAll();
     }
 
+    public boolean updateFloorPlan(int tableId, int xPos, int yPos, String shape, int width, int height) {
+        return repository.updateFloorPlan(tableId, xPos, yPos, shape, width, height) > 0;
+    }
+
     public Table getTable(int id) {
 
         Table table =

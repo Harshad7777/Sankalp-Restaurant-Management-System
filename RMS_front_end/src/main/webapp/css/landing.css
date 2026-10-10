@@ -48,6 +48,8 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 
@@ -61,7 +63,14 @@ body {
 
     overflow-x: hidden;
 
+    width: 100%;
+
+    max-width: 100%;
+
+    position: relative;
+
 }
+
 
 
 a {
@@ -374,13 +383,17 @@ img {
 
     font-family: "Cormorant Garamond", serif;
 
-    font-size: clamp(65px, 8vw, 110px);
+    font-size: clamp(34px, 6.5vw, 100px);
 
-    line-height: 0.9;
+    line-height: 1.05;
 
     font-weight: 700;
 
     margin-bottom: 10px;
+
+    word-wrap: break-word;
+
+    overflow-wrap: break-word;
 
 }
 
@@ -958,6 +971,16 @@ img {
 
 .text-gold {
     color: var(--gold);
+}
+
+.outlet-selector-box {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 18px;
+    border-radius: 50px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .hero-stats-pills {
@@ -2239,28 +2262,68 @@ img {
 
     .section-padding {
 
-        padding: 75px 0;
+        padding: 55px 0;
 
     }
 
 
     .hero-content h1 {
 
-        font-size: 65px;
+        font-size: 36px;
+
+        line-height: 1.15;
 
     }
 
 
     .hero-content h2 {
 
-        font-size: 32px;
+        font-size: 24px;
 
     }
 
 
     .hero-content p {
 
-        font-size: 13px;
+        font-size: 14px;
+
+        line-height: 1.6;
+
+    }
+
+    .hero-content {
+
+        padding-top: 100px;
+
+    }
+
+    .outlet-selector-box {
+
+        border-radius: 16px;
+
+        width: 100%;
+
+        flex-direction: column !important;
+
+        gap: 8px;
+
+        text-align: center;
+
+        padding: 12px;
+
+    }
+
+    .outlet-selector-box label {
+
+        margin-right: 0 !important;
+
+    }
+
+    .outlet-selector-box select {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
 
     }
 
@@ -2283,7 +2346,7 @@ img {
 
     .about-image {
 
-        height: 400px;
+        height: 320px;
 
     }
 
@@ -2324,7 +2387,7 @@ img {
 
     .reservation-card {
 
-        padding: 30px 20px;
+        padding: 24px 16px;
 
     }
 
@@ -2344,14 +2407,16 @@ img {
 
     .hero-content h1 {
 
-        font-size: 55px;
+        font-size: 30px;
+
+        line-height: 1.2;
 
     }
 
 
     .hero-content h2 {
 
-        font-size: 28px;
+        font-size: 20px;
 
     }
 
@@ -2379,19 +2444,139 @@ img {
 
     }
 
+    .hero-stats-pills {
+
+        gap: 10px;
+
+        margin-top: 24px;
+
+    }
+
+    .hero-pill {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
 
     .brand-name {
 
-        font-size: 25px;
+        font-size: 22px;
+
+    }
+
+    .brand-subtitle {
+
+        font-size: 7px;
+
+        letter-spacing: 1.5px;
 
     }
 
 
     .brand-logo {
 
-        width: 40px;
-        height: 40px;
+        width: 36px;
+
+        height: 36px;
 
     }
 
+}
+
+/* =========================================================
+   GLOBAL TOAST NOTIFICATION CARD STYLES
+========================================================= */
+
+.global-toast-container {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.global-toast-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.3);
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-left: 4px solid #d4af37;
+    max-width: 400px;
+    min-width: 280px;
+    pointer-events: auto;
+}
+
+.global-toast-card.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.global-toast-card.toast-success {
+    border-left-color: #10b981;
+}
+
+.global-toast-card.toast-success .toast-icon {
+    color: #10b981;
+}
+
+.global-toast-card.toast-error {
+    border-left-color: #ef4444;
+}
+
+.global-toast-card.toast-error .toast-icon {
+    color: #ef4444;
+}
+
+.global-toast-card.toast-warning {
+    border-left-color: #f59e0b;
+}
+
+.global-toast-card.toast-warning .toast-icon {
+    color: #f59e0b;
+}
+
+.global-toast-card.toast-info {
+    border-left-color: #3b82f6;
+}
+
+.global-toast-card.toast-info .toast-icon {
+    color: #3b82f6;
+}
+
+.global-toast-card .toast-icon {
+    font-size: 22px;
+    color: #d4af37;
+    flex-shrink: 0;
+}
+
+.global-toast-card .toast-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.global-toast-card .toast-content strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.global-toast-card .toast-content span {
+    font-size: 12.5px;
+    color: #cbd5e1;
 }

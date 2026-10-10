@@ -24,14 +24,17 @@ public class JmsMailProducer {
 
     private final JmsTemplate jmsTemplate;
     private final JavaMailSender mailSender;
+    private final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 
     @Value("${spring.mail.username:harshadrakshe28@gmail.com}")
     private String fromEmail;
 
     public JmsMailProducer(ObjectProvider<JmsTemplate> jmsTemplateProvider,
-                           ObjectProvider<JavaMailSender> mailSenderProvider) {
+                           ObjectProvider<JavaMailSender> mailSenderProvider,
+                           org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
         this.jmsTemplate = jmsTemplateProvider.getIfAvailable();
         this.mailSender = mailSenderProvider.getIfAvailable();
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void sendEmail(EmailMessageDTO message) {
@@ -197,6 +200,52 @@ public class JmsMailProducer {
         sendEmail(email);
     }
 
+    private String resolveRestaurantName(Integer restaurantId) {
+        if (restaurantId == null || restaurantId <= 0) restaurantId = 1;
+        try {
+            java.util.List<String> names = jdbcTemplate.query(
+                "SELECT restaurant_name FROM restaurants WHERE restaurant_id = ?",
+                (rs, rowNum) -> rs.getString("restaurant_name"),
+                restaurantId
+            );
+            if (!names.isEmpty() && names.get(0) != null && !names.get(0).isBlank()) {
+                return names.get(0);
+            }
+            java.util.List<String> settingNames = jdbcTemplate.query(
+                "SELECT restaurant_name FROM restaurant_settings WHERE restaurant_id = ?",
+                (rs, rowNum) -> rs.getString("restaurant_name"),
+                restaurantId
+            );
+            if (!settingNames.isEmpty() && settingNames.get(0) != null && !settingNames.get(0).isBlank()) {
+                return settingNames.get(0);
+            }
+        } catch (Exception ignored) {}
+        return "Restaurant Outlet #" + restaurantId;
+    }
+
+    private String resolveAdminEmail(Integer restaurantId) {
+        if (restaurantId == null || restaurantId <= 0) restaurantId = 1;
+        try {
+            java.util.List<String> emails = jdbcTemplate.query(
+                "SELECT email FROM restaurant_settings WHERE restaurant_id = ? AND email IS NOT NULL AND email != ''",
+                (rs, rowNum) -> rs.getString("email"),
+                restaurantId
+            );
+            if (!emails.isEmpty() && emails.get(0) != null && emails.get(0).contains("@")) {
+                return emails.get(0);
+            }
+            java.util.List<String> adminEmails = jdbcTemplate.query(
+                "SELECT email FROM users WHERE role = 'ADMIN' AND restaurant_id = ? AND email IS NOT NULL AND email != '' LIMIT 1",
+                (rs, rowNum) -> rs.getString("email"),
+                restaurantId
+            );
+            if (!adminEmails.isEmpty() && adminEmails.get(0) != null && adminEmails.get(0).contains("@")) {
+                return adminEmails.get(0);
+            }
+        } catch (Exception ignored) {}
+        return fromEmail;
+    }
+
     // =====================================================
     // TABLE RESERVATION NOTIFICATION SERVICES (EMAIL & SMS)
     // =====================================================
@@ -204,65 +253,124 @@ public class JmsMailProducer {
     public void sendReservationSubmittedNotification(com.restaurant.model.Reservation reservation) {
         if (reservation == null) return;
 
+        Integer resId = reservation.getRestaurantId();
+        if (resId == null || resId <= 0) {
+            resId = 1;
+        }
+
+        String restaurantName = resolveRestaurantName(resId);
+        String adminEmail = resolveAdminEmail(resId);
+
         String phone = reservation.getGuestPhone() != null ? reservation.getGuestPhone().trim() : "";
-        String emailAddr = reservation.getGuestEmail() != null && !reservation.getGuestEmail().isBlank()
+        String guestEmail = reservation.getGuestEmail() != null && !reservation.getGuestEmail().isBlank()
                 ? reservation.getGuestEmail().trim()
-                : fromEmail;
+                : "";
 
         String guestName = reservation.getGuestName() != null ? reservation.getGuestName() : "Guest";
         String code = reservation.getReservationCode() != null ? reservation.getReservationCode() : "RES-SUBMITTED";
         String date = reservation.getBookingDate() != null ? reservation.getBookingDate().toString() : "-";
         String time = reservation.getBookingTime() != null ? reservation.getBookingTime() : "-";
         int guests = reservation.getGuestCount() != null ? reservation.getGuestCount() : 2;
+        String specialReq = reservation.getSpecialRequest() != null ? reservation.getSpecialRequest() : "None";
 
         // Log SMS Notification Dispatch
-        log.info("📲 [SMS SENT] Mobile Confirmation sent to +91 {}: 'Dear {}, your table booking request [{}] for {} guest(s) on {} @ {} has been RECEIVED. Sankalp Concierge Team will confirm shortly.'",
-                phone, guestName, code, guests, date, time);
+        log.info("📲 [SMS SENT] Mobile Confirmation sent to +91 {}: 'Dear {}, your table booking request [{}] for {} guest(s) on {} @ {} at {} has been RECEIVED.'",
+                phone, guestName, code, guests, date, time, restaurantName);
 
-        // Dispatch Rich HTML Email
-        if (emailAddr != null && emailAddr.contains("@")) {
-            String subject = "Table Reservation Requested - " + code + " | Sankalp Restaurant";
+        // 1. DISPATCH GUEST HTML CONFIRMATION EMAIL
+        if (guestEmail.contains("@")) {
+            String subject = "Table Reservation Requested - " + code + " | " + restaurantName;
             String htmlBody = String.format("""
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 25px; border: 1px solid #d4af37; border-radius: 12px; background: #ffffff;">
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <h2 style="color: #d4af37; margin: 0; font-size: 24px;">Sankalp Restaurant</h2>
-                            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Luxury Fine Dining & Culinary Suite</p>
+                            <h2 style="color: #d4af37; margin: 0; font-size: 24px;">%s</h2>
+                            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Table Reservation Confirmation</p>
                         </div>
                         <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 15px 0;"/>
                         <h3 style="color: #1e293b; margin-top: 0;">Reservation Request Received!</h3>
                         <p style="font-size: 15px; color: #475569;">Dear <strong>%s</strong>,</p>
-                        <p style="font-size: 14px; color: #475569;">Thank you for reserving with Sankalp Restaurant. Your table request details are below:</p>
+                        <p style="font-size: 14px; color: #475569;">Thank you for reserving with <strong>%s</strong>. Your table request details are below:</p>
                         
                         <div style="background: #fafaf9; padding: 18px; border-radius: 8px; border-left: 4px solid #d4af37; margin: 20px 0;">
                             <p style="margin: 0 0 10px 0;"><strong>Booking Reference:</strong> <span style="color:#d4af37; font-weight:bold; font-size:16px;">%s</span></p>
                             <p style="margin: 0 0 10px 0;"><strong>Mobile Number:</strong> +91 %s</p>
                             <p style="margin: 0 0 10px 0;"><strong>Date & Time Slot:</strong> %s @ %s</p>
                             <p style="margin: 0 0 10px 0;"><strong>Party Size:</strong> %d Guest(s)</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Special Request:</strong> %s</p>
                             <p style="margin: 0;"><strong>Status:</strong> <span style="background:#fef3c7; color:#b45309; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:bold;">PENDING CONFIRMATION</span></p>
                         </div>
 
                         <p style="font-size: 14px; color: #475569;">Our concierge team is reviewing seating availability. You will receive an automated follow-up notification once a table is assigned and confirmed.</p>
                         <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;"/>
-                        <p style="font-size: 12px; color: #94a3b8; text-align: center;">Opp. City Mall, Main Ring Road, Ahmedabad, Gujarat 380015 | Inquiries: +91 98765 43210</p>
+                        <p style="font-size: 12px; color: #94a3b8; text-align: center;">%s Concierge Team</p>
                     </div>
-                    """, guestName, code, phone, date, time, guests);
+                    """, restaurantName, guestName, restaurantName, code, phone, date, time, guests, specialReq, restaurantName);
 
-            EmailMessageDTO emailMsg = EmailMessageDTO.builder()
-                    .to(emailAddr)
+            EmailMessageDTO guestEmailMsg = EmailMessageDTO.builder()
+                    .to(guestEmail)
                     .subject(subject)
                     .body(htmlBody)
                     .isHtml(true)
-                    .emailType("RESERVATION_SUBMITTED")
+                    .emailType("RESERVATION_SUBMITTED_GUEST")
                     .timestamp(LocalDateTime.now())
                     .build();
 
-            sendEmail(emailMsg);
+            sendEmail(guestEmailMsg);
+        }
+
+        // 2. DISPATCH RESTAURANT ADMIN NOTIFICATION EMAIL
+        if (adminEmail != null && adminEmail.contains("@")) {
+            String adminSubject = "🚨 New Table Reservation Request - " + code + " | " + restaurantName;
+            String adminHtmlBody = String.format("""
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 25px; border: 1px solid #2563eb; border-radius: 12px; background: #ffffff;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h2 style="color: #2563eb; margin: 0; font-size: 24px;">%s</h2>
+                            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">New Reservation Alert - Admin Management</p>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 15px 0;"/>
+                        <h3 style="color: #1e293b; margin-top: 0;">A New Table Reservation Requires Review!</h3>
+                        <p style="font-size: 14px; color: #475569;">Hello Admin of <strong>%s</strong>,</p>
+                        <p style="font-size: 14px; color: #475569;">A new customer has submitted a table reservation request. Please review the guest details below:</p>
+                        
+                        <div style="background: #eff6ff; padding: 18px; border-radius: 8px; border-left: 4px solid #2563eb; margin: 20px 0;">
+                            <p style="margin: 0 0 10px 0;"><strong>Reservation Code:</strong> <span style="color:#2563eb; font-weight:bold; font-size:16px;">%s</span></p>
+                            <p style="margin: 0 0 10px 0;"><strong>Guest Name:</strong> %s</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Phone Number:</strong> +91 %s</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Email Address:</strong> %s</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Date & Time Slot:</strong> %s @ %s</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Guest Count:</strong> %d Guest(s)</p>
+                            <p style="margin: 0 0 10px 0;"><strong>Special Notes:</strong> %s</p>
+                            <p style="margin: 0;"><strong>Current Status:</strong> <span style="background:#fef3c7; color:#b45309; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:bold;">PENDING</span></p>
+                        </div>
+
+                        <p style="font-size: 14px; color: #475569;">Please log into your restaurant management portal (Table Dashboard) to approve, assign a table, or cancel this reservation.</p>
+                        <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;"/>
+                        <p style="font-size: 12px; color: #94a3b8; text-align: center;">%s Admin Operations Alert</p>
+                    </div>
+                    """, restaurantName, restaurantName, code, guestName, phone, guestEmail.isEmpty() ? "Not Provided" : guestEmail, date, time, guests, specialReq, restaurantName);
+
+            EmailMessageDTO adminEmailMsg = EmailMessageDTO.builder()
+                    .to(adminEmail)
+                    .subject(adminSubject)
+                    .body(adminHtmlBody)
+                    .isHtml(true)
+                    .emailType("RESERVATION_SUBMITTED_ADMIN")
+                    .timestamp(LocalDateTime.now())
+                    .build();
+
+            sendEmail(adminEmailMsg);
         }
     }
 
     public void sendReservationStatusNotification(com.restaurant.model.Reservation reservation) {
         if (reservation == null) return;
 
+        Integer resId = reservation.getRestaurantId();
+        if (resId == null || resId <= 0) {
+            resId = 1;
+        }
+
+        String restaurantName = resolveRestaurantName(resId);
         String phone = reservation.getGuestPhone() != null ? reservation.getGuestPhone().trim() : "";
         String emailAddr = reservation.getGuestEmail() != null && !reservation.getGuestEmail().isBlank()
                 ? reservation.getGuestEmail().trim()
@@ -279,23 +387,23 @@ public class JmsMailProducer {
                 : "";
 
         // Log SMS Notification Dispatch
-        log.info("📲 [SMS SENT] Mobile Notification sent to +91 {}: 'Dear {}, your table reservation [{}] status is now: {}{}. Thank you for choosing Sankalp Restaurant!'",
-                phone, guestName, code, status, tableNum);
+        log.info("📲 [SMS SENT] Mobile Notification sent to +91 {}: 'Dear {}, your table reservation [{}] status at {} is now: {}{}.'",
+                phone, guestName, code, restaurantName, status, tableNum);
 
         // Dispatch Rich HTML Email
         if (emailAddr != null && emailAddr.contains("@")) {
             String statusColor = "CONFIRMED".equalsIgnoreCase(status) ? "#16a34a" : ("REJECTED".equalsIgnoreCase(status) ? "#dc2626" : "#2563eb");
-            String subject = "Table Reservation " + status + " - " + code + " | Sankalp Restaurant";
+            String subject = "Table Reservation " + status + " - " + code + " | " + restaurantName;
             String htmlBody = String.format("""
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 25px; border: 1px solid #d4af37; border-radius: 12px; background: #ffffff;">
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <h2 style="color: #d4af37; margin: 0; font-size: 24px;">Sankalp Restaurant</h2>
-                            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Luxury Fine Dining & Culinary Suite</p>
+                            <h2 style="color: #d4af37; margin: 0; font-size: 24px;">%s</h2>
+                            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Table Reservation Update</p>
                         </div>
                         <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 15px 0;"/>
                         <h3 style="color: %s; margin-top: 0;">Reservation Status Updated: %s</h3>
                         <p style="font-size: 15px; color: #475569;">Dear <strong>%s</strong>,</p>
-                        <p style="font-size: 14px; color: #475569;">Your dining reservation status at Sankalp Restaurant has been updated by our staff management team.</p>
+                        <p style="font-size: 14px; color: #475569;">Your dining reservation status at <strong>%s</strong> has been updated by our concierge team.</p>
                         
                         <div style="background: #fafaf9; padding: 18px; border-radius: 8px; border-left: 4px solid %s; margin: 20px 0;">
                             <p style="margin: 0 0 10px 0;"><strong>Booking Reference:</strong> <span style="color:#d4af37; font-weight:bold; font-size:16px;">%s</span></p>
@@ -307,10 +415,10 @@ public class JmsMailProducer {
 
                         <p style="font-size: 14px; color: #475569;">%s</p>
                         <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;"/>
-                        <p style="font-size: 12px; color: #94a3b8; text-align: center;">Opp. City Mall, Main Ring Road, Ahmedabad, Gujarat 380015 | Phone Inquiries: +91 98765 43210</p>
+                        <p style="font-size: 12px; color: #94a3b8; text-align: center;">%s Concierge Team</p>
                     </div>
-                    """, statusColor, status, guestName, statusColor, code, phone, date, time, guests, statusColor, status, tableNum,
-                    "CONFIRMED".equalsIgnoreCase(status) ? "Your table is ready! Please arrive 5 minutes prior to your time slot." : "Thank you for contacting Sankalp Restaurant.");
+                    """, restaurantName, statusColor, status, guestName, restaurantName, statusColor, code, phone, date, time, guests, statusColor, status, tableNum,
+                    "CONFIRMED".equalsIgnoreCase(status) ? "Your table is ready! Please arrive 5 minutes prior to your time slot." : ("Thank you for choosing " + restaurantName + "."), restaurantName);
 
             EmailMessageDTO emailMsg = EmailMessageDTO.builder()
                     .to(emailAddr)
@@ -325,4 +433,3 @@ public class JmsMailProducer {
         }
     }
 }
-

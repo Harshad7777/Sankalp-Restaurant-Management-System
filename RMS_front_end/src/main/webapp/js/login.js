@@ -8,6 +8,77 @@
 
 "use strict";
 
+// Universal App UI Toast Notification System
+window.showToast = function (title, message = "", type = "success") {
+    if (!message && title) {
+        message = title;
+        title = type === "error" ? "Error" : (type === "warning" ? "Warning" : "Notice");
+    }
+
+    let toastContainer = document.getElementById("globalToast");
+    if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "globalToast";
+        toastContainer.className = "global-toast-container";
+        toastContainer.innerHTML = `
+            <div class="global-toast-card" id="globalToastCard">
+                <i class="fa-solid fa-circle-check toast-icon" id="globalToastIcon"></i>
+                <div class="toast-content">
+                    <strong id="globalToastTitle">Notification</strong>
+                    <span id="globalToastMessage">Operation successful</span>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toastContainer);
+    }
+
+    const card = document.getElementById("globalToastCard");
+    const icon = document.getElementById("globalToastIcon");
+    const titleEl = document.getElementById("globalToastTitle");
+    const msgEl = document.getElementById("globalToastMessage");
+
+    if (!card) return;
+
+    card.className = "global-toast-card";
+    if (type === "success") {
+        card.classList.add("toast-success");
+        if (icon) icon.className = "fa-solid fa-circle-check toast-icon";
+    } else if (type === "error") {
+        card.classList.add("toast-error");
+        if (icon) icon.className = "fa-solid fa-circle-exclamation toast-icon";
+    } else if (type === "warning") {
+        card.classList.add("toast-warning");
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation toast-icon";
+    } else {
+        card.classList.add("toast-info");
+        if (icon) icon.className = "fa-solid fa-circle-info toast-icon";
+    }
+
+    if (titleEl) titleEl.textContent = title || "Notification";
+    if (msgEl) {
+        msgEl.textContent = message || "";
+        msgEl.style.display = message ? "block" : "none";
+    }
+
+    card.classList.add("show");
+
+    if (window._toastTimeout) clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+        card.classList.remove("show");
+    }, 4000);
+};
+
+// Safe override of window.alert to prevent ugly browser popups
+window.alert = function (message) {
+    console.warn("Intercepted browser alert:", message);
+    const msgStr = String(message || "");
+    const isError = /error|fail|invalid|cannot|unable|denied|wrong/i.test(msgStr);
+    const isSuccess = /success|created|saved|updated|done|completed/i.test(msgStr);
+    const type = isError ? "error" : (isSuccess ? "success" : "info");
+    const title = isError ? "Alert" : (isSuccess ? "Success" : "Information");
+    window.showToast(title, msgStr, type);
+};
+
 const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
     ? window.API_BASE_URL
     : (window.location.origin.includes(":8081") 
@@ -459,6 +530,12 @@ function initLoginForm() {
             localStorage.setItem("username", username);
             localStorage.setItem("fullName", fullName);
             localStorage.setItem("role", role);
+            if (responseData.restaurantId) {
+                localStorage.setItem("restaurantId", String(responseData.restaurantId));
+            }
+            if (responseData.restaurantName) {
+                localStorage.setItem("restaurantName", responseData.restaurantName);
+            }
 
             // Chef Special Cache
             if (role === "CHEF") {

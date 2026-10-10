@@ -19,7 +19,7 @@ import com.restaurant.model.Customer;
 import com.restaurant.service.CustomerService;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping({"/customer", "/customers"})
 @CrossOrigin(origins = "*")
 public class CustomerController {
 

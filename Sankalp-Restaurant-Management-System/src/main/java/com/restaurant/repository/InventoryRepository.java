@@ -15,6 +15,7 @@ import com.restaurant.dto.PageResponse;
 import com.restaurant.model.Inventory;
 import com.restaurant.model.InventoryLog;
 import com.restaurant.repository.query.InventoryQueries;
+import com.restaurant.security.SecurityUtil;
 
 @Repository
 public class InventoryRepository {
@@ -26,66 +27,75 @@ public class InventoryRepository {
     }
 
     private Inventory mapInventoryRow(ResultSet rs, int rowNum) throws SQLException {
-        Timestamp lastRestockedTs = rs.getTimestamp("last_restocked");
-        Timestamp createdAtTs = rs.getTimestamp("created_at");
-        Timestamp updatedAtTs = rs.getTimestamp("updated_at");
+        Inventory item = new Inventory();
+        item.setInventoryId(rs.getInt("inventory_id"));
+        try {
+            item.setRestaurantId(rs.getInt("restaurant_id"));
+        } catch (SQLException ignored) {}
+        item.setItemName(rs.getString("item_name"));
+        item.setCategory(rs.getString("category"));
+        item.setQuantity(rs.getDouble("quantity"));
+        item.setUnit(rs.getString("unit"));
+        item.setMinThreshold(rs.getDouble("min_threshold"));
+        item.setCostPerUnit(rs.getDouble("cost_per_unit"));
+        item.setSupplierName(rs.getString("supplier_name"));
+        item.setSupplierContact(rs.getString("supplier_contact"));
 
-        return Inventory.builder()
-                .inventoryId(rs.getInt("inventory_id"))
-                .itemName(rs.getString("item_name"))
-                .category(rs.getString("category"))
-                .quantity(rs.getDouble("quantity"))
-                .unit(rs.getString("unit"))
-                .minThreshold(rs.getDouble("min_threshold"))
-                .costPerUnit(rs.getDouble("cost_per_unit"))
-                .supplierName(rs.getString("supplier_name"))
-                .supplierContact(rs.getString("supplier_contact"))
-                .lastRestocked(lastRestockedTs != null ? lastRestockedTs.toLocalDateTime() : null)
-                .status(rs.getString("status"))
-                .createdAt(createdAtTs != null ? createdAtTs.toLocalDateTime() : null)
-                .updatedAt(updatedAtTs != null ? updatedAtTs.toLocalDateTime() : null)
-                .build();
+        Timestamp lastRestocked = rs.getTimestamp("last_restocked");
+        if (lastRestocked != null) {
+            item.setLastRestocked(lastRestocked.toLocalDateTime());
+        }
+        item.setStatus(rs.getString("status"));
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            item.setCreatedAt(createdAt.toLocalDateTime());
+        }
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            item.setUpdatedAt(updatedAt.toLocalDateTime());
+        }
+        return item;
     }
 
     private InventoryLog mapInventoryLogRow(ResultSet rs, int rowNum) throws SQLException {
-        Timestamp createdAtTs = rs.getTimestamp("created_at");
-
         return InventoryLog.builder()
                 .logId(rs.getInt("log_id"))
                 .inventoryId(rs.getInt("inventory_id"))
-                .itemName(rs.getString("item_name"))
                 .actionType(rs.getString("action_type"))
                 .quantity(rs.getDouble("quantity"))
                 .previousQuantity(rs.getDouble("previous_quantity"))
                 .newQuantity(rs.getDouble("new_quantity"))
                 .reason(rs.getString("reason"))
                 .performedBy(rs.getString("performed_by"))
-                .createdAt(createdAtTs != null ? createdAtTs.toLocalDateTime() : null)
+                .createdAt(rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null)
                 .build();
     }
 
     public List<Inventory> findAll() {
-        return jdbcTemplate.query(InventoryQueries.FIND_ALL, this::mapInventoryRow);
+        return jdbcTemplate.query(InventoryQueries.FIND_ALL, this::mapInventoryRow, SecurityUtil.getCurrentRestaurantId());
     }
 
     public Inventory findById(int id) {
-        List<Inventory> result = jdbcTemplate.query(InventoryQueries.FIND_BY_ID, this::mapInventoryRow, id);
+        List<Inventory> result = jdbcTemplate.query(InventoryQueries.FIND_BY_ID, this::mapInventoryRow, id, SecurityUtil.getCurrentRestaurantId());
         return result.isEmpty() ? null : result.get(0);
     }
 
     public boolean existsByName(String name) {
-        Integer count = jdbcTemplate.queryForObject(InventoryQueries.EXISTS_BY_NAME, Integer.class, name);
+        Integer count = jdbcTemplate.queryForObject(InventoryQueries.EXISTS_BY_NAME, Integer.class, name, SecurityUtil.getCurrentRestaurantId());
         return count != null && count > 0;
     }
 
     public boolean existsByNameAndNotId(String name, int id) {
-        Integer count = jdbcTemplate.queryForObject(InventoryQueries.EXISTS_BY_NAME_AND_NOT_ID, Integer.class, name, id);
+        Integer count = jdbcTemplate.queryForObject(InventoryQueries.EXISTS_BY_NAME_AND_NOT_ID, Integer.class, name, id, SecurityUtil.getCurrentRestaurantId());
         return count != null && count > 0;
     }
 
     public int save(Inventory item) {
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
         return jdbcTemplate.update(
                 InventoryQueries.INSERT_ITEM,
+                resId,
                 item.getItemName(),
                 item.getCategory(),
                 item.getQuantity(),
@@ -100,6 +110,7 @@ public class InventoryRepository {
     }
 
     public int update(Inventory item) {
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
         return jdbcTemplate.update(
                 InventoryQueries.UPDATE_ITEM,
                 item.getItemName(),
@@ -111,7 +122,8 @@ public class InventoryRepository {
                 item.getSupplierName(),
                 item.getSupplierContact(),
                 item.getStatus(),
-                item.getInventoryId()
+                item.getInventoryId(),
+                resId
         );
     }
 
@@ -121,16 +133,17 @@ public class InventoryRepository {
                 newQuantity,
                 status,
                 actionType,
-                id
+                id,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
     public int delete(int id) {
-        return jdbcTemplate.update(InventoryQueries.DELETE_ITEM, id);
+        return jdbcTemplate.update(InventoryQueries.DELETE_ITEM, id, SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<String> getDistinctCategories() {
-        return jdbcTemplate.queryForList(InventoryQueries.GET_DISTINCT_CATEGORIES, String.class);
+        return jdbcTemplate.queryForList(InventoryQueries.GET_DISTINCT_CATEGORIES, String.class, SecurityUtil.getCurrentRestaurantId());
     }
 
     public int saveLog(InventoryLog log) {
@@ -147,15 +160,16 @@ public class InventoryRepository {
     }
 
     public List<InventoryLog> findLogsByInventoryId(int inventoryId) {
-        return jdbcTemplate.query(InventoryQueries.FIND_LOGS_BY_INVENTORY_ID, this::mapInventoryLogRow, inventoryId);
+        return jdbcTemplate.query(InventoryQueries.FIND_LOGS_BY_INVENTORY_ID, this::mapInventoryLogRow, inventoryId, SecurityUtil.getCurrentRestaurantId());
     }
 
     public InventorySummaryDTO getSummary() {
-        Long total = jdbcTemplate.queryForObject(InventoryQueries.COUNT_TOTAL, Long.class);
-        Long inStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "IN_STOCK");
-        Long lowStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "LOW_STOCK");
-        Long outOfStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "OUT_OF_STOCK");
-        Double totalVal = jdbcTemplate.queryForObject(InventoryQueries.SUM_TOTAL_VALUE, Double.class);
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
+        Long total = jdbcTemplate.queryForObject(InventoryQueries.COUNT_TOTAL, Long.class, resId);
+        Long inStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "IN_STOCK", resId);
+        Long lowStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "LOW_STOCK", resId);
+        Long outOfStock = jdbcTemplate.queryForObject(InventoryQueries.COUNT_BY_STATUS, Long.class, "OUT_OF_STOCK", resId);
+        Double totalVal = jdbcTemplate.queryForObject(InventoryQueries.SUM_TOTAL_VALUE, Double.class, resId);
 
         return InventorySummaryDTO.builder()
                 .totalItems(total != null ? total : 0)
@@ -167,9 +181,10 @@ public class InventoryRepository {
     }
 
     public PageResponse<Inventory> findFilteredPage(PageRequestDTO req) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM inventory WHERE 1=1 ");
-        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM inventory WHERE 1=1 ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM inventory WHERE restaurant_id = ? ");
+        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM inventory WHERE restaurant_id = ? ");
         List<Object> params = new ArrayList<>();
+        params.add(SecurityUtil.getCurrentRestaurantId());
 
         if (req.getSearch() != null && !req.getSearch().trim().isEmpty()) {
             String searchPattern = "%" + req.getSearch().trim().toLowerCase() + "%";

@@ -2800,9 +2800,18 @@ window.renderKitchenOrders =
 window.showKitchenToast =
     showKitchenToast;
 
-window.getChefId =
-    getChefId;
-
+window.triggerThermalKotFromModal = async function() {
+    if (!selectedOrder) {
+        alert("Please select an order first.");
+        return;
+    }
+    const orderId = selectedOrder.orderId || selectedOrder.id;
+    if (window.ThermalPrinter) {
+        await window.ThermalPrinter.printKOT(orderId, "");
+    } else {
+        alert("Thermal Printer module not loaded.");
+    }
+};
 
 console.log(
     "Kitchen JS initialization complete"

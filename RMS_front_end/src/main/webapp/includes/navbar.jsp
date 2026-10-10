@@ -64,6 +64,20 @@
         </div>
 
 
+        <!-- THEME TOGGLE -->
+
+        <button
+            type="button"
+            class="theme-toggle-btn"
+            id="themeToggleBtn"
+            title="Toggle Light / Dark Glass Mode"
+            aria-label="Toggle Theme">
+
+            <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
+
+        </button>
+
+
         <!-- NOTIFICATION -->
 
         <div class="notification-box">
@@ -93,8 +107,8 @@
                     Admin
                 </strong>
 
-                <small>
-                    Administrator
+                <small id="headerRestaurantName" class="badge bg-gold text-dark font-weight-bold ml-1">
+                    Sankalp Restaurant
                 </small>
 
             </div>

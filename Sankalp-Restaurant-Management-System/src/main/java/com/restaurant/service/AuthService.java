@@ -8,113 +8,86 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.restaurant.dto.LoginResponse;
+import com.restaurant.model.RestaurantSetting;
 import com.restaurant.model.Users;
+import com.restaurant.repository.SettingRepository;
 import com.restaurant.repository.UserRepository;
 import com.restaurant.security.JwtUtil;
 
 @Service
 public class AuthService {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(AuthService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final SettingRepository settingRepository;
+    private final com.restaurant.repository.RestaurantRepository restaurantRepository;
 
     public AuthService(
             AuthenticationManager authenticationManager,
             JwtUtil jwtUtil,
-            UserRepository userRepository) {
-
+            UserRepository userRepository,
+            SettingRepository settingRepository,
+            com.restaurant.repository.RestaurantRepository restaurantRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.settingRepository = settingRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
-    // =====================================================
-    // LOGIN
-    // =====================================================
+    public LoginResponse login(String username, String password) {
 
-    public LoginResponse login(
-            String username,
-            String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
 
-        // =================================================
-        // AUTHENTICATE USER
-        // =================================================
-
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                username,
-                                password
-                        )
-                );
-
-        // =================================================
-        // GET USER FROM DATABASE
-        // =================================================
-
-        Users user =
-                userRepository.findByUsername(
-                        authentication.getName()
-                );
+        Users user = userRepository.findByUsername(authentication.getName());
 
         if (user == null) {
-
-            throw new RuntimeException(
-                    "User not found"
-            );
+            throw new RuntimeException("User not found");
         }
 
-        // =================================================
-        // GET ROLE
-        // =================================================
+        String role = user.getRole();
 
-        String role =
-                user.getRole();
-
-        if (role == null ||
-            role.trim().isEmpty()) {
-
-            throw new RuntimeException(
-                    "User role not found"
-            );
+        if (role == null || role.trim().isEmpty()) {
+            throw new RuntimeException("User role not found");
         }
 
-        role =
-                role.trim().toUpperCase();
+        role = role.trim().toUpperCase();
 
-        // Remove ROLE_ if database contains it
         if (role.startsWith("ROLE_")) {
-
-            role =
-                    role.substring(5);
+            role = role.substring(5);
         }
 
-        // =================================================
-        // GENERATE JWT
-        // =================================================
+        Integer restaurantId = user.getRestaurantId() != null ? user.getRestaurantId() : 1;
 
-        String token =
-                jwtUtil.generateToken(
-                        user.getUsername()
-                );
+        String restaurantName = "Sankalp Restaurant";
+        com.restaurant.model.Restaurant restaurant = restaurantRepository.findById(restaurantId);
+        if (restaurant != null && restaurant.getRestaurantName() != null) {
+            restaurantName = restaurant.getRestaurantName();
+        } else {
+            RestaurantSetting settings = settingRepository.getSettingsByRestaurantId(restaurantId);
+            if (settings != null && settings.getRestaurantName() != null) {
+                restaurantName = settings.getRestaurantName();
+            }
+        }
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getUserId(), role, restaurantId);
 
         logger.info(
-                "Login success: userId={}, username={}, role={}",
-                user.getUserId(), user.getUsername(), role);
-
-        // =================================================
-        // RESPONSE
-        // =================================================
+                "Login success: userId={}, username={}, role={}, restaurantId={}, restaurantName={}",
+                user.getUserId(), user.getUsername(), role, restaurantId, restaurantName);
 
         return new LoginResponse(
                 token,
                 user.getUserId(),
                 user.getUsername(),
-                role
+                role,
+                restaurantId,
+                restaurantName
         );
     }
 }

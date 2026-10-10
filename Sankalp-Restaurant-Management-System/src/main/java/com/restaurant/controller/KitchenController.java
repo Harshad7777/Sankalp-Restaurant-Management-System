@@ -32,7 +32,7 @@ public class KitchenController {
     // GET ALL KITCHEN ORDERS
     // =========================================================
 
-    @GetMapping
+    @GetMapping({"", "/orders"})
     public ResponseEntity<?> getKitchenOrders() {
 
         try {

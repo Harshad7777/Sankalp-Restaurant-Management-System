@@ -12,7 +12,7 @@ public final class ReportQueries {
     public static final String GET_TOTAL_SALES = """
             SELECT IFNULL(SUM(grand_total), 0)
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
             """;
 
     public static final String GET_DATE_WISE_SALES = """
@@ -21,7 +21,7 @@ public final class ReportQueries {
                 COUNT(order_id) AS totalOrders,
                 IFNULL(SUM(grand_total), 0) AS totalSales
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
             GROUP BY DATE(bill_date)
             ORDER BY reportDate DESC
             """;
@@ -32,7 +32,7 @@ public final class ReportQueries {
                 COUNT(order_id) AS totalOrders,
                 IFNULL(SUM(grand_total), 0) AS totalSales
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
             AND DATE(bill_date) BETWEEN ? AND ?
             GROUP BY DATE(bill_date)
             ORDER BY reportDate DESC
@@ -41,13 +41,13 @@ public final class ReportQueries {
     public static final String GET_TOTAL_ORDERS = """
             SELECT COUNT(*)
             FROM bill
-            WHERE payment_status = 'PAID'
+            WHERE payment_status = 'PAID' AND restaurant_id = ?
             """;
 
     public static final String GET_TOTAL_CUSTOMERS = """
             SELECT COUNT(*)
             FROM customer
-            WHERE status = 'ACTIVE'
+            WHERE status = 'ACTIVE' AND restaurant_id = ?
             """;
 
     public static final String GET_TOP_MENU = """
@@ -62,7 +62,7 @@ public final class ReportQueries {
                 ON od.order_id = o.order_id
             JOIN bill b
                 ON o.order_id = b.order_id
-            WHERE b.payment_status = 'PAID'
+            WHERE b.payment_status = 'PAID' AND b.restaurant_id = ?
             GROUP BY
                 m.item_id,
                 m.item_name

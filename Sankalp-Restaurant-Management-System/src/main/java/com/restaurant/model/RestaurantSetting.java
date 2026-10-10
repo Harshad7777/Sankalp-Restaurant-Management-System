@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class RestaurantSetting {
 
     private Integer id = 1;
+    private Integer restaurantId = 1;
     private String restaurantName = "Sankalp Restaurant";
     private String tagline = "Authentic Flavors & Fine Dining Experience";
     private String phone = "+91 98765 43210";
@@ -46,6 +47,14 @@ public class RestaurantSetting {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Integer restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public String getRestaurantName() {

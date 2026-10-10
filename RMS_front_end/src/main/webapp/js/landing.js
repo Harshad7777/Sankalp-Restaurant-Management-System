@@ -8,6 +8,77 @@
 
 "use strict";
 
+// Universal App UI Toast Notification System
+window.showToast = function (title, message = "", type = "success") {
+    if (!message && title) {
+        message = title;
+        title = type === "error" ? "Error" : (type === "warning" ? "Warning" : "Notice");
+    }
+
+    let toastContainer = document.getElementById("globalToast");
+    if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "globalToast";
+        toastContainer.className = "global-toast-container";
+        toastContainer.innerHTML = `
+            <div class="global-toast-card" id="globalToastCard">
+                <i class="fa-solid fa-circle-check toast-icon" id="globalToastIcon"></i>
+                <div class="toast-content">
+                    <strong id="globalToastTitle">Notification</strong>
+                    <span id="globalToastMessage">Operation successful</span>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toastContainer);
+    }
+
+    const card = document.getElementById("globalToastCard");
+    const icon = document.getElementById("globalToastIcon");
+    const titleEl = document.getElementById("globalToastTitle");
+    const msgEl = document.getElementById("globalToastMessage");
+
+    if (!card) return;
+
+    card.className = "global-toast-card";
+    if (type === "success") {
+        card.classList.add("toast-success");
+        if (icon) icon.className = "fa-solid fa-circle-check toast-icon";
+    } else if (type === "error") {
+        card.classList.add("toast-error");
+        if (icon) icon.className = "fa-solid fa-circle-exclamation toast-icon";
+    } else if (type === "warning") {
+        card.classList.add("toast-warning");
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation toast-icon";
+    } else {
+        card.classList.add("toast-info");
+        if (icon) icon.className = "fa-solid fa-circle-info toast-icon";
+    }
+
+    if (titleEl) titleEl.textContent = title || "Notification";
+    if (msgEl) {
+        msgEl.textContent = message || "";
+        msgEl.style.display = message ? "block" : "none";
+    }
+
+    card.classList.add("show");
+
+    if (window._toastTimeout) clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+        card.classList.remove("show");
+    }, 4000);
+};
+
+// Safe override of window.alert to prevent ugly browser popups
+window.alert = function (message) {
+    console.warn("Intercepted browser alert:", message);
+    const msgStr = String(message || "");
+    const isError = /error|fail|invalid|cannot|unable|denied|wrong/i.test(msgStr);
+    const isSuccess = /success|created|saved|updated|done|completed/i.test(msgStr);
+    const type = isError ? "error" : (isSuccess ? "success" : "info");
+    const title = isError ? "Alert" : (isSuccess ? "Success" : "Information");
+    window.showToast(title, msgStr, type);
+};
+
 const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
     ? "http://localhost:8080" 
     : (window.location.origin + "/RMS_backend");
@@ -102,19 +173,26 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeMenuSearch();
 });
 
-// =========================================================
-// FETCH LIVE MENU & CATEGORIES FROM BACKEND API
-// =========================================================
+let currentPublicRestaurantId = 1;
 
-async function loadLiveMenuAndCategories() {
+async function loadLiveMenuAndCategories(restaurantId) {
+    if (restaurantId) {
+        currentPublicRestaurantId = restaurantId;
+    }
+    const reqResId = currentPublicRestaurantId || 1;
+    selectedCategoryId = "all";
+
     try {
+        const catApi = CATEGORY_API + "?restaurantId=" + reqResId;
+        const menuApi = MENU_API + "?restaurantId=" + reqResId;
+
         // Fetch Categories
-        const catPromise = fetch(CATEGORY_API, { method: "GET" })
+        const catPromise = fetch(catApi, { method: "GET" })
             .then(res => res.ok ? res.json() : [])
             .catch(() => []);
 
         // Fetch Menu Items
-        const menuPromise = fetch(MENU_API, { method: "GET" })
+        const menuPromise = fetch(menuApi, { method: "GET" })
             .then(res => res.ok ? res.json() : [])
             .catch(() => []);
 
@@ -134,6 +212,11 @@ async function loadLiveMenuAndCategories() {
         allMenuItems = DEFAULT_MENU_ITEMS;
         renderMenuCards(DEFAULT_MENU_ITEMS);
     }
+}
+
+function switchPublicRestaurantMenu(restaurantId) {
+    console.log("Switching public menu to Restaurant ID:", restaurantId);
+    loadLiveMenuAndCategories(restaurantId);
 }
 
 // =========================================================
@@ -524,7 +607,11 @@ function initializeReservation() {
             return;
         }
 
+        const restSelect = document.getElementById("reservationRestaurantId");
+        const resId = restSelect ? parseInt(restSelect.value, 10) : 1;
+
         const payload = {
+            restaurantId: isNaN(resId) ? 1 : resId,
             guestName: name,
             guestPhone: phone,
             guestEmail: email,

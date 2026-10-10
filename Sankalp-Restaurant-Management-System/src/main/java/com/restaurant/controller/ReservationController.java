@@ -22,7 +22,7 @@ import com.restaurant.service.ReservationService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping({"/reservation", "/reservations"})
 @CrossOrigin(origins = "*")
 public class ReservationController {
 

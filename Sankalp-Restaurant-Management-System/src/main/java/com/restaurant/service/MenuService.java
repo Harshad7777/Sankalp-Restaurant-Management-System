@@ -121,7 +121,11 @@ public class MenuService {
 	// Get All Menu
 	// ==========================
 	public List<Menu> getAllMenu() {
-		return repository.findAll();
+		return getAllMenu(null);
+	}
+
+	public List<Menu> getAllMenu(Integer restaurantId) {
+		return repository.findAll(restaurantId);
 	}
 
 	// ==========================

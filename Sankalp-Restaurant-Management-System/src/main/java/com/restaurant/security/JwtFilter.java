@@ -19,8 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(JwtFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
@@ -28,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
     public JwtFilter(
             JwtUtil jwtUtil,
             CustomUserDetailsService userDetailsService) {
-
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
@@ -40,61 +38,34 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        // =====================================================
-        // GET AUTHORIZATION HEADER
-        // =====================================================
-
-        String authorizationHeader =
-                request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String token = null;
+        Integer restaurantId = null;
 
-        // =====================================================
-        // CHECK BEARER TOKEN
-        // =====================================================
-
-        if (authorizationHeader != null
-                && authorizationHeader.startsWith("Bearer ")) {
-
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7).trim();
-
             if (!token.isEmpty()) {
-
                 try {
-
                     username = jwtUtil.extractUsername(token);
-
+                    restaurantId = jwtUtil.extractRestaurantId(token);
                 } catch (Exception e) {
-
                     logger.debug("JWT token error: {}", e.getMessage());
                 }
             }
         }
 
-        // =====================================================
-        // AUTHENTICATE USER
-        // =====================================================
-
-        if (username != null
-                && SecurityContextHolder
-                        .getContext()
-                        .getAuthentication() == null) {
-
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                UserDetails userDetails =
-                        userDetailsService
-                                .loadUserByUsername(username);
-
-                // =================================================
-                // VALIDATE TOKEN
-                // =================================================
+                if (userDetails instanceof CustomUserDetails customUserDetails) {
+                    restaurantId = customUserDetails.getRestaurantId();
+                }
 
                 if (jwtUtil.validateToken(token)) {
-
-                    UsernamePasswordAuthenticationToken
-                            authentication =
+                    UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
@@ -102,39 +73,25 @@ public class JwtFilter extends OncePerRequestFilter {
                             );
 
                     authentication.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request)
+                            new WebAuthenticationDetailsSource().buildDetails(request)
                     );
 
-                    SecurityContextHolder
-                            .getContext()
-                            .setAuthentication(authentication);
-
-                    logger.debug(
-                            "JWT authentication success: user={}, "
-                            + "authorities={}, request={} {}",
-                            userDetails.getUsername(),
-                            userDetails.getAuthorities(),
-                            request.getMethod(),
-                            request.getRequestURI());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-
             } catch (Exception e) {
-
                 logger.debug("JWT authentication error: {}", e.getMessage());
-
-                SecurityContextHolder
-                        .clearContext();
+                SecurityContextHolder.clearContext();
             }
         }
 
-        // =====================================================
-        // CONTINUE FILTER CHAIN
-        // =====================================================
+        if (restaurantId != null) {
+            TenantContext.setCurrentRestaurantId(restaurantId);
+        }
 
-        filterChain.doFilter(
-                request,
-                response
-        );
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            TenantContext.clear();
+        }
     }
 }

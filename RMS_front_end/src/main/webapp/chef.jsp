@@ -406,15 +406,25 @@
             </div>
 
 
-            <button
-                type="button"
-                id="closeOrderModal"
-                class="modal-close"
-            >
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button
+                    type="button"
+                    class="btn btn-warning btn-sm"
+                    style="background: #ffc107; color: #111; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;"
+                    onclick="triggerThermalKotFromModal()">
+                    <i class="fa-solid fa-receipt me-1"></i> Print KOT (Thermal)
+                </button>
 
-                <i class="fa-solid fa-xmark"></i>
+                <button
+                    type="button"
+                    id="closeOrderModal"
+                    class="modal-close"
+                >
 
-            </button>
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+            </div>
 
         </div>
 

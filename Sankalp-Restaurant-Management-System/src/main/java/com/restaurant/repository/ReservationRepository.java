@@ -2,7 +2,6 @@ package com.restaurant.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.restaurant.model.Reservation;
 import com.restaurant.repository.query.ReservationQueries;
+import com.restaurant.security.SecurityUtil;
 
 @Repository
 public class ReservationRepository {
@@ -24,6 +24,9 @@ public class ReservationRepository {
     private Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
         Reservation r = new Reservation();
         r.setReservationId(rs.getInt("reservation_id"));
+        try {
+            r.setRestaurantId(rs.getInt("restaurant_id"));
+        } catch (SQLException ignored) {}
         r.setReservationCode(rs.getString("reservation_code"));
         r.setGuestName(rs.getString("guest_name"));
         r.setGuestPhone(rs.getString("guest_phone"));
@@ -64,7 +67,8 @@ public class ReservationRepository {
     public List<Reservation> findAll() {
         return jdbcTemplate.query(
                 ReservationQueries.FIND_ALL,
-                this::mapRow
+                this::mapRow,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
@@ -72,7 +76,8 @@ public class ReservationRepository {
         return jdbcTemplate.query(
                 ReservationQueries.FIND_BY_STATUS,
                 this::mapRow,
-                status
+                status,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
@@ -80,23 +85,43 @@ public class ReservationRepository {
         List<Reservation> list = jdbcTemplate.query(
                 ReservationQueries.FIND_BY_ID,
                 this::mapRow,
-                id
+                id,
+                SecurityUtil.getCurrentRestaurantId()
         );
         return list.isEmpty() ? null : list.get(0);
     }
 
     public Reservation findByCode(String code) {
-        List<Reservation> list = jdbcTemplate.query(
-                ReservationQueries.FIND_BY_CODE,
-                this::mapRow,
-                code
-        );
+        Integer resId = SecurityUtil.getOptionalCurrentRestaurantId();
+        List<Reservation> list;
+        if (resId != null) {
+            list = jdbcTemplate.query(
+                    ReservationQueries.FIND_BY_CODE,
+                    this::mapRow,
+                    code,
+                    resId
+            );
+        } else {
+            list = jdbcTemplate.query(
+                    "SELECT r.*, t.table_number FROM table_reservation r LEFT JOIN restaurant_tables t ON r.table_id = t.table_id WHERE r.reservation_code = ?",
+                    this::mapRow,
+                    code
+            );
+        }
         return list.isEmpty() ? null : list.get(0);
     }
 
     public int save(Reservation r) {
+        Integer resId = SecurityUtil.getOptionalCurrentRestaurantId();
+        if (resId == null && r.getRestaurantId() != null && r.getRestaurantId() > 0) {
+            resId = r.getRestaurantId();
+        }
+        if (resId == null) {
+            resId = 1;
+        }
         return jdbcTemplate.update(
                 ReservationQueries.INSERT_RESERVATION,
+                resId,
                 r.getReservationCode(),
                 r.getGuestName(),
                 r.getGuestPhone(),
@@ -114,7 +139,8 @@ public class ReservationRepository {
         return jdbcTemplate.update(
                 ReservationQueries.UPDATE_STATUS,
                 status,
-                id
+                id,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
@@ -122,23 +148,36 @@ public class ReservationRepository {
         return jdbcTemplate.update(
                 ReservationQueries.ASSIGN_TABLE,
                 tableId,
-                id
+                id,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
     public int delete(int id) {
         return jdbcTemplate.update(
                 ReservationQueries.DELETE_RESERVATION,
-                id
+                id,
+                SecurityUtil.getCurrentRestaurantId()
         );
     }
 
     public boolean existsByCode(String code) {
-        Integer count = jdbcTemplate.queryForObject(
-                ReservationQueries.EXISTS_BY_CODE,
-                Integer.class,
-                code
-        );
+        Integer resId = SecurityUtil.getOptionalCurrentRestaurantId();
+        Integer count;
+        if (resId != null) {
+            count = jdbcTemplate.queryForObject(
+                    ReservationQueries.EXISTS_BY_CODE,
+                    Integer.class,
+                    code,
+                    resId
+            );
+        } else {
+            count = jdbcTemplate.queryForObject(
+                    "SELECT COUNT(*) FROM table_reservation WHERE reservation_code = ?",
+                    Integer.class,
+                    code
+            );
+        }
         return count != null && count > 0;
     }
 }

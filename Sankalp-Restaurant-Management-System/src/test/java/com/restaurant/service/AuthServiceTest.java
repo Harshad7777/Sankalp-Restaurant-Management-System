@@ -2,6 +2,8 @@ package com.restaurant.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,12 @@ class AuthServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private com.restaurant.repository.SettingRepository settingRepository;
+
+    @Mock
+    private com.restaurant.repository.RestaurantRepository restaurantRepository;
+
     @InjectMocks
     private AuthService authService;
 
@@ -47,9 +55,10 @@ class AuthServiceTest {
         mockUser.setUserId(1);
         mockUser.setUsername(username);
         mockUser.setRole("ROLE_ADMIN");
+        mockUser.setRestaurantId(1);
 
         when(userRepository.findByUsername(username)).thenReturn(mockUser);
-        when(jwtUtil.generateToken(username)).thenReturn("mocked.jwt.token");
+        when(jwtUtil.generateToken(eq(username), anyInt(), anyString(), anyInt())).thenReturn("mocked.jwt.token");
 
         LoginResponse response = authService.login(username, password);
 

@@ -43,6 +43,8 @@ document.addEventListener(
 
         syncGlobalBrandLogo();
 
+        setupThemeToggle();
+
     }
 );
 
@@ -58,31 +60,67 @@ const RMS_GLOBAL_BACKEND_URL = (typeof window.API_BASE_URL !== "undefined" && wi
 
 async function syncGlobalBrandLogo() {
     const sidebarLogo = document.getElementById("sidebarLogoImg");
-    if (!sidebarLogo) return;
 
     // 1. Local storage instant apply
     try {
+        const storedName = localStorage.getItem("restaurantName");
+        if (storedName) applyRestaurantName(storedName);
+
         const stored = localStorage.getItem("sankalp_restaurant_settings");
         if (stored) {
             const settings = JSON.parse(stored);
             if (settings && settings.logoPath) {
                 applySidebarLogo(sidebarLogo, settings.logoPath);
             }
-        }
-    } catch (e) {}
-
-    // 2. Fetch fresh settings from backend API
-    try {
-        const settingsUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl("/settings") : "/api/settings";
-        const res = await fetch(settingsUrl);
-        if (res.ok) {
-            const settings = await res.json();
-            if (settings && settings.logoPath) {
-                localStorage.setItem("sankalp_restaurant_settings", JSON.stringify(settings));
-                applySidebarLogo(sidebarLogo, settings.logoPath);
+            if (settings && settings.restaurantName) {
+                applyRestaurantName(settings.restaurantName);
             }
         }
     } catch (e) {}
+
+    // 2. Fetch fresh restaurant details for authenticated user
+    try {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const headers = { "Authorization": "Bearer " + token };
+            const currentUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl("/restaurant/current") : "/api/restaurant/current";
+            const res = await fetch(currentUrl, { headers });
+            if (res.ok) {
+                const restaurant = await res.json();
+                if (restaurant && restaurant.restaurantName) {
+                    localStorage.setItem("restaurantName", restaurant.restaurantName);
+                    applyRestaurantName(restaurant.restaurantName);
+                }
+            }
+        }
+    } catch (e) {}
+
+    // 3. Fetch fresh settings from backend API with tenant authentication
+    try {
+        const token = localStorage.getItem("token");
+        const headers = token ? { "Authorization": "Bearer " + token } : {};
+        const settingsUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl("/settings") : "/api/settings";
+        const res = await fetch(settingsUrl, { headers });
+        if (res.ok) {
+            const settings = await res.json();
+            if (settings) {
+                localStorage.setItem("sankalp_restaurant_settings", JSON.stringify(settings));
+                if (settings.logoPath) applySidebarLogo(sidebarLogo, settings.logoPath);
+                if (settings.restaurantName) {
+                    localStorage.setItem("restaurantName", settings.restaurantName);
+                    applyRestaurantName(settings.restaurantName);
+                }
+            }
+        }
+    } catch (e) {}
+}
+
+function applyRestaurantName(name) {
+    if (!name) return;
+    const brandEls = document.querySelectorAll(".brand-name, .restaurant-brand-name, #headerRestaurantName, #sidebarRestaurantName, #sidebarBottomTitle");
+    brandEls.forEach(el => {
+        el.textContent = name;
+    });
 }
 
 function applySidebarLogo(imgEl, logoPath) {
@@ -1017,37 +1055,7 @@ function setupLogout() {
 ===================================================== */
 
 function clearLoginData() {
-
-    const keys = [
-
-        "token",
-        "jwtToken",
-
-        "userId",
-
-        "username",
-        "userName",
-
-        "role",
-        "userRole",
-
-        "chefId",
-        "chefToken",
-        "chefRole"
-
-    ];
-
-
-    keys.forEach(
-        function (key) {
-
-            localStorage.removeItem(
-                key
-            );
-
-        }
-    );
-
+    localStorage.clear();
 }
 
 
@@ -1068,8 +1076,12 @@ function setupNotifications() {
     // Toggle dropdown
     notifBtn.addEventListener("click", function (e) {
         e.stopPropagation();
-        const isShown = notifDropdown.style.display === "flex";
-        notifDropdown.style.display = isShown ? "none" : "flex";
+        const isShown = notifDropdown.classList.contains("show");
+        if (isShown) {
+            notifDropdown.classList.remove("show");
+        } else {
+            notifDropdown.classList.add("show");
+        }
 
         // Close profile dropdown if open
         const profileDropdown = document.getElementById("profileDropdown");
@@ -1096,7 +1108,7 @@ function setupNotifications() {
 
     // Close when clicking outside
     document.addEventListener("click", function () {
-        if (notifDropdown) notifDropdown.style.display = "none";
+        if (notifDropdown) notifDropdown.classList.remove("show");
     });
 }
 
@@ -1209,6 +1221,51 @@ window.alert = function (message) {
     window.showToast(title, msgStr, type);
 };
 
+
+/* =====================================================
+   THEME TOGGLE SYSTEM (DARK / LIGHT GLASS)
+===================================================== */
+
+function setupThemeToggle() {
+    const savedTheme = localStorage.getItem("rms_theme") || "dark";
+    applyTheme(savedTheme);
+
+    const toggleBtns = document.querySelectorAll("#themeToggleBtn, .theme-toggle-btn");
+    toggleBtns.forEach(btn => {
+        btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const current = document.documentElement.getAttribute("data-theme") || "dark";
+            const nextTheme = current === "dark" ? "light" : "dark";
+            applyTheme(nextTheme);
+            localStorage.setItem("rms_theme", nextTheme);
+            if (window.showToast) {
+                window.showToast("Theme Changed", `Switched to ${nextTheme.toUpperCase()} mode`, "info");
+            }
+        });
+    });
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.setAttribute("data-theme", theme);
+
+    const icons = document.querySelectorAll("#themeToggleIcon, .theme-toggle-btn i");
+    icons.forEach(icon => {
+        if (theme === "dark") {
+            icon.className = "fa-solid fa-sun";
+            icon.style.color = "#fcd34d";
+        } else {
+            icon.className = "fa-solid fa-moon";
+            icon.style.color = "#475569";
+        }
+    });
+}
+
+// Immediate theme execution on script read to prevent flash of wrong theme
+(function () {
+    const instantTheme = localStorage.getItem("rms_theme") || "dark";
+    document.documentElement.setAttribute("data-theme", instantTheme);
+})();
 
 /* =====================================================
    FINAL LOG

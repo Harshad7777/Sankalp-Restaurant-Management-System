@@ -205,6 +205,20 @@
             <p>Freshly prepared culinary masterpieces directly synced from our kitchen menu.</p>
         </div>
 
+        <!-- PUBLIC RESTAURANT OUTLET SELECTOR -->
+        <div class="d-flex justify-content-center mb-4 reveal">
+            <div class="outlet-selector-box d-flex align-items-center justify-content-center flex-wrap">
+                <label for="publicRestaurantSelect" class="me-2 text-warning fw-bold text-nowrap mb-0" style="font-size: 0.95rem;">
+                    <i class="fa-solid fa-store me-1"></i> Select Restaurant Outlet:
+                </label>
+                <select id="publicRestaurantSelect" class="form-select d-inline-block w-auto border-0 text-white bg-dark shadow-none fw-semibold" style="cursor: pointer; font-size: 0.95rem; border-radius: 20px; max-width: 100%;" onchange="switchPublicRestaurantMenu(this.value)">
+                    <option value="1" selected>🏛️ Sankalp Restaurant (South & North Indian)</option>
+                    <option value="2">🍕 ABC Restaurant (Burgers, Pizza & Fast Food)</option>
+                    <option value="3">🍷 Royal Fine Dining (Gourmet Steaks & Seafood)</option>
+                </select>
+            </div>
+        </div>
+
         <!-- SEARCH & CATEGORY FILTER BAR -->
         <div class="menu-controls reveal">
             
@@ -391,6 +405,14 @@
                         <h4 class="form-heading">Table Booking Request</h4>
 
                         <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="reservationRestaurantId" class="fw-bold text-warning">Target Restaurant Outlet *</label>
+                                <select id="reservationRestaurantId" required class="form-select bg-dark text-white border-warning fw-semibold">
+                                    <option value="1" selected>🏛️ Sankalp Restaurant (South & North Indian)</option>
+                                    <option value="2">🍕 ABC Restaurant (Burgers, Pizza & Fast Food)</option>
+                                    <option value="3">🍷 Royal Fine Dining (Gourmet Steaks & Seafood)</option>
+                                </select>
+                            </div>
                             <div class="col-md-4">
                                 <label for="guestName">Full Name *</label>
                                 <input type="text" id="guestName" placeholder="Your Name" required class="form-control">

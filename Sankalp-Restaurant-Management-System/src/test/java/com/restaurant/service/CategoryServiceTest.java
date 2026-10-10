@@ -100,7 +100,7 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should get all categories")
     void testGetAllCategory() {
-        when(repository.findAll()).thenReturn(List.of(testCategory));
+        when(repository.findAll(any())).thenReturn(List.of(testCategory));
 
         List<Category> list = categoryService.getAllCategory();
 

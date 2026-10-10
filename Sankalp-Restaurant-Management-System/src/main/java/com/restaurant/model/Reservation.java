@@ -8,10 +8,22 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Represents a Table Reservation entity in the Restaurant Management System.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Reservation {
 
     private Integer reservationId;
+    private Integer restaurantId;
     private String reservationCode;
 
     @NotBlank(message = "Guest name is required")
@@ -44,136 +56,10 @@ public class Reservation {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Reservation() {
-    }
-
+    // Legacy constructor
     public Reservation(Integer reservationId, String reservationCode, String guestName, String guestPhone,
                        LocalDate bookingDate, String bookingTime, Integer guestCount, String specialRequest,
                        Integer tableId, String tableNumber, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.reservationId = reservationId;
-        this.reservationCode = reservationCode;
-        this.guestName = guestName;
-        this.guestPhone = guestPhone;
-        this.bookingDate = bookingDate;
-        this.bookingTime = bookingTime;
-        this.guestCount = guestCount;
-        this.specialRequest = specialRequest;
-        this.tableId = tableId;
-        this.tableNumber = tableNumber;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Integer getReservationId() {
-        return reservationId;
-    }
-
-    public void setReservationId(Integer reservationId) {
-        this.reservationId = reservationId;
-    }
-
-    public String getReservationCode() {
-        return reservationCode;
-    }
-
-    public void setReservationCode(String reservationCode) {
-        this.reservationCode = reservationCode;
-    }
-
-    public String getGuestName() {
-        return guestName;
-    }
-
-    public void setGuestName(String guestName) {
-        this.guestName = guestName;
-    }
-
-    public String getGuestPhone() {
-        return guestPhone;
-    }
-
-    public void setGuestPhone(String guestPhone) {
-        this.guestPhone = guestPhone;
-    }
-
-    public String getGuestEmail() {
-        return guestEmail;
-    }
-
-    public void setGuestEmail(String guestEmail) {
-        this.guestEmail = guestEmail;
-    }
-
-    public LocalDate getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(LocalDate bookingDate) {
-        this.bookingDate = bookingDate;
-    }
-
-    public String getBookingTime() {
-        return bookingTime;
-    }
-
-    public void setBookingTime(String bookingTime) {
-        this.bookingTime = bookingTime;
-    }
-
-    public Integer getGuestCount() {
-        return guestCount;
-    }
-
-    public void setGuestCount(Integer guestCount) {
-        this.guestCount = guestCount;
-    }
-
-    public String getSpecialRequest() {
-        return specialRequest;
-    }
-
-    public void setSpecialRequest(String specialRequest) {
-        this.specialRequest = specialRequest;
-    }
-
-    public Integer getTableId() {
-        return tableId;
-    }
-
-    public void setTableId(Integer tableId) {
-        this.tableId = tableId;
-    }
-
-    public String getTableNumber() {
-        return tableNumber;
-    }
-
-    public void setTableNumber(String tableNumber) {
-        this.tableNumber = tableNumber;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this(reservationId, 0, reservationCode, guestName, guestPhone, null, bookingDate, bookingTime, guestCount, specialRequest, tableId, tableNumber, status, createdAt, updatedAt);
     }
 }

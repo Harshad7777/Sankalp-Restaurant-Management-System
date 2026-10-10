@@ -1,7 +1,7 @@
 # ==========================================
 # STAGE 1: Build the WAR artifact
 # ==========================================
-FROM maven:3.9-eclipse-temurin-21 AS builder
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /build
 
@@ -15,7 +15,7 @@ RUN mvn clean package -DskipTests
 # ==========================================
 # STAGE 2: Tomcat 10.1 Server Runtime
 # ==========================================
-FROM tomcat:10.1-jdk21
+FROM tomcat:10.1-jdk17
 
 # Remove default Tomcat apps
 RUN rm -rf /usr/local/tomcat/webapps/*

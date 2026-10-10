@@ -7,21 +7,29 @@ import org.springframework.stereotype.Service;
 
 import com.restaurant.dto.ChangePasswordDTO;
 import com.restaurant.model.Users;
+import com.restaurant.repository.RestaurantRepository;
+import com.restaurant.repository.SettingRepository;
 import com.restaurant.repository.UserRepository;
 
 @Service
 public class UserService {
 
     private final UserRepository repository;
+    private final RestaurantRepository restaurantRepository;
+    private final SettingRepository settingRepository;
     private final PasswordEncoder passwordEncoder;
     private final com.restaurant.service.mail.JmsMailProducer mailProducer;
 
     public UserService(
             UserRepository repository,
+            RestaurantRepository restaurantRepository,
+            SettingRepository settingRepository,
             PasswordEncoder passwordEncoder,
             com.restaurant.service.mail.JmsMailProducer mailProducer) {
 
         this.repository = repository;
+        this.restaurantRepository = restaurantRepository;
+        this.settingRepository = settingRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailProducer = mailProducer;
     }
@@ -160,6 +168,31 @@ public class UserService {
                         user.getPassword()
                 )
         );
+
+        // =================================================
+        // MULTI-TENANT RESTAURANT RESOLUTION / CREATION
+        // =================================================
+        if (user.getRestaurantName() != null && !user.getRestaurantName().isBlank()) {
+            String resName = user.getRestaurantName().trim();
+            com.restaurant.model.Restaurant existingRes = restaurantRepository.findByName(resName);
+            if (existingRes != null) {
+                user.setRestaurantId(existingRes.getRestaurantId());
+            } else {
+                int newResId = restaurantRepository.createRestaurant(resName);
+                if (newResId > 0) {
+                    settingRepository.seedStarterTenantData(newResId, resName);
+                    user.setRestaurantId(newResId);
+                } else {
+                    return "Failed to create new restaurant tenant";
+                }
+            }
+        } else if (user.getRestaurantId() != null && user.getRestaurantId() > 0) {
+            // Assigned to existing selected restaurant
+        } else if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            return "Please specify a New Restaurant Name or select an existing restaurant";
+        } else {
+            user.setRestaurantId(1);
+        }
 
 
         int result =

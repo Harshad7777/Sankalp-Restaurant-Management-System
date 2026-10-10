@@ -19,6 +19,9 @@
 <!-- CONFIG SCRIPT -->
 <script src="${pageContext.request.contextPath}/js/config.js"></script>
 
+<!-- THERMAL PRINTER SCRIPT -->
+<script src="${pageContext.request.contextPath}/js/thermal-printer.js"></script>
+
 <!-- COMMON SCRIPT -->
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
 

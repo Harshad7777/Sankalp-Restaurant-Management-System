@@ -10,8 +10,8 @@
 
 body {
     margin: 0;
-    background: #f5f6f8;
-    color: #202631;
+    background: var(--body-bg);
+    color: var(--text-primary);
 }
 
 
@@ -44,7 +44,7 @@ body {
     margin: 0;
     font-size: 30px;
     font-weight: 700;
-    color: #172033;
+    color: var(--text-primary);
 }
 
 

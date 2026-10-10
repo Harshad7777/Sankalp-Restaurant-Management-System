@@ -1240,13 +1240,70 @@
 
                 <i class="fa-solid fa-print"></i>
 
-                Print Bill
+                Print Standard
+
+            </button>
+
+            <button
+                type="button"
+                id="modalThermalPrintBtn"
+                class="modal-btn"
+                style="background: #17a2b8; color: white;"
+                onclick="triggerThermalPrintFromModal()">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                Thermal Print (ESC/POS)
+
+            </button>
+
+            <button
+                type="button"
+                id="modalTableQRBtn"
+                class="modal-btn"
+                style="background: #28a745; color: white;"
+                onclick="triggerTableQRFromModal()">
+
+                <i class="fa-solid fa-qrcode"></i>
+
+                Table QR Payment
 
             </button>
 
         </div>
 
     </div>
+
+</div>
+
+<!-- =========================================================
+     TABLE QR PAYMENT MODAL
+========================================================= -->
+<div id="tableQrModal" class="bill-modal-overlay" style="display: none;">
+    <div class="bill-modal-card" style="max-width: 420px; text-align: center; padding: 25px;">
+        <div style="margin-bottom: 15px;">
+            <i class="fa-solid fa-qrcode" style="font-size: 2.5rem; color: #d4af37;"></i>
+            <h3 style="margin-top: 10px; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #111;">Table QR Checkout</h3>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 5px;">Scan with GPay, PhonePe, Paytm, or any UPI App</p>
+            <div style="font-size: 0.95rem; color: #333; margin-top: 5px;">
+                Bill No: <strong id="qrModalBillNo">---</strong> | Amount: <strong id="qrModalAmount" style="color: #28a745;">₹0.00</strong>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #e9ecef; display: inline-block; margin-bottom: 15px;">
+            <img id="qrModalImg" src="" alt="Dynamic UPI QR Code" style="width: 220px; height: 220px; border-radius: 8px;" />
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button type="button" class="modal-btn secondary" onclick="document.getElementById('tableQrModal').style.display='none'">
+                <i class="fa-solid fa-xmark"></i> Close
+            </button>
+            <button type="button" class="modal-btn" style="background: #28a745; color: white;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print QR Stand
+            </button>
+        </div>
+    </div>
+</div>
 
 </div>
 

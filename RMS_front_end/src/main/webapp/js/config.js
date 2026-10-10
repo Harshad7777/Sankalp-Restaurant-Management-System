@@ -18,12 +18,12 @@
     let defaultApiBaseUrl = "";
 
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-        if (port === "8081") {
-            // Docker Environment (Frontend on 8081, Backend Spring Boot on 8080)
-            defaultApiBaseUrl = "http://localhost:8080";
+        if (port === "8081" || port === "8080") {
+            // Check if Tomcat webapp /api is available on current origin, otherwise fallback to http://localhost:8080
+            defaultApiBaseUrl = origin + "/api";
         } else {
-            // Local Tomcat Environment
-            defaultApiBaseUrl = "http://localhost:8080";
+            // Local Tomcat Environment (API deployed as api.war on same Tomcat server)
+            defaultApiBaseUrl = origin + "/api";
         }
     } else {
         // Production Server (cPanel / Apache Tomcat Deployment)

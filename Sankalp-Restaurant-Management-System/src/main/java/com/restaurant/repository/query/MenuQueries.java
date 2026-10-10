@@ -11,8 +11,8 @@ public final class MenuQueries {
 
     public static final String INSERT_MENU = """
             INSERT INTO menu
-            (category_id, item_name, description, price, image, status)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (restaurant_id, category_id, item_name, description, price, image, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
     public static final String UPDATE_MENU = """
@@ -24,23 +24,24 @@ public final class MenuQueries {
                 price = ?,
                 image = ?,
                 status = ?
-            WHERE item_id = ?
+            WHERE item_id = ? AND restaurant_id = ?
             """;
 
     public static final String GET_OLD_IMAGE = """
             SELECT image
             FROM menu
-            WHERE item_id = ?
+            WHERE item_id = ? AND restaurant_id = ?
             """;
 
     public static final String DELETE_BY_ID = """
             DELETE FROM menu
-            WHERE item_id = ?
+            WHERE item_id = ? AND restaurant_id = ?
             """;
 
     public static final String FIND_BY_ID = """
             SELECT
                 m.item_id AS itemId,
+                m.restaurant_id AS restaurantId,
                 m.category_id AS categoryId,
                 c.category_name AS categoryName,
                 m.item_name AS itemName,
@@ -51,12 +52,13 @@ public final class MenuQueries {
             FROM menu m
             INNER JOIN category c
                 ON m.category_id = c.category_id
-            WHERE m.item_id = ?
+            WHERE m.item_id = ? AND m.restaurant_id = ?
             """;
 
     public static final String FIND_ALL = """
             SELECT
                 m.item_id AS itemId,
+                m.restaurant_id AS restaurantId,
                 m.category_id AS categoryId,
                 c.category_name AS categoryName,
                 m.item_name AS itemName,
@@ -67,12 +69,14 @@ public final class MenuQueries {
             FROM menu m
             INNER JOIN category c
                 ON m.category_id = c.category_id
+            WHERE m.restaurant_id = ?
             ORDER BY m.item_id DESC
             """;
 
     public static final String FIND_BY_CATEGORY = """
             SELECT
                 m.item_id AS itemId,
+                m.restaurant_id AS restaurantId,
                 m.category_id AS categoryId,
                 c.category_name AS categoryName,
                 m.item_name AS itemName,
@@ -83,12 +87,12 @@ public final class MenuQueries {
             FROM menu m
             INNER JOIN category c
                 ON m.category_id = c.category_id
-            WHERE m.category_id = ?
+            WHERE m.category_id = ? AND m.restaurant_id = ?
             """;
 
     public static final String EXISTS_BY_NAME = """
             SELECT COUNT(*)
             FROM menu
-            WHERE item_name = ?
+            WHERE item_name = ? AND restaurant_id = ?
             """;
 }

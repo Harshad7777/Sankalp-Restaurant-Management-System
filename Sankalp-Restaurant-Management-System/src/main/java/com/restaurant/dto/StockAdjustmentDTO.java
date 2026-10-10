@@ -4,7 +4,18 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for inventory stock adjustment requests.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StockAdjustmentDTO {
 
     @NotNull(message = "Adjustment quantity is required")
@@ -18,81 +29,4 @@ public class StockAdjustmentDTO {
     private String reason;
 
     private String performedBy;
-
-    public StockAdjustmentDTO() {
-    }
-
-    public StockAdjustmentDTO(Double quantity, String actionType, String reason, String performedBy) {
-        this.quantity = quantity;
-        this.actionType = actionType;
-        this.reason = reason;
-        this.performedBy = performedBy;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Double quantity;
-        private String actionType;
-        private String reason;
-        private String performedBy;
-
-        public Builder quantity(Double quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        public Builder actionType(String actionType) {
-            this.actionType = actionType;
-            return this;
-        }
-
-        public Builder reason(String reason) {
-            this.reason = reason;
-            return this;
-        }
-
-        public Builder performedBy(String performedBy) {
-            this.performedBy = performedBy;
-            return this;
-        }
-
-        public StockAdjustmentDTO build() {
-            return new StockAdjustmentDTO(quantity, actionType, reason, performedBy);
-        }
-    }
-
-    public Double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Double quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getActionType() {
-        return actionType;
-    }
-
-    public void setActionType(String actionType) {
-        this.actionType = actionType;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getPerformedBy() {
-        return performedBy;
-    }
-
-    public void setPerformedBy(String performedBy) {
-        this.performedBy = performedBy;
-    }
 }

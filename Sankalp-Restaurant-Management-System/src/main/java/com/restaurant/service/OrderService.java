@@ -17,9 +17,11 @@ import com.restaurant.repository.OrderRepository;
 public class OrderService {
 
     private final OrderRepository repository;
+    private final RecipeService recipeService;
 
-    public OrderService(OrderRepository repository) {
+    public OrderService(OrderRepository repository, RecipeService recipeService) {
         this.repository = repository;
+        this.recipeService = recipeService;
     }
 
     // =====================================================
@@ -27,7 +29,16 @@ public class OrderService {
     // =====================================================
 
     public int createOrder(OrderDTO dto) {
-        return repository.createOrder(dto);
+        int orderId = repository.createOrder(dto);
+        try {
+            if (dto != null && dto.getItems() != null) {
+                recipeService.deductStockForOrderItems(dto.getItems(), "ORDER_ID_" + orderId);
+            }
+        } catch (Exception e) {
+            // Log warning but don't break order flow if stock deduction fails
+            System.err.println("Automatic recipe stock deduction warning: " + e.getMessage());
+        }
+        return orderId;
     }
 
     // =====================================================

@@ -393,6 +393,28 @@ function initializeDateDisplay() {
     const today =
         new Date();
 
+    const dateToInput =
+        document.getElementById("dateTo");
+
+    const dateFromInput =
+        document.getElementById("dateFrom");
+
+    if (dateToInput && !dateToInput.value) {
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        dateToInput.value = `${year}-${month}-${day}`;
+    }
+
+    if (dateFromInput && !dateFromInput.value) {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        const year = thirtyDaysAgo.getFullYear();
+        const month = String(thirtyDaysAgo.getMonth() + 1).padStart(2, '0');
+        const day = String(thirtyDaysAgo.getDate()).padStart(2, '0');
+        dateFromInput.value = `${year}-${month}-${day}`;
+    }
+
 
     const currentDate =
         document.getElementById(

@@ -165,6 +165,10 @@ async function loadDashboard() {
             orders
         );
 
+        updateTopSellingItems(
+            data.topSellingItems || []
+        );
+
         loadDashboardStockAlerts();
 
     }
@@ -817,60 +821,17 @@ function createOrderStatusChart(
 ===================================================== */
 
 function setupRefresh() {
+    const button = document.getElementById("refreshDashboard");
+    if (!button) return;
 
-    const button =
-        document.getElementById(
-            "refreshDashboard"
-        );
-
-
-    if (!button) {
-
-        return;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        async function () {
-
-            const icon =
-                button.querySelector(
-                    "i"
-                );
-
-
-            if (icon) {
-
-                icon.classList.add(
-                    "fa-spin"
-                );
-
-            }
-
-
-            await loadDashboard();
-
-
-            setTimeout(
-                function () {
-
-                    if (icon) {
-
-                        icon.classList.remove(
-                            "fa-spin"
-                        );
-
-                    }
-
-                },
-                500
-            );
-
-        }
-    );
-
+    button.addEventListener("click", async function () {
+        const icon = button.querySelector("i");
+        if (icon) icon.classList.add("fa-spin");
+        await loadDashboard();
+        setTimeout(function () {
+            if (icon) icon.classList.remove("fa-spin");
+        }, 500);
+    });
 }
 
 
@@ -879,27 +840,11 @@ function setupRefresh() {
 ===================================================== */
 
 function logoutUser() {
-
-    localStorage.removeItem(
-        "token"
-    );
-
-    localStorage.removeItem(
-        "username"
-    );
-
-    localStorage.removeItem(
-        "role"
-    );
-
-    localStorage.removeItem(
-        "userId"
-    );
-
-
-    window.location.href =
-        "login.jsp";
-
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    window.location.href = "login.jsp";
 }
 
 
@@ -907,54 +852,19 @@ function logoutUser() {
    DATE FORMAT
 ===================================================== */
 
-function formatDate(
-    value
-) {
-
-    if (!value) {
-
-        return "-";
-
-    }
-
-
+function formatDate(value) {
+    if (!value) return "-";
     try {
-
-        const date =
-            new Date(value);
-
-
-        if (
-            Number.isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return value;
-
-        }
-
-
-        return date.toLocaleDateString(
-            "en-IN",
-            {
-
-                day: "2-digit",
-
-                month: "short",
-
-                year: "numeric"
-
-            }
-        );
-
-    }
-    catch (error) {
-
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    } catch (error) {
         return value;
-
     }
-
 }
 
 
@@ -962,37 +872,13 @@ function formatDate(
    ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(
-    value
-) {
-
+function escapeHtml(value) {
     return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -1060,6 +946,83 @@ async function loadDashboardStockAlerts() {
         tbody.innerHTML = html;
 
     } catch (e) {
-        console.warn("Could not load dashboard stock alerts:", e);
+        console.error("Dashboard Stock Alerts error:", e);
     }
+}
+
+
+/* =====================================================
+   UPDATE TOP SELLING ITEMS BY RESTAURANT
+===================================================== */
+
+function updateTopSellingItems(topItems) {
+    const container = document.getElementById("topSellingItemsContainer") || document.querySelector(".top-items");
+    if (!container) return;
+
+    if (!Array.isArray(topItems) || topItems.length === 0) {
+        container.innerHTML = `<div class="empty-state text-center py-4 text-muted" style="grid-column: 1 / -1;">No top selling items recorded yet for this restaurant.</div>`;
+        return;
+    }
+
+    const icons = ["fa-bowl-food", "fa-bowl-rice", "fa-plate-wheat", "fa-utensils", "fa-cookie"];
+    let html = "";
+
+    topItems.forEach((item, index) => {
+        const rank = index + 1;
+        const itemName = item.itemName || "Menu Item";
+        const orders = item.orders || 0;
+        const soldQty = item.soldQuantity || 0;
+        const percent = item.percentage ?? 100;
+        const iconClass = icons[index % icons.length];
+
+        let imgUrl = "";
+        if (item.image && typeof item.image === "string") {
+            const raw = item.image.trim();
+            if (raw.startsWith("http://") || raw.startsWith("https://") || raw.startsWith("data:")) {
+                imgUrl = raw;
+            } else {
+                let clean = raw.replace(/^\/+/, "");
+                if (clean.startsWith("api/")) clean = clean.substring(4);
+                if (clean.startsWith("uploads/")) {
+                    imgUrl = "/api/" + clean;
+                } else if (/\.(jpg|jpeg|png|webp|gif)$/i.test(clean)) {
+                    imgUrl = "/api/uploads/" + clean;
+                } else {
+                    imgUrl = "/api/" + clean;
+                }
+            }
+        }
+
+        const subtitleText = orders > 0 
+            ? `${orders} Orders (${soldQty} Sold)` 
+            : `Popular Item`;
+
+        const imageHtml = imgUrl 
+            ? `<div class="food-image" style="position: relative; overflow: hidden;">
+                <img src="${imgUrl}" alt="${escapeHtml(itemName)}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <i class="fa-solid ${iconClass}" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;"></i>
+               </div>`
+            : `<div class="food-image">
+                <i class="fa-solid ${iconClass}"></i>
+               </div>`;
+
+        html += `
+            <div class="top-item">
+                <div class="rank">${rank}</div>
+                ${imageHtml}
+                <div class="food-info">
+                    <strong title="${escapeHtml(itemName)}">${escapeHtml(itemName)}</strong>
+                    <span>${subtitleText}</span>
+                </div>
+                <div class="food-percent">
+                    <strong>${percent}%</strong>
+                    <div class="progress">
+                        <div style="width: ${percent}%;"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
 }

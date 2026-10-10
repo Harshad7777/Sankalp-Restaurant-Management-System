@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.restaurant.repository.query.KitchenQueries;
+import com.restaurant.security.SecurityUtil;
 
 @Repository
 public class KitchenRepository {
@@ -18,18 +19,24 @@ public class KitchenRepository {
     }
 
     public List<Map<String, Object>> getKitchenOrders() {
-        return jdbcTemplate.queryForList(KitchenQueries.GET_KITCHEN_ORDERS);
+        return jdbcTemplate.queryForList(
+                KitchenQueries.GET_KITCHEN_ORDERS,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<Map<String, Object>> getKitchenOrderById(int orderId) {
-        return jdbcTemplate.queryForList(KitchenQueries.GET_KITCHEN_ORDER_BY_ID, orderId);
+        return jdbcTemplate.queryForList(
+                KitchenQueries.GET_KITCHEN_ORDER_BY_ID,
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public boolean orderExists(int orderId) {
         Integer count = jdbcTemplate.queryForObject(
                 KitchenQueries.CHECK_ORDER_EXISTS,
                 Integer.class,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
         return count != null && count > 0;
     }
 
@@ -37,7 +44,8 @@ public class KitchenRepository {
         Integer count = jdbcTemplate.queryForObject(
                 KitchenQueries.CHECK_DETAIL_EXISTS,
                 Integer.class,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
         return count != null && count > 0;
     }
 
@@ -45,7 +53,8 @@ public class KitchenRepository {
         List<Integer> result = jdbcTemplate.query(
                 KitchenQueries.GET_ORDER_ID_FROM_DETAIL,
                 (rs, rowNum) -> rs.getInt("order_id"),
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
         return result.isEmpty() ? null : result.get(0);
     }
 
@@ -53,7 +62,8 @@ public class KitchenRepository {
         List<String> result = jdbcTemplate.query(
                 KitchenQueries.GET_KITCHEN_STATUS,
                 (rs, rowNum) -> rs.getString("kitchen_status"),
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
         return result.isEmpty() ? null : result.get(0);
     }
 
@@ -61,68 +71,78 @@ public class KitchenRepository {
         return jdbcTemplate.update(
                 KitchenQueries.UPDATE_KITCHEN_STATUS,
                 status,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public int updatePreparedBy(int detailId, Integer chefId) {
         return jdbcTemplate.update(
                 KitchenQueries.UPDATE_PREPARED_BY,
                 chefId,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public int updateServedAt(int detailId) {
         return jdbcTemplate.update(
                 KitchenQueries.UPDATE_SERVED_AT,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public int clearServedAt(int detailId) {
         return jdbcTemplate.update(
                 KitchenQueries.CLEAR_SERVED_AT,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public int updateOrderStatus(int orderId, String status) {
         return jdbcTemplate.update(
                 KitchenQueries.UPDATE_ORDER_STATUS,
                 status,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public String getOrderStatus(int orderId) {
         List<String> result = jdbcTemplate.query(
                 KitchenQueries.GET_ORDER_STATUS,
                 (rs, rowNum) -> rs.getString("order_status"),
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
         return result.isEmpty() ? null : result.get(0);
     }
 
     public Map<String, Object> getOrderKitchenSummary(int orderId) {
         return jdbcTemplate.queryForMap(
                 KitchenQueries.GET_ORDER_KITCHEN_SUMMARY,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<String> getKitchenStatuses(int orderId) {
         return jdbcTemplate.queryForList(
                 KitchenQueries.GET_KITCHEN_STATUSES,
                 String.class,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public List<Integer> getDetailIds(int orderId) {
         return jdbcTemplate.queryForList(
                 KitchenQueries.GET_DETAIL_IDS,
                 Integer.class,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 
     public boolean hasOrderDetails(int orderId) {
         Integer count = jdbcTemplate.queryForObject(
                 KitchenQueries.HAS_ORDER_DETAILS,
                 Integer.class,
-                orderId);
+                orderId,
+                SecurityUtil.getCurrentRestaurantId());
         return count != null && count > 0;
     }
 
@@ -131,6 +151,7 @@ public class KitchenRepository {
                 KitchenQueries.GET_ITEM_COUNT_BY_STATUS,
                 Integer.class,
                 orderId,
+                SecurityUtil.getCurrentRestaurantId(),
                 status);
         return count == null ? 0 : count;
     }
@@ -138,6 +159,7 @@ public class KitchenRepository {
     public int resetKitchenStatus(int detailId) {
         return jdbcTemplate.update(
                 KitchenQueries.RESET_KITCHEN_STATUS,
-                detailId);
+                detailId,
+                SecurityUtil.getCurrentRestaurantId());
     }
 }

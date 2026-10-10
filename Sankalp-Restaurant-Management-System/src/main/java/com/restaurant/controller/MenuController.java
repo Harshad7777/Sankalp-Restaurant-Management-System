@@ -19,7 +19,7 @@ import com.restaurant.model.Menu;
 import com.restaurant.service.MenuService;
 
 @RestController
-@RequestMapping("/menu")
+@RequestMapping({"/menu", "/menus"})
 @CrossOrigin("*")
 public class MenuController {
 
@@ -102,9 +102,10 @@ public class MenuController {
     // Get All Menu
     // ==========================
     @GetMapping
-    public ResponseEntity<List<Menu>> getAllMenu() {
+    public ResponseEntity<List<Menu>> getAllMenu(
+            @RequestParam(value = "restaurantId", required = false) Integer restaurantId) {
 
-        return ResponseEntity.ok(service.getAllMenu());
+        return ResponseEntity.ok(service.getAllMenu(restaurantId));
     }
 
     // ==========================

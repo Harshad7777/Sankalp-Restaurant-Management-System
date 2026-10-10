@@ -3877,7 +3877,40 @@
 
     } else {
 
-        initialize();
-    }
+    window.triggerThermalPrintFromModal = async function() {
+        if (!state.selectedBill) {
+            alert("Please select a bill first.");
+            return;
+        }
+        const billId = state.selectedBill.billId;
+        if (window.ThermalPrinter) {
+            await window.ThermalPrinter.printBill(billId, "");
+        } else {
+            alert("Thermal Printer module not loaded.");
+        }
+    };
+
+    window.triggerTableQRFromModal = async function() {
+        if (!state.selectedBill) {
+            alert("Please select a bill first.");
+            return;
+        }
+        const billId = state.selectedBill.billId;
+        try {
+            const res = await fetch(`/api/payment/qr-code/${billId}`);
+            const data = await res.json();
+            if (data && data.qrCodeBase64) {
+                document.getElementById("qrModalImg").src = data.qrCodeBase64;
+                document.getElementById("qrModalBillNo").textContent = data.billNo || ("#" + billId);
+                document.getElementById("qrModalAmount").textContent = "₹" + (data.grandTotal ? data.grandTotal.toFixed(2) : "0.00");
+                document.getElementById("tableQrModal").style.display = "flex";
+            } else {
+                alert("Failed to generate UPI QR Code.");
+            }
+        } catch (e) {
+            console.error("QR Code Error:", e);
+            alert("Error fetching QR Code: " + e.message);
+        }
+    };
 
 })();
