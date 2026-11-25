@@ -45,10 +45,14 @@ public class ApiProxyServlet extends HttpServlet {
             envTarget = getServletContext().getInitParameter("apiProxyTarget");
         }
         if (envTarget != null && !envTarget.isBlank()) {
-            this.proxyTarget = envTarget.replaceAll("/+$", "");
+            String normalized = envTarget.trim().replaceAll("/+$", "");
+            if (!normalized.startsWith("http://") && !normalized.startsWith("https://")) {
+                normalized = "https://" + normalized;
+            }
+            this.proxyTarget = normalized;
         }
         this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(15))
+                .connectTimeout(Duration.ofSeconds(30))
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
@@ -80,7 +84,7 @@ public class ApiProxyServlet extends HttpServlet {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(URI.create(targetUrl))
-                .timeout(Duration.ofSeconds(60))
+                .timeout(Duration.ofSeconds(90))
                 .method(method, bodyPublisher);
 
         Enumeration<String> headerNames = req.getHeaderNames();

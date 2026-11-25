@@ -27,5 +27,5 @@ ENV PORT=8080
 ENV CATALINA_OPTS="-Xms64m -Xmx256m -XX:+UseSerialGC -Djava.awt.headless=true -Dfile.encoding=UTF-8"
 EXPOSE 8080
 
-# Bind Tomcat HTTP connector dynamically to $PORT
-CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT}\\\"/g\" /usr/local/tomcat/conf/server.xml && catalina.sh run"]
+# Bind Tomcat HTTP connector dynamically to $PORT and disable shutdown port noise
+CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT}\\\"/g; s/port=\\\"8005\\\"/port=\\\"-1\\\"/g\" /usr/local/tomcat/conf/server.xml && catalina.sh run"]

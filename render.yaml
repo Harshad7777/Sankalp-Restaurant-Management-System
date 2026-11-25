@@ -49,7 +49,4 @@ services:
     healthCheckPath: /login.jsp
     envVars:
       - key: API_PROXY_TARGET
-        fromService:
-          type: web
-          name: sankalp-rms-api
-          envVarKey: RENDER_EXTERNAL_URL
+        value: https://sankalp-rms-api.onrender.com
