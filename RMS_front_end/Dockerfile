@@ -1,30 +1,28 @@
 # ==========================================
-# STAGE 1: Build the WAR artifact
+# STAGE 1: Build Frontend WAR (Java 21)
 # ==========================================
-FROM maven:3.9-eclipse-temurin-17 AS builder
+FROM maven:3.9-eclipse-temurin-21 AS builder
 
 WORKDIR /build
 
-# Cache Maven dependencies
 COPY pom.xml .
-
-# Copy source code and package WAR
 COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ==========================================
-# STAGE 2: Tomcat 10.1 Server Runtime
+# STAGE 2: Tomcat 10.1 JDK 21 Runtime (512MB-Safe for Render Free / Cloud Run)
 # ==========================================
-FROM tomcat:10.1-jdk17
+FROM tomcat:10.1-jdk21
 
 # Remove default Tomcat apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Deploy application as the ROOT webapp (accessible at root URL /)
-COPY --from=builder /build/target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Deploy application as ROOT webapp
+COPY --from=builder /build/target/ROOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose Tomcat default HTTP port
+ENV PORT=8080
+ENV CATALINA_OPTS="-Xms64m -Xmx256m -XX:+UseSerialGC -Djava.awt.headless=true -Dfile.encoding=UTF-8"
 EXPOSE 8080
 
-# Start Tomcat
-CMD ["catalina.sh", "run"]
+# Bind Tomcat HTTP connector dynamically to $PORT
+CMD ["sh", "-c", "sed -i \"s/port=\\\"8080\\\"/port=\\\"${PORT}\\\"/g\" /usr/local/tomcat/conf/server.xml && catalina.sh run"]

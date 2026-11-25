@@ -121,7 +121,7 @@
 
     <link
         rel="stylesheet"
-        href="${pageContext.request.contextPath}/css/common.css">
+        href="${pageContext.request.contextPath}/css/common.css?v=1.0.0">
 
 
     <!-- =====================================================
@@ -130,7 +130,9 @@
 
     <link
         rel="stylesheet"
-        href="${pageContext.request.contextPath}/css/<%= pageCss %>?v=<%= System.currentTimeMillis() %>">
+        href="${pageContext.request.contextPath}/css/<%= pageCss %>?v=1.0.0">
+
+    <script src="${pageContext.request.contextPath}/js/config.js?v=1.0.0"></script>
 
 </head>
 

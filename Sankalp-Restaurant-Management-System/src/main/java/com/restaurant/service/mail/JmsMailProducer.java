@@ -29,6 +29,9 @@ public class JmsMailProducer {
     @Value("${spring.mail.username:harshadrakshe28@gmail.com}")
     private String fromEmail;
 
+    @Value("${app.frontend-url:https://restaurantms.co.in}")
+    private String frontendUrl;
+
     public JmsMailProducer(ObjectProvider<JmsTemplate> jmsTemplateProvider,
                            ObjectProvider<JavaMailSender> mailSenderProvider,
                            org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
@@ -84,13 +87,13 @@ public class JmsMailProducer {
                     <p>Your account has been registered successfully with role: <span style="background:#fef3c7; color:#b45309; padding:2px 8px; border-radius:4px; font-weight:bold;">%s</span>.</p>
                     <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin: 15px 0;">
                         <p style="margin: 0 0 8px 0;"><strong>Username:</strong> %s</p>
-                        <p style="margin: 0;"><strong>Portal URL:</strong> <a href="http://localhost:8080/RMS_front_end_antigravity/login.jsp">Login to Dashboard</a></p>
+                        <p style="margin: 0;"><strong>Portal URL:</strong> <a href="%s/login.jsp">Login to Dashboard</a></p>
                     </div>
                     <p>If you did not request this account, please contact our administrator immediately.</p>
                     <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;"/>
                     <p style="font-size: 12px; color: #64748b;">This is an automated notification from Sankalp Restaurant Management System.</p>
                 </div>
-                """, fullName != null ? fullName : username, role, username);
+                """, fullName != null ? fullName : username, role, username, frontendUrl != null ? frontendUrl.replaceAll("/+$", "") : "");
 
         EmailMessageDTO email = EmailMessageDTO.builder()
                 .to(toEmail)

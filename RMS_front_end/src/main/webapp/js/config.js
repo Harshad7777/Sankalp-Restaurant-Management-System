@@ -18,17 +18,16 @@
     let defaultApiBaseUrl = "";
 
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-        if (port === "8081" || port === "8080") {
-            // Check if Tomcat webapp /api is available on current origin, otherwise fallback to http://localhost:8080
-            defaultApiBaseUrl = origin + "/api";
+        if (port === "8081") {
+            // Standalone Docker frontend container talking to backend on :8080
+            defaultApiBaseUrl = "http://" + hostname + ":8080";
         } else {
             // Local Tomcat Environment (API deployed as api.war on same Tomcat server)
             defaultApiBaseUrl = origin + "/api";
         }
     } else {
-        // Production Server (cPanel / Apache Tomcat Deployment)
-        // If API is deployed as api.war -> https://yourdomain.com/api
-        // If API is deployed as RMS_backend.war -> https://yourdomain.com/RMS_backend
+        // Production Server (cPanel / Apache Tomcat / Reverse Proxy Deployment)
+        // ROOT.war at / + api.war at /api -> https://yourdomain.com/api
         if (window.location.pathname.startsWith("/RMS_frontend")) {
             defaultApiBaseUrl = origin + "/RMS_backend";
         } else {

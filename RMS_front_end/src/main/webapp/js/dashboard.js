@@ -11,9 +11,7 @@ console.log("=================================");
    API
 ===================================================== */
 
-const BACKEND_BASE_URL = window.location.origin.includes(":8081") 
-    ? "http://localhost:8080" 
-    : (window.location.origin + "/RMS_backend");
+const BACKEND_BASE_URL = (window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
 
 const DASHBOARD_API = "/api/dashboard/summary";
 

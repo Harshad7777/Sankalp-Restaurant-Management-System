@@ -16,9 +16,7 @@ console.log("======================================");
 // Spring Boot -> http://localhost:8080
 // ============================================================
 
-const API_BASE = window.location.origin.includes(":8081") 
-    ? "http://localhost:8080" 
-    : (window.location.origin + "/RMS_backend");
+const API_BASE = (window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
 
 const REPORT_API = "/api/report";
 const BILL_API = "/api/bill";

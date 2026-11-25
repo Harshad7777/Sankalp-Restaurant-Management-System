@@ -16,14 +16,11 @@
 <!-- BOOTSTRAP 5 JS BUNDLE -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- CONFIG SCRIPT -->
-<script src="${pageContext.request.contextPath}/js/config.js"></script>
-
 <!-- THERMAL PRINTER SCRIPT -->
-<script src="${pageContext.request.contextPath}/js/thermal-printer.js"></script>
+<script src="${pageContext.request.contextPath}/js/thermal-printer.js?v=1.0.0"></script>
 
 <!-- COMMON SCRIPT -->
-<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js?v=1.0.0"></script>
 
 </body>
 </html>

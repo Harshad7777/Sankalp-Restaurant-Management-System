@@ -64,6 +64,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/config.js?v=1.0.0"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const tableId = urlParams.get('tableId') || 1;
@@ -73,7 +74,7 @@
 
         async function loadMenu() {
             try {
-                const res = await fetch('/api/menu');
+                const res = await fetch(window.getApiUrl('/menu'));
                 const items = await res.json();
                 let html = '';
                 items.forEach(item => {
@@ -139,7 +140,7 @@
             };
 
             try {
-                const res = await fetch('/api/orders', {
+                const res = await fetch(window.getApiUrl('/orders'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -149,7 +150,7 @@
                     cart = [];
                     updateCartUI();
                     
-                    fetch('/api/notifications/whatsapp/send', {
+                    fetch(window.getApiUrl('/notifications/whatsapp/send'), {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ phone: mobile, message: 'Thank you ' + name + '! Your order from Table #' + tableId + ' was sent to kitchen.' })

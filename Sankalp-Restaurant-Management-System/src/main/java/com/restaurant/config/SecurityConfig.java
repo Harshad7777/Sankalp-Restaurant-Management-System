@@ -84,7 +84,6 @@ public class SecurityConfig {
                     "/auth/login",
                     "/auth/forgot-password/**",
                     "/users/register",
-                    "/settings/**",
                     "/restaurant/**",
                     "/restaurants/**",
                     "/uploads/**",
@@ -93,6 +92,8 @@ public class SecurityConfig {
                     "/css/**",
                     "/js/**",
                     "/favicon.ico",
+                    "/actuator/health",
+                    "/actuator/health/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
@@ -155,6 +156,10 @@ public class SecurityConfig {
                 // GET = PUBLIC (for landing page & customers)
                 // POST/PUT/DELETE = ADMIN
                 // =================================================
+
+                .requestMatchers(HttpMethod.GET, "/settings", "/settings/**").permitAll()
+
+                .requestMatchers("/settings/**").hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.GET,

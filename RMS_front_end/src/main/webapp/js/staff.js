@@ -8,9 +8,7 @@
 
 (function () {
 
-    const BACKEND_BASE = window.location.origin.includes(":8081")
-        ? "http://localhost:8080"
-        : (window.location.origin + "/RMS_backend");
+    const BACKEND_BASE = (window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
     const API = "/api/users";
 
 
@@ -116,7 +114,7 @@
             );
 
             throw new Error(
-                "Cannot connect to Spring Boot backend at http://localhost:8080"
+                "Cannot connect to backend server. Please verify the API service is running."
             );
         }
 

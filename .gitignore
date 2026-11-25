@@ -4,6 +4,15 @@
 target/
 **/target/
 
+# Secrets & environment files (never commit to GitHub)
+.env
+.env.*
+!.env.example
+scripts/setenv.sh
+*-credentials.json
+*.key
+*.pem
+
 # Apache Tomcat local server & logs
 tomcat10/
 logs/
@@ -28,7 +37,7 @@ logs/
 .DS_Store
 Thumbs.db
 
-# User uploaded files in backend (except placeholders if needed)
+# User uploaded files in backend
 uploads/*
 !uploads/.gitkeep
 **/uploads/*

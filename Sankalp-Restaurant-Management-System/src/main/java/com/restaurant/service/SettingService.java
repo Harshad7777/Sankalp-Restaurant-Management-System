@@ -3,20 +3,25 @@ package com.restaurant.service;
 import java.io.File;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.restaurant.model.RestaurantSetting;
 import com.restaurant.repository.SettingRepository;
+import com.restaurant.service.storage.MediaStorageService;
 
 @Service
 public class SettingService {
 
-    @Value("${file.upload-dir:C:/restaurant/uploads}")
+    @Value("${file.upload-dir:${user.home}/rms-uploads}")
     private String uploadDir;
 
     private final SettingRepository repository;
+
+    @Autowired(required = false)
+    private MediaStorageService mediaStorageService;
 
     public SettingService(SettingRepository repository) {
         this.repository = repository;
@@ -47,17 +52,20 @@ public class SettingService {
         }
 
         try {
-            File folder = new File(uploadDir);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-
             String originalName = file.getOriginalFilename() != null ? file.getOriginalFilename() : "logo.png";
             String cleanName = originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
             String fileName = "logo_" + UUID.randomUUID().toString().substring(0, 8) + "_" + cleanName;
 
-            File destination = new File(folder, fileName);
-            file.transferTo(destination);
+            if (mediaStorageService != null) {
+                mediaStorageService.store(fileName, file.getBytes(), file.getContentType());
+            } else {
+                File folder = new File(uploadDir);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                File destination = new File(folder, fileName);
+                file.transferTo(destination);
+            }
 
             String logoUrl = "/uploads/" + fileName;
 

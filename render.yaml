@@ -1,0 +1,55 @@
+# =====================================================
+# Render Blueprint - Sankalp Restaurant Management System
+# Free Tier ($0/mo): Docker Backend + Docker Frontend
+# Connect to your free MySQL database (Aiven or TiDB Cloud)
+# =====================================================
+
+services:
+  - type: web
+    name: sankalp-rms-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Sankalp-Restaurant-Management-System/Dockerfile
+    dockerContext: ./Sankalp-Restaurant-Management-System
+    healthCheckPath: /api/actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SERVER_SERVLET_CONTEXT_PATH
+        value: /api
+      - key: STORAGE_PROVIDER
+        value: local
+      - key: MAIL_ENABLED
+        value: "false"
+      - key: SWAGGER_ENABLED
+        value: "true"
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JASYPT_ENCRYPTOR_PASSWORD
+        generateValue: true
+      - key: APP_FRONTEND_URL
+        value: https://sankalp-rms.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://sankalp-rms.onrender.com,https://*.onrender.com
+
+  - type: web
+    name: sankalp-rms
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./RMS_front_end/Dockerfile
+    dockerContext: ./RMS_front_end
+    healthCheckPath: /login.jsp
+    envVars:
+      - key: API_PROXY_TARGET
+        fromService:
+          type: web
+          name: sankalp-rms-api
+          envVarKey: RENDER_EXTERNAL_URL

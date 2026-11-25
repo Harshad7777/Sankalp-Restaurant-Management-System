@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="30 seconds">
+<configuration scan="true" scanPeriod="60 seconds">
 
     <!-- Property Definitions -->
-    <property name="LOG_PATH" value="logs" />
+    <springProperty scope="context" name="LOG_PATH" source="LOG_DIR" defaultValue="${catalina.base:-.}/logs" />
+    <springProperty scope="context" name="APP_LOG_LEVEL" source="logging.level.com.restaurant" defaultValue="INFO" />
+    <springProperty scope="context" name="JDBC_LOG_LEVEL" source="logging.level.org.springframework.jdbc.core" defaultValue="WARN" />
     <property name="APP_NAME" value="rms" />
 
-    <!-- Color Console Pattern -->
+    <!-- Console Log Pattern -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan([%15.15thread]) %magenta(%-40.40logger{39}) : %msg%n%throwable" />
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%15.15thread] %-40.40logger{39} : %msg%n%throwable" />
 
     <!-- File Log Pattern -->
     <property name="FILE_LOG_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %-40.40logger{39} : %msg%n%throwable" />
 
-    <!-- Console Appender -->
+    <!-- Console Appender (Captured by Google Cloud Logging on Cloud Run) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
@@ -21,57 +23,67 @@
         </encoder>
     </appender>
 
-    <!-- Main Rolling File Appender -->
-    <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/${APP_NAME}.log</file>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- Daily rollover with indexing -->
-            <fileNamePattern>${LOG_PATH}/archived/${APP_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
-        </rollingPolicy>
-    </appender>
+    <!-- Production Profile (Cloud Run): Console-only stdout logging -->
+    <springProfile name="prod">
+        <logger name="com.restaurant" level="${APP_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+        <logger name="org.springframework.web" level="WARN" />
+        <logger name="org.springframework.security" level="WARN" />
+        <logger name="org.springframework.jdbc.core" level="${JDBC_LOG_LEVEL}" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
 
-    <!-- Error/Warning Rolling File Appender -->
-    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/${APP_NAME}-error.log</file>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/archived/${APP_NAME}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>500MB</totalSizeCap>
-        </rollingPolicy>
-    </appender>
+    <!-- Local / Tomcat Profiles: Console + Rolling File Appenders -->
+    <springProfile name="!prod">
+        <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${APP_NAME}.log</file>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/archived/${APP_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>14</maxHistory>
+                <totalSizeCap>250MB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
 
-    <!-- Application Logger -->
-    <logger name="com.restaurant" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE_ALL" />
-        <appender-ref ref="FILE_ERROR" />
-    </logger>
+        <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${APP_NAME}-error.log</file>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>WARN</level>
+            </filter>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/archived/${APP_NAME}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>14</maxHistory>
+                <totalSizeCap>100MB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
 
-    <!-- Spring Framework Loggers -->
-    <logger name="org.springframework.web" level="INFO" />
-    <logger name="org.springframework.security" level="INFO" />
-    <logger name="org.springframework.jdbc.core" level="DEBUG" />
+        <logger name="com.restaurant" level="${APP_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE_ALL" />
+            <appender-ref ref="FILE_ERROR" />
+        </logger>
 
-    <!-- Root Logger -->
-    <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE_ALL" />
-        <appender-ref ref="FILE_ERROR" />
-    </root>
+        <logger name="org.springframework.web" level="WARN" />
+        <logger name="org.springframework.security" level="WARN" />
+        <logger name="org.springframework.jdbc.core" level="${JDBC_LOG_LEVEL}" />
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE_ALL" />
+            <appender-ref ref="FILE_ERROR" />
+        </root>
+    </springProfile>
 
 </configuration>

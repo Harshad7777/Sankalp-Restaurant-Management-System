@@ -9,9 +9,12 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.restaurant.service.storage.MediaStorageService;
 
 @Service
 public class FileUploadService {
@@ -28,8 +31,11 @@ public class FileUploadService {
 
     private static final long MAX_FILE_SIZE_BYTES = 5L * 1024 * 1024; // 5MB
 
-    @Value("${file.upload-dir}")
+    @Value("${file.upload-dir:${user.home}/rms-uploads}")
     private String uploadDir;
+
+    @Autowired(required = false)
+    private MediaStorageService mediaStorageService;
 
     public String uploadImage(MultipartFile file) throws IOException {
 
@@ -52,32 +58,23 @@ public class FileUploadService {
                     "Only JPEG, PNG, and WEBP images are allowed.");
         }
 
-        // -------------------------------------------------
-        // BUILD A SAFE, NON-GUESSABLE FILENAME
-        // -------------------------------------------------
-        // Never trust the client-supplied original filename directly:
-        // it can contain path separators ("../../etc/passwd") or
-        // executable extensions. We derive only a whitelisted
-        // extension from it and generate the rest ourselves.
-        // -------------------------------------------------
-
         String extension = extractSafeExtension(
                 file.getOriginalFilename(), contentType);
 
         String fileName = UUID.randomUUID() + extension;
 
-        Path uploadRoot = Paths.get(uploadDir).toAbsolutePath().normalize();
+        if (mediaStorageService != null) {
+            return mediaStorageService.store(fileName, file.getBytes(), contentType);
+        }
 
+        Path uploadRoot = Paths.get(uploadDir).toAbsolutePath().normalize();
         Path targetPath = uploadRoot.resolve(fileName).normalize();
 
-        // Defense in depth: confirm the resolved path is still inside
-        // the upload directory before writing anything to disk.
         if (!targetPath.startsWith(uploadRoot)) {
             throw new IllegalArgumentException("Invalid file name.");
         }
 
         Files.createDirectories(uploadRoot);
-
         Files.write(targetPath, file.getBytes());
 
         logger.info("Image saved at: {}", targetPath);
@@ -89,13 +86,11 @@ public class FileUploadService {
             String originalFilename,
             String contentType) {
 
-        String ext = switch (contentType.toLowerCase()) {
+        return switch (contentType.toLowerCase()) {
             case "image/jpeg" -> ".jpg";
             case "image/png" -> ".png";
             case "image/webp" -> ".webp";
             default -> "";
         };
-
-        return ext;
     }
 }

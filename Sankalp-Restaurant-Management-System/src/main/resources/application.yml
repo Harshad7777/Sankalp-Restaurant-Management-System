@@ -4,9 +4,17 @@
 # =====================================================
 
 server:
-  port: 8080
+  port: ${PORT:8080}
   servlet:
     context-path: ${SERVER_SERVLET_CONTEXT_PATH:}
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
+    min-response-size: 1024
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+    include-message: on_param
 
 spring:
   application:
@@ -16,10 +24,18 @@ spring:
   # Database Configuration (Encrypted with Jasypt)
   # ---------------------------------------------------
   datasource:
-    url: "${DB_URL:jdbc:mysql://localhost:3306/smprowor_RMS?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}"
-    username: "${DB_USERNAME:smprowor_harshad}"
-    password: "${DB_PASSWORD:N!63TJd_=N-@aA]!}"
+    url: "${DB_URL:jdbc:mysql://localhost:3306/rms?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}"
+    username: "${DB_USERNAME:root}"
+    password: "${DB_PASSWORD:}"
     driver-class-name: "com.mysql.cj.jdbc.Driver"
+    hikari:
+      pool-name: SankalpHikariPool
+      maximum-pool-size: ${DB_POOL_SIZE:15}
+      minimum-idle: ${DB_MIN_IDLE:3}
+      idle-timeout: 180000
+      max-lifetime: 600000
+      keepalive-time: 60000
+      connection-timeout: 20000
 
   # ---------------------------------------------------
   # Database Schema & Data Initialization
@@ -54,8 +70,8 @@ spring:
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:harshadrakshe28@gmail.com}
-    password: ${MAIL_PASSWORD:vioa qkuu afto vxvg}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -71,28 +87,45 @@ spring:
   # ---------------------------------------------------
   jackson:
     serialization:
-      indent-output: true
+      indent-output: false
 
 # -----------------------------------------------------
 # Jasypt Encryption Configuration
 # -----------------------------------------------------
 jasypt:
   encryptor:
-    password: ${JASYPT_ENCRYPTOR_PASSWORD:SankalpRMSSecretKey2026!}
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:local-dev-only-jasypt-key}
     bean: jasyptStringEncryptor
 
 # -----------------------------------------------------
 # JWT Token Configuration
 # -----------------------------------------------------
 jwt:
-  secret: "${JWT_SECRET:SankalpRestaurantManagementSystemSecretKey2026SecureJwtTokenForProductionAndTestingPurposeOnly}"
+  secret: "${JWT_SECRET:local-dev-only-secret-change-me-32bytes-min}"
   expiration-ms: ${JWT_EXPIRATION_MS:3600000} # 1 hour
 
 # -----------------------------------------------------
-# File Upload Storage Directory
+# File Upload Storage Directory (Cross-Platform)
 # -----------------------------------------------------
 file:
-  upload-dir: C:/restaurant/uploads
+  upload-dir: ${FILE_UPLOAD_DIR:${user.home}/rms-uploads}
+
+# -----------------------------------------------------
+# Application & CORS Settings
+# -----------------------------------------------------
+app:
+  frontend-url: ${APP_FRONTEND_URL:https://restaurantms.co.in}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://restaurantms.co.in,http://restaurantms.co.in,https://www.restaurantms.co.in,http://www.restaurantms.co.in,http://localhost:*,https://localhost:*,http://127.0.0.1:*,https://127.0.0.1:*,*}
+
+# -----------------------------------------------------
+# OpenAPI / Swagger Toggle
+# -----------------------------------------------------
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:true}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}
 
 # -----------------------------------------------------
 # Restaurant Application Features
@@ -102,18 +135,18 @@ restaurant:
     enabled: ${MAIL_ENABLED:true}
 
 # -----------------------------------------------------
-# Logging Configuration
+# Logging Configuration (Production-Optimized)
 # -----------------------------------------------------
 logging:
   level:
-    root: INFO
-    com.restaurant: DEBUG
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.springframework.jdbc.core: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
+    root: ${LOG_LEVEL_ROOT:INFO}
+    com.restaurant: ${LOG_LEVEL_APP:INFO}
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.springframework.jdbc.core: ${LOG_LEVEL_JDBC:WARN}
+    org.hibernate.orm.jdbc.bind: WARN
   file:
-    name: logs/rms.log
+    name: ${LOG_DIR:logs}/rms.log
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"

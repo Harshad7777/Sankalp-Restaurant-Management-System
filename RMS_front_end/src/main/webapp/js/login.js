@@ -81,9 +81,7 @@ window.alert = function (message) {
 
 const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
     ? window.API_BASE_URL
-    : (window.location.origin.includes(":8081") 
-        ? "http://localhost:8080/RMS_backend" 
-        : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend")));
+    : ((window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
 
 function getLoginApiUrl() {
     if (typeof window.getApiUrl === "function") {

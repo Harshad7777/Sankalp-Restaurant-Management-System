@@ -1,10 +1,13 @@
 package com.restaurant.config;
 
+import java.util.concurrent.TimeUnit;
+
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -35,10 +38,12 @@ public class WebConfig implements WebMvcConfigurer {
         logger.info("Resource location = {}", location);
 
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(location);
+                .addResourceLocations(location)
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic());
 
         registry.addResourceHandler("/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico")
-                .addResourceLocations("classpath:/static/", "classpath:/static/images/", "classpath:/static/css/", "classpath:/static/js/");
+                .addResourceLocations("classpath:/static/", "classpath:/static/images/", "classpath:/static/css/", "classpath:/static/js/")
+                .setCacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePublic());
     }
 
     @org.springframework.context.annotation.Bean

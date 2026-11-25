@@ -1,24 +1,32 @@
 package com.restaurant.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.restaurant.model.Menu;
 import com.restaurant.repository.MenuRepository;
+import com.restaurant.service.storage.MediaStorageService;
 
 @Service
 public class MenuService {
 
+	private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
+
 	private final MenuRepository repository;
 
-	@Value("${file.upload-dir}")
+	@Value("${file.upload-dir:${user.home}/rms-uploads}")
 	private String uploadDir;
+
+	@Autowired(required = false)
+	private MediaStorageService mediaStorageService;
 
 	public MenuService(MenuRepository repository) {
 		this.repository = repository;
@@ -41,28 +49,12 @@ public class MenuService {
 		menu.setDescription(description);
 		menu.setPrice(price);
 		menu.setStatus(status);
-		if (image != null) {
-
-		    System.out.println("Image Object : " + image);
-		    System.out.println("Image Empty  : " + image.isEmpty());
-		    System.out.println("Image Name   : " + image.getOriginalFilename());
-
-		}
 
 		if (image != null && !image.isEmpty()) {
-
-		    String fileName = saveImage(image);
-
-		    System.out.println("Saved File Name : " + fileName);
-
-		    menu.setImage(fileName);
-
+			String fileName = saveImage(image);
+			menu.setImage(fileName);
 		} else {
-
-		    System.out.println("No Image Received");
-
-		    menu.setImage(null);
-
+			menu.setImage(null);
 		}
 
 		int value = repository.save(menu);
@@ -89,9 +81,7 @@ public class MenuService {
 		menu.setStatus(status);
 
 		if (image != null && !image.isEmpty()) {
-
 			String fileName = saveImage(image);
-
 			menu.setImage(fileName);
 		}
 
@@ -145,41 +135,26 @@ public class MenuService {
 	// Save Image
 	// ==========================
 	private String saveImage(MultipartFile file) {
+		try {
+			String originalName = file.getOriginalFilename() != null ? file.getOriginalFilename() : "menu.jpg";
+			String cleanName = originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
+			String fileName = UUID.randomUUID() + "_" + cleanName;
 
-	    try {
+			if (mediaStorageService != null) {
+				return mediaStorageService.store(fileName, file.getBytes(), file.getContentType());
+			}
 
-	        System.out.println("Upload Directory : " + uploadDir);
+			File folder = new File(uploadDir);
+			if (!folder.exists()) {
+				folder.mkdirs();
+			}
 
-	        File folder = new File(uploadDir);
-
-	        if (!folder.exists()) {
-
-	            boolean created = folder.mkdirs();
-
-	            System.out.println("Folder Created : " + created);
-	        }
-
-	        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-
-	        File destination = new File(folder, fileName);
-
-	        System.out.println("Saving To : " + destination.getAbsolutePath());
-
-	        file.transferTo(destination);
-
-	        System.out.println("File Exists : " + destination.exists());
-
-	        System.out.println("File Size : " + destination.length());
-
-	        return fileName;
-
-	    } catch (Exception e) {
-
-	        e.printStackTrace();
-
-	        throw new RuntimeException(e);
-
-	    }
-
+			File destination = new File(folder, fileName);
+			file.transferTo(destination);
+			logger.info("Menu image saved locally at: {}", destination.getAbsolutePath());
+			return fileName;
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to save menu image: " + e.getMessage(), e);
+		}
 	}
 }

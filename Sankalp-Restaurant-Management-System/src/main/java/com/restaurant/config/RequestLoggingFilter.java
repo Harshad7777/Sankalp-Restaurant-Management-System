@@ -23,6 +23,16 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(RequestLoggingFilter.class);
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return uri != null && (uri.contains("/uploads/")
+                || uri.contains("/images/")
+                || uri.contains("/css/")
+                || uri.contains("/js/")
+                || uri.endsWith("/favicon.ico"));
+    }
+
+    @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -35,14 +45,14 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         String fullPath = queryString != null ? uri + "?" + queryString : uri;
         String clientIp = getClientIp(request);
 
-        log.info("--> HTTP {} {} | Client IP: {}", method, fullPath, clientIp);
+        log.debug("--> HTTP {} {} | Client IP: {}", method, fullPath, clientIp);
 
         try {
             filterChain.doFilter(request, response);
         } finally {
             long duration = System.currentTimeMillis() - startTime;
             int status = response.getStatus();
-            
+
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String principal = (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName()))
                     ? auth.getName()
@@ -53,7 +63,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             } else if (status >= 400) {
                 log.warn("<-- HTTP {} {} | Status: {} | Duration: {}ms | User: {}", method, fullPath, status, duration, principal);
             } else {
-                log.info("<-- HTTP {} {} | Status: {} | Duration: {}ms | User: {}", method, fullPath, status, duration, principal);
+                log.debug("<-- HTTP {} {} | Status: {} | Duration: {}ms | User: {}", method, fullPath, status, duration, principal);
             }
         }
     }

@@ -32,9 +32,7 @@ const CONTEXT_PATH =
 ========================================================= */
 
 const BACKEND_URL =
-    window.location.origin.includes(":8081") 
-        ? "http://localhost:8080" 
-        : (window.location.origin + "/RMS_backend");
+    (window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
 
 
 /* =========================================================

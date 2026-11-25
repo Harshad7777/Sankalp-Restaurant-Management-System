@@ -4,9 +4,7 @@
  * =========================================================
  */
 
-const BACKEND_URL = window.location.origin.includes(":8081")
-    ? "http://localhost:8080"
-    : (window.location.origin + "/RMS_backend");
+const BACKEND_URL = (window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api")));
 const SETTINGS_API = "/api/settings";
 
 const DEFAULT_SETTINGS = {
@@ -131,7 +129,7 @@ function initLogoOptions() {
                 const result = await response.json();
 
                 if (response.ok && result.logoUrl) {
-                    const fullUrl = BACKEND_URL + result.logoUrl;
+                    const fullUrl = (typeof window.getApiUrl === "function") ? window.getApiUrl(result.logoUrl) : (BACKEND_URL + result.logoUrl);
                     if (logoPathInput) logoPathInput.value = fullUrl;
 
                     // Uncheck preset radios

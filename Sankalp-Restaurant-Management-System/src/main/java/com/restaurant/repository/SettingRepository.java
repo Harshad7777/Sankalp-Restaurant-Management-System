@@ -25,7 +25,7 @@ public class SettingRepository {
     public void init() {
         try {
             jdbcTemplate.execute(SettingQueries.CREATE_TABLE_IF_NOT_EXISTS);
-            jdbcTemplate.update(SettingQueries.INSERT_DEFAULT_FOR_RESTAURANT);
+            jdbcTemplate.update(SettingQueries.INSERT_DEFAULT_FOR_RESTAURANT, 1);
 
             // Ensure Royal Fine Dining tenant (id 3) exists and migrate royal_admin users in database
             jdbcTemplate.update("INSERT INTO restaurants (restaurant_id, restaurant_name, status) VALUES (3, 'Royal Fine Dining', 'ACTIVE') ON DUPLICATE KEY UPDATE restaurant_name = 'Royal Fine Dining'");

@@ -4,7 +4,7 @@
 
 <%
     String contextPath = request.getContextPath();
-    String backendBaseUrl = contextPath.endsWith("/RMS_backend") ? contextPath : "/RMS_backend";
+    String backendBaseUrl = "/api";
 %>
 
 <!DOCTYPE html>
@@ -294,8 +294,7 @@
     const BACKEND_BASE_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
         ? window.API_BASE_URL
         : (window.location.origin.includes(":8081") 
-            ? "http://localhost:8080/RMS_backend" 
-            : (window.location.origin.endsWith("/RMS_backend") ? window.location.origin : (window.location.origin + "/RMS_backend")));
+            ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api"));
 
     document.addEventListener("DOMContentLoaded", function () {
         initBrandBranding();

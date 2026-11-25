@@ -54,9 +54,7 @@ document.addEventListener(
 
 const RMS_GLOBAL_BACKEND_URL = (typeof window.API_BASE_URL !== "undefined" && window.API_BASE_URL)
     ? window.API_BASE_URL
-    : (window.location.origin.includes(":8081") 
-        ? "http://localhost:8080" 
-        : (window.location.origin + "/RMS_backend"));
+    : ((window.API_BASE_URL || (window.location.origin.includes(":8081") ? ("http://" + window.location.hostname + ":8080") : (window.location.origin + "/api"))));
 
 async function syncGlobalBrandLogo() {
     const sidebarLogo = document.getElementById("sidebarLogoImg");

@@ -541,7 +541,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Landing JS -->
-<script src="<%= contextPath %>/js/landing.js"></script>
+<script src="<%= contextPath %>/js/config.js?v=1.0.0"></script>
+<script src="<%= contextPath %>/js/landing.js?v=1.0.0"></script>
 
 </body>
 </html>
