@@ -29,6 +29,10 @@ public class ApiProxyServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Set<String> ALLOWED_REQUEST_HEADERS = Set.of(
+            "authorization", "content-type", "accept", "accept-language"
+    );
+
     private static final Set<String> HOP_BY_HOP_HEADERS = Set.of(
             "host", "connection", "keep-alive", "proxy-authenticate",
             "proxy-authorization", "te", "trailers", "transfer-encoding",
@@ -97,7 +101,7 @@ public class ApiProxyServlet extends HttpServlet {
         Enumeration<String> headerNames = req.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String name = headerNames.nextElement();
-            if (HOP_BY_HOP_HEADERS.contains(name.toLowerCase())) {
+            if (!ALLOWED_REQUEST_HEADERS.contains(name.toLowerCase())) {
                 continue;
             }
             Enumeration<String> values = req.getHeaders(name);
