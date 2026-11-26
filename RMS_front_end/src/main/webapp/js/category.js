@@ -1170,7 +1170,7 @@ function getCategoryIcon(name) {
         value.includes("starter")
     ) {
 
-        return "fa-solid fa-cloche";
+        return "fa-solid fa-pepper-hot";
     }
 
 
