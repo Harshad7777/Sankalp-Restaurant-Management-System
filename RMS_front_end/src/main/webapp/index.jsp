@@ -144,7 +144,7 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-6 reveal">
                 <div class="about-image-wrapper">
-                    <img src="<%= contextPath %>/images/login-bg.jpg" alt="Sankalp Fine Dining Interior" class="about-image">
+                    <img src="<%= contextPath %>/images/sankalp-ambience.jpg" alt="Sankalpa Pure Veg Dining & Ambience" class="about-image">
                     <div class="experience-card">
                         <strong>15+</strong>
                         <span>Years of<br>Royal Heritage</span>
@@ -371,7 +371,7 @@
             </div>
             <div class="col-md-4 col-sm-6 gallery-item reveal">
                 <div class="gallery-img-box">
-                    <img src="<%= contextPath %>/images/menu/Gulab_Jamun.jpg" alt="Warm Gulab Jamun">
+                    <img src="<%= contextPath %>/images/sankalp-ambience.jpg" alt="Sankalpa Pure Veg Ambience">
                     <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
                 </div>
             </div>
