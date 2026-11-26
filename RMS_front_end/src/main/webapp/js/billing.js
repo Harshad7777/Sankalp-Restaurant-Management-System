@@ -3847,10 +3847,10 @@
            LOAD DATA
         ------------------------------------------------- */
 
-        await loadOrders();
-
-
-        await loadBills();
+        await Promise.all([
+            loadBills(),
+            loadOrders()
+        ]);
 
 
         console.log(
@@ -3874,6 +3874,9 @@
         );
 
     } else {
+
+        initialize();
+    }
 
     window.triggerThermalPrintFromModal = async function() {
         if (!state.selectedBill) {

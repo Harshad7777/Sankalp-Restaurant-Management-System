@@ -1342,7 +1342,7 @@
 ========================================================= -->
 
 <script
-    src="<%= contextPath %>/js/billing.js">
+    src="<%= contextPath %>/js/billing.js?v=1.0.1">
 </script>
 
 
