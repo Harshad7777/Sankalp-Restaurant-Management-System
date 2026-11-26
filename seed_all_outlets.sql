@@ -13,12 +13,12 @@ USE smprowor_RMS;
 -- 1. OUTLETS (RESTAURANTS 1, 2, 3)
 -- -----------------------------------------------------
 INSERT IGNORE INTO restaurants (restaurant_id, restaurant_name, tagline, phone, email, website, address, currency_symbol, logo_path, status) VALUES
-(1, 'Sankalp - Chakan', 'Authentic South Indian & Fine Dining', '+91 98765 43210', 'chakan@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Chakan', '₹', '/images/sankalp_logo.jpg', 'ACTIVE'),
+(1, 'Sankalp', 'Authentic South Indian & Fine Dining', '+91 98765 43210', 'chakan@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Chakan', '₹', '/images/sankalp_logo.jpg', 'ACTIVE'),
 (2, 'Sankalp - Khed', 'Flavors of North & Pure Veg Cuisine', '+91 98765 99999', 'khed@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Khed', '₹', '/images/logo.png', 'ACTIVE'),
 (3, 'Sankalp - Pune', 'Heritage Pure Veg & Family Dining', '+91 98220 11223', 'pune@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'FC Road, Shivajinagar, Pune', '₹', '/images/logo1.png', 'ACTIVE');
 
 INSERT IGNORE INTO restaurant_settings (id, restaurant_id, restaurant_name, tagline, phone, email, website, address, currency_symbol, logo_path) VALUES
-(1, 1, 'Sankalp - Chakan', 'Authentic South Indian & Fine Dining', '+91 98765 43210', 'chakan@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Chakan', '₹', '/images/sankalp_logo.jpg'),
+(1, 1, 'Sankalp', 'Authentic South Indian & Fine Dining', '+91 98765 43210', 'chakan@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Chakan', '₹', '/images/sankalp_logo.jpg'),
 (2, 2, 'Sankalp - Khed', 'Flavors of North & Pure Veg Cuisine', '+91 98765 99999', 'khed@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'Pune-Nashik Highway, Khed', '₹', '/images/logo.png'),
 (3, 3, 'Sankalp - Pune', 'Heritage Pure Veg & Family Dining', '+91 98220 11223', 'pune@sankalprestaurant.com', 'https://www.sankalprestaurant.com', 'FC Road, Shivajinagar, Pune', '₹', '/images/logo1.png');
 

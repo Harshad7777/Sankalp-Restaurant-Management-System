@@ -212,7 +212,7 @@
                     <i class="fa-solid fa-store me-1"></i> Select Restaurant Outlet:
                 </label>
                 <select id="publicRestaurantSelect" class="form-select d-inline-block w-auto border-0 text-white bg-dark shadow-none fw-semibold" style="cursor: pointer; font-size: 0.95rem; border-radius: 20px; max-width: 100%;" onchange="switchPublicRestaurantMenu(this.value)">
-                    <option value="1" selected>🏛️ Sankalp - Chakan (Pune-Nashik Highway, Chakan)</option>
+                    <option value="1" selected>🏛️ Sankalp (Pune-Nashik Highway, Chakan)</option>
                     <option value="2">🍕 Sankalp - Khed (Pune-Nashik Highway, Khed)</option>
                     <option value="3">🍷 Sankalp - Pune (FC Road, Shivajinagar, Pune)</option>
                 </select>
@@ -426,7 +426,7 @@
                             <div class="col-md-12">
                                 <label for="reservationRestaurantId" class="fw-bold text-warning">Target Restaurant Outlet *</label>
                                 <select id="reservationRestaurantId" required class="form-select bg-dark text-white border-warning fw-semibold">
-                                    <option value="1" selected>🏛️ Sankalp - Chakan (Pune-Nashik Highway, Chakan)</option>
+                                    <option value="1" selected>🏛️ Sankalp (Pune-Nashik Highway, Chakan)</option>
                                     <option value="2">🍕 Sankalp - Khed (Pune-Nashik Highway, Khed)</option>
                                     <option value="3">🍷 Sankalp - Pune (FC Road, Shivajinagar, Pune)</option>
                                 </select>
