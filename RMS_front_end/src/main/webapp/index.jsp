@@ -341,19 +341,37 @@
         <div class="row g-4 mt-2">
             <div class="col-md-4 col-sm-6 gallery-item reveal">
                 <div class="gallery-img-box">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=85" alt="Dining Hall">
+                    <img src="<%= contextPath %>/images/login-bg.jpg" alt="Sankalpa Pure Veg Restaurant">
                     <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 gallery-item reveal">
                 <div class="gallery-img-box">
-                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=85" alt="Gourmet Dish">
+                    <img src="<%= contextPath %>/images/menu/Chef_Special_Thali.png" alt="Chef Special Pure Veg Thali">
                     <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 gallery-item reveal">
                 <div class="gallery-img-box">
-                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85" alt="Dessert Plate">
+                    <img src="<%= contextPath %>/images/menu/Paneer_Butter_Masala.png" alt="Paneer Butter Masala">
+                    <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 gallery-item reveal">
+                <div class="gallery-img-box">
+                    <img src="<%= contextPath %>/images/menu/Paneer_Tikka.jpg" alt="Paneer Tikka">
+                    <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 gallery-item reveal">
+                <div class="gallery-img-box">
+                    <img src="<%= contextPath %>/images/menu/Masala_Dosa.png" alt="Crispy Masala Dosa">
+                    <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 gallery-item reveal">
+                <div class="gallery-img-box">
+                    <img src="<%= contextPath %>/images/menu/Gulab_Jamun.jpg" alt="Warm Gulab Jamun">
                     <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
                 </div>
             </div>
