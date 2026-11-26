@@ -27,10 +27,15 @@ public class SettingRepository {
             jdbcTemplate.execute(SettingQueries.CREATE_TABLE_IF_NOT_EXISTS);
             jdbcTemplate.update(SettingQueries.INSERT_DEFAULT_FOR_RESTAURANT, 1);
 
-            // Ensure Royal Fine Dining tenant (id 3) exists and migrate royal_admin users in database
-            jdbcTemplate.update("INSERT INTO restaurants (restaurant_id, restaurant_name, status) VALUES (3, 'Royal Fine Dining', 'ACTIVE') ON DUPLICATE KEY UPDATE restaurant_name = 'Royal Fine Dining'");
+            // Ensure tenant 3 exists and migrate legacy outlet names to Sankalp branch names
+            jdbcTemplate.update("INSERT INTO restaurants (restaurant_id, restaurant_name, status) VALUES (3, 'Sankalp - Pune', 'ACTIVE') ON DUPLICATE KEY UPDATE restaurant_name = IF(restaurant_name = 'Royal Fine Dining', 'Sankalp - Pune', restaurant_name)");
+            jdbcTemplate.update("UPDATE restaurants SET restaurant_name = 'Sankalp - Chakan' WHERE restaurant_id = 1 AND restaurant_name = 'Sankalp Restaurant'");
+            jdbcTemplate.update("UPDATE restaurants SET restaurant_name = 'Sankalp - Khed' WHERE restaurant_id = 2 AND restaurant_name = 'ABC Restaurant'");
+            jdbcTemplate.update("UPDATE restaurant_settings SET restaurant_name = 'Sankalp - Chakan', address = 'Pune-Nashik Highway, Chakan' WHERE restaurant_id = 1 AND restaurant_name = 'Sankalp Restaurant'");
+            jdbcTemplate.update("UPDATE restaurant_settings SET restaurant_name = 'Sankalp - Khed', address = 'Pune-Nashik Highway, Khed' WHERE restaurant_id = 2 AND restaurant_name = 'ABC Restaurant'");
+            jdbcTemplate.update("UPDATE restaurant_settings SET restaurant_name = 'Sankalp - Pune', address = COALESCE(NULLIF(address, ''), 'FC Road, Shivajinagar, Pune') WHERE restaurant_id = 3 AND restaurant_name = 'Royal Fine Dining'");
             jdbcTemplate.update("UPDATE users SET restaurant_id = 3 WHERE username LIKE 'royal_admin%'");
-            seedStarterTenantData(3, "Royal Fine Dining");
+            seedStarterTenantData(3, "Sankalp - Pune");
         } catch (Exception e) {
             System.err.println("Database auto-migration info: " + e.getMessage());
         }
