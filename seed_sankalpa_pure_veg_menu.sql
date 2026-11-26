@@ -2,7 +2,7 @@
 -- SANKALPA PURE VEG - EXCLUSIVE MENU & CLEANUP SEED
 -- Keeps ONLY the 16 categories & 171 dishes from the
 -- Sankalpa Pure Veg menu photos and removes all others.
--- Applied to all 3 Sankalp branches (Chakan=1, Khed=2, Pune=3)
+-- Applied to all 3 Sankalp branches (1, 2, 3)
 -- =====================================================
 
 USE smprowor_RMS;
@@ -77,25 +77,25 @@ WHERE NOT EXISTS (SELECT 1 FROM category WHERE restaurant_id = 1 AND category_na
 
 -- OUTLET 1 MENU ITEMS (171 dishes)
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Tawa');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Tawa';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Tawa';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Kadhai', 'Seasonal veggies cooked in aromatic kadhai masala', 140.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Kadhai');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Veg Kadhai';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Maharani');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Maharani';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Maharani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Haidrabadi');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Haidrabadi';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Haidrabadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Jaipuri');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Jaipuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Jaipuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Makkhanwala', 'Mixed vegetables simmered in rich buttery tomato gravy', 150.00, 'images/menu/Paneer_Butter_Masala.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Makkhanwala');
@@ -105,9 +105,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Maratha');
 UPDATE menu SET image = 'images/menu/Veg_Maratha.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Maratha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Bhuna');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Bhuna';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Bhuna';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Dilruba', 'Chef special rich red & golden veg curry', 150.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Dilruba');
@@ -117,9 +117,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Banjara');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Banjara';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Sundari');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Sundari';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 1 AND item_name = 'Veg Sundari';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Kaju Special' LIMIT 1), 'Kaju Kari', 'Roasted cashews simmered in spiced onion-tomato curry', 130.00, 'images/menu/Kaju_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Kaju Kari');
@@ -141,9 +141,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Masala');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 160.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 160.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Babycorn', 'Mushrooms and tender babycorn in rich masala', 180.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Babycorn');
@@ -217,17 +217,17 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Shev Bhaji');
 UPDATE menu SET image = 'images/menu/Shev_Bhaji.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Shev Bhaji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Fry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Fry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Dry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Dry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Chana Masala', 'Chickpeas simmered in tangy Punjabi masala', 70.00, 'images/menu/Chana_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Chana Masala');
@@ -277,17 +277,17 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Bhendi Masala');
 UPDATE menu SET image = 'images/menu/Bhindi_Fry.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Bhendi Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Soyabin Masala');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Masala';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Soyabin Fry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Fry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Soyabin Dry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Dry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Mataki Masala', 'Sprouted moth beans in traditional Maharashtrian masala', 70.00, 'images/menu/Matki_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mataki Masala');
@@ -305,13 +305,13 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Rajma Fry');
 UPDATE menu SET image = 'images/menu/Rajma_Masala.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Rajma Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Masala');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Masala';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Fry');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Fry';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 75.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Patiyala', 'Stuffed papad rolls served in rich Punjabi gravy', 130.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Patiyala');
@@ -341,29 +341,29 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mix Veg');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Mix Veg';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Khurma');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Khurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Khurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Singapuri');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Veg Singapuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Veg Singapuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Green Garden');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Veg Green Garden';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Veg Green Garden';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Kopta', 'Crispy vegetable koftas in rich gravy', 120.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Veg Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Hariyali');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Hariyali';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Hariyali';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Mumtaj');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Mumtaj';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Mumtaj';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Lengcha', 'Special cylindrical veg rolls in spiced gravy', 110.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Lengcha');
@@ -377,29 +377,29 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Khandala');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Veg Khandala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Tamatar Chatani');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 90.00 WHERE restaurant_id = 1 AND item_name = 'Tamatar Chatani';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 90.00 WHERE restaurant_id = 1 AND item_name = 'Tamatar Chatani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Stuffed_Shimla.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Stuff Tamatar');
-UPDATE menu SET image = 'images/menu/Stuffed_Shimla.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Stuff Tamatar';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Stuff Tamatar';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Veg Manchurian', 'Crispy vegetable balls tossed in tangy Manchurian sauce', 80.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Manchurian');
 UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Veg Manchurian';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Soyabin Chilli');
-UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 85.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Chilli';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 85.00 WHERE restaurant_id = 1 AND item_name = 'Soyabin Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Paneer Chilli', 'Wok-tossed paneer cubes with peppers and chilli sauce', 110.00, 'images/menu/Paneer_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Paneer Chilli');
 UPDATE menu SET image = 'images/menu/Paneer_Chilli.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Paneer Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Chilli');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Chilli';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 110.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Chinese' LIMIT 1), 'Veg Hakka Noodles', 'Stir-fried noodles with crunchy vegetables', 100.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Hakka Noodles');
@@ -409,9 +409,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Malai Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Malai Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Navratna Kurma');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Navratna Kurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Navratna Kurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Paneer Shan Savera', 'Spinach and paneer koftas in rich golden gravy', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Paneer Shan Savera');
@@ -433,13 +433,13 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Dam Aalu Kashmiri');
 UPDATE menu SET image = 'images/menu/Dum_Aloo.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Dam Aalu Kashmiri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Aalu');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Aalu';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Aalu';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Aalu Mutter');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Aalu Mutter';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Aalu Mutter';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Palak', 'Potatoes cooked in fresh spiced spinach gravy', 75.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Aalu Palak');
@@ -517,21 +517,21 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Handi Half');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 180.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Full');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 240.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Full';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 240.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Half');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Half';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Full');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 240.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Full';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 240.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Half');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Half';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 120.00 WHERE restaurant_id = 1 AND item_name = 'Akkha Masur Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Handi' LIMIT 1), 'Paneer Tikka Handi Full', 'Full handi of smoky paneer tikka masala', 350.00, 'images/menu/Paneer_Tikka.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Paneer Tikka Handi Full');
@@ -581,9 +581,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Handi Half');
 UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Hara_Bhara_Kabab.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Harbhara Kabab');
-UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Veg Harbhara Kabab';
+UPDATE menu SET image = 'images/menu/Hara_Bhara_Kabab.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Veg Harbhara Kabab';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Veg Pakoda', 'Crispy assorted vegetable fritters', 90.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Pakoda');
@@ -601,13 +601,13 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Paneer Pakoda');
 UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 100.00 WHERE restaurant_id = 1 AND item_name = 'Paneer Pakoda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/French_Fries.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/Potato_Wafers.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Wafers');
-UPDATE menu SET image = 'images/menu/French_Fries.jpg', price = 10.00 WHERE restaurant_id = 1 AND item_name = 'Wafers';
+UPDATE menu SET image = 'images/menu/Potato_Wafers.jpg', price = 10.00 WHERE restaurant_id = 1 AND item_name = 'Wafers';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Upma.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Sabudana_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Khichadi');
-UPDATE menu SET image = 'images/menu/Upma.png', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Khichadi';
+UPDATE menu SET image = 'images/menu/Sabudana_Khichdi.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Soup' LIMIT 1), 'Tomato Soup', 'Classic creamy roasted tomato soup with croutons', 60.00, 'images/menu/Tomato_Soup.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Tomato Soup');
@@ -617,13 +617,13 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Manchow Soup');
 UPDATE menu SET image = 'images/menu/Manchow_Soup.jpg', price = 60.00 WHERE restaurant_id = 1 AND item_name = 'Veg Manchow Soup';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Plain Rice Full');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Plain Rice Full';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Plain Rice Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Plain Rice Half');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Plain Rice Half';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Plain Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Jeera Rice Full', 'Cumin-tempered fragrant basmati rice (Full)', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Jeera Rice Full');
@@ -633,9 +633,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Jeera Rice Half');
 UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 60.00 WHERE restaurant_id = 1 AND item_name = 'Jeera Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Steam Rice');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Steam Rice';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 80.00 WHERE restaurant_id = 1 AND item_name = 'Steam Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Masala Rice', 'Spiced Maharashtrian masala bhat', 120.00, 'images/menu/Veg_Pulav.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Masala Rice');
@@ -653,21 +653,21 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Green Peas Pulav');
 UPDATE menu SET image = 'images/menu/Veg_Pulav.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Green Peas Pulav';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Veg Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Veg Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Shezwan Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Shezwan Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Shezwan Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Dal Khichadi', 'Comforting ghee-tempered dal and rice khichdi', 130.00, 'images/menu/Dal_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Dal Khichadi');
 UPDATE menu SET image = 'images/menu/Dal_Khichdi.jpg', price = 130.00 WHERE restaurant_id = 1 AND item_name = 'Dal Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Veg_Biryani.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Biryani.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 1 AND item_name = 'Mushroom Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Roti', 'Fresh tandoori wheat roti', 10.00, 'images/menu/Butter_Roti.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Roti');
@@ -677,25 +677,25 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Butter Roti');
 UPDATE menu SET image = 'images/menu/Butter_Roti.jpg', price = 15.00 WHERE restaurant_id = 1 AND item_name = 'Butter Roti';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 30.00 WHERE restaurant_id = 1 AND item_name = 'Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 30.00 WHERE restaurant_id = 1 AND item_name = 'Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Butter Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 35.00 WHERE restaurant_id = 1 AND item_name = 'Butter Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 35.00 WHERE restaurant_id = 1 AND item_name = 'Butter Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Masala Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Masala Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Masala Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Aalu Parotha', 'Stuffed spiced potato paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Aalu Parotha');
 UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Aalu Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Paneer_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Paneer Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Paneer Parotha';
+UPDATE menu SET image = 'images/menu/Paneer_Paratha.jpg', price = 70.00 WHERE restaurant_id = 1 AND item_name = 'Paneer Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Naan', 'Soft tandoor-baked naan', 30.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Naan');
@@ -709,9 +709,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Kashmiri Naan');
 UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 1 AND item_name = 'Kashmiri Naan';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Kulcha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Kulcha');
-UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 1 AND item_name = 'Kulcha';
+UPDATE menu SET image = 'images/menu/Kulcha.jpg', price = 40.00 WHERE restaurant_id = 1 AND item_name = 'Kulcha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Papad' LIMIT 1), 'Roast Papad', 'Crisp flame-roasted urad papad', 20.00, 'images/menu/Masala_Papad.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Roast Papad');
@@ -729,25 +729,25 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Papad Burji');
 UPDATE menu SET image = 'images/menu/Masala_Papad.jpg', price = 50.00 WHERE restaurant_id = 1 AND item_name = 'Papad Burji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Thums_Up.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Thums Up');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Thums Up';
+UPDATE menu SET image = 'images/menu/Thums_Up.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Thums Up';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Limca.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Limca');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Limca';
+UPDATE menu SET image = 'images/menu/Limca.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Limca';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Mango_Juice.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Maaza.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Maaza');
-UPDATE menu SET image = 'images/menu/Mango_Juice.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Maaza';
+UPDATE menu SET image = 'images/menu/Maaza.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Maaza';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Soda_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 15.00 WHERE restaurant_id = 1 AND item_name = 'Soda';
+UPDATE menu SET image = 'images/menu/Soda_Water.jpg', price = 15.00 WHERE restaurant_id = 1 AND item_name = 'Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Jeera_Soda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Jeera Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Jeera Soda';
+UPDATE menu SET image = 'images/menu/Jeera_Soda.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Jeera Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Lassi', 'Creamy chilled sweet Punjabi lassi', 20.00, 'images/menu/Lassi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Lassi');
@@ -757,9 +757,9 @@ SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Tak');
 UPDATE menu SET image = 'images/menu/Chaas_Tak.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Tak';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 1, (SELECT category_id FROM category WHERE restaurant_id = 1 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Mineral_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 1 AND item_name = 'Mineral Water');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Mineral Water';
+UPDATE menu SET image = 'images/menu/Mineral_Water.jpg', price = 20.00 WHERE restaurant_id = 1 AND item_name = 'Mineral Water';
 
 -- -----------------------------------------------------
 -- OUTLET 2 CATEGORIES
@@ -815,25 +815,25 @@ WHERE NOT EXISTS (SELECT 1 FROM category WHERE restaurant_id = 2 AND category_na
 
 -- OUTLET 2 MENU ITEMS (171 dishes)
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Tawa');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Tawa';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Tawa';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Kadhai', 'Seasonal veggies cooked in aromatic kadhai masala', 140.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Kadhai');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Veg Kadhai';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Maharani');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Maharani';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Maharani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Haidrabadi');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Haidrabadi';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Haidrabadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Jaipuri');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Jaipuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Jaipuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Makkhanwala', 'Mixed vegetables simmered in rich buttery tomato gravy', 150.00, 'images/menu/Paneer_Butter_Masala.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Makkhanwala');
@@ -843,9 +843,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Maratha');
 UPDATE menu SET image = 'images/menu/Veg_Maratha.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Maratha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Bhuna');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Bhuna';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Bhuna';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Dilruba', 'Chef special rich red & golden veg curry', 150.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Dilruba');
@@ -855,9 +855,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Banjara');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Banjara';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Sundari');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Sundari';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 2 AND item_name = 'Veg Sundari';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Kaju Special' LIMIT 1), 'Kaju Kari', 'Roasted cashews simmered in spiced onion-tomato curry', 130.00, 'images/menu/Kaju_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Kaju Kari');
@@ -879,9 +879,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Masala');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 160.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 160.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Babycorn', 'Mushrooms and tender babycorn in rich masala', 180.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Babycorn');
@@ -955,17 +955,17 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Shev Bhaji');
 UPDATE menu SET image = 'images/menu/Shev_Bhaji.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Shev Bhaji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Fry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Fry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Dry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Dry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Chana Masala', 'Chickpeas simmered in tangy Punjabi masala', 70.00, 'images/menu/Chana_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Chana Masala');
@@ -1015,17 +1015,17 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Bhendi Masala');
 UPDATE menu SET image = 'images/menu/Bhindi_Fry.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Bhendi Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Soyabin Masala');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Masala';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Soyabin Fry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Fry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Soyabin Dry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Dry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Mataki Masala', 'Sprouted moth beans in traditional Maharashtrian masala', 70.00, 'images/menu/Matki_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mataki Masala');
@@ -1043,13 +1043,13 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Rajma Fry');
 UPDATE menu SET image = 'images/menu/Rajma_Masala.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Rajma Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Masala');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Masala';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Fry');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Fry';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 75.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Patiyala', 'Stuffed papad rolls served in rich Punjabi gravy', 130.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Patiyala');
@@ -1079,29 +1079,29 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mix Veg');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Mix Veg';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Khurma');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Khurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Khurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Singapuri');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Veg Singapuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Veg Singapuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Green Garden');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Veg Green Garden';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Veg Green Garden';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Kopta', 'Crispy vegetable koftas in rich gravy', 120.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Veg Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Hariyali');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Hariyali';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Hariyali';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Mumtaj');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Mumtaj';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Mumtaj';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Lengcha', 'Special cylindrical veg rolls in spiced gravy', 110.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Lengcha');
@@ -1115,29 +1115,29 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Khandala');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Veg Khandala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Tamatar Chatani');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 90.00 WHERE restaurant_id = 2 AND item_name = 'Tamatar Chatani';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 90.00 WHERE restaurant_id = 2 AND item_name = 'Tamatar Chatani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Stuffed_Shimla.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Stuff Tamatar');
-UPDATE menu SET image = 'images/menu/Stuffed_Shimla.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Stuff Tamatar';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Stuff Tamatar';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Veg Manchurian', 'Crispy vegetable balls tossed in tangy Manchurian sauce', 80.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Manchurian');
 UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Veg Manchurian';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Soyabin Chilli');
-UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 85.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Chilli';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 85.00 WHERE restaurant_id = 2 AND item_name = 'Soyabin Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Paneer Chilli', 'Wok-tossed paneer cubes with peppers and chilli sauce', 110.00, 'images/menu/Paneer_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Paneer Chilli');
 UPDATE menu SET image = 'images/menu/Paneer_Chilli.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Paneer Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Chilli');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Chilli';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 110.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Chinese' LIMIT 1), 'Veg Hakka Noodles', 'Stir-fried noodles with crunchy vegetables', 100.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Hakka Noodles');
@@ -1147,9 +1147,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Malai Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Malai Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Navratna Kurma');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Navratna Kurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Navratna Kurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Paneer Shan Savera', 'Spinach and paneer koftas in rich golden gravy', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Paneer Shan Savera');
@@ -1171,13 +1171,13 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Dam Aalu Kashmiri');
 UPDATE menu SET image = 'images/menu/Dum_Aloo.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Dam Aalu Kashmiri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Aalu');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Aalu';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Aalu';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Aalu Mutter');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Aalu Mutter';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Aalu Mutter';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Palak', 'Potatoes cooked in fresh spiced spinach gravy', 75.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Aalu Palak');
@@ -1255,21 +1255,21 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Handi Half');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 180.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Full');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 240.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Full';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 240.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Half');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Half';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Full');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 240.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Full';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 240.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Half');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Half';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 120.00 WHERE restaurant_id = 2 AND item_name = 'Akkha Masur Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Handi' LIMIT 1), 'Paneer Tikka Handi Full', 'Full handi of smoky paneer tikka masala', 350.00, 'images/menu/Paneer_Tikka.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Paneer Tikka Handi Full');
@@ -1319,9 +1319,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Handi Half');
 UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Hara_Bhara_Kabab.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Harbhara Kabab');
-UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Veg Harbhara Kabab';
+UPDATE menu SET image = 'images/menu/Hara_Bhara_Kabab.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Veg Harbhara Kabab';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Veg Pakoda', 'Crispy assorted vegetable fritters', 90.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Pakoda');
@@ -1339,13 +1339,13 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Paneer Pakoda');
 UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 100.00 WHERE restaurant_id = 2 AND item_name = 'Paneer Pakoda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/French_Fries.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/Potato_Wafers.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Wafers');
-UPDATE menu SET image = 'images/menu/French_Fries.jpg', price = 10.00 WHERE restaurant_id = 2 AND item_name = 'Wafers';
+UPDATE menu SET image = 'images/menu/Potato_Wafers.jpg', price = 10.00 WHERE restaurant_id = 2 AND item_name = 'Wafers';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Upma.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Sabudana_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Khichadi');
-UPDATE menu SET image = 'images/menu/Upma.png', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Khichadi';
+UPDATE menu SET image = 'images/menu/Sabudana_Khichdi.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Soup' LIMIT 1), 'Tomato Soup', 'Classic creamy roasted tomato soup with croutons', 60.00, 'images/menu/Tomato_Soup.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Tomato Soup');
@@ -1355,13 +1355,13 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Manchow Soup');
 UPDATE menu SET image = 'images/menu/Manchow_Soup.jpg', price = 60.00 WHERE restaurant_id = 2 AND item_name = 'Veg Manchow Soup';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Plain Rice Full');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Plain Rice Full';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Plain Rice Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Plain Rice Half');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Plain Rice Half';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Plain Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Jeera Rice Full', 'Cumin-tempered fragrant basmati rice (Full)', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Jeera Rice Full');
@@ -1371,9 +1371,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Jeera Rice Half');
 UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 60.00 WHERE restaurant_id = 2 AND item_name = 'Jeera Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Steam Rice');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Steam Rice';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 80.00 WHERE restaurant_id = 2 AND item_name = 'Steam Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Masala Rice', 'Spiced Maharashtrian masala bhat', 120.00, 'images/menu/Veg_Pulav.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Masala Rice');
@@ -1391,21 +1391,21 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Green Peas Pulav');
 UPDATE menu SET image = 'images/menu/Veg_Pulav.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Green Peas Pulav';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Veg Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Veg Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Shezwan Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Shezwan Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Shezwan Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Dal Khichadi', 'Comforting ghee-tempered dal and rice khichdi', 130.00, 'images/menu/Dal_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Dal Khichadi');
 UPDATE menu SET image = 'images/menu/Dal_Khichdi.jpg', price = 130.00 WHERE restaurant_id = 2 AND item_name = 'Dal Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Veg_Biryani.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Biryani.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 2 AND item_name = 'Mushroom Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Roti', 'Fresh tandoori wheat roti', 10.00, 'images/menu/Butter_Roti.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Roti');
@@ -1415,25 +1415,25 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Butter Roti');
 UPDATE menu SET image = 'images/menu/Butter_Roti.jpg', price = 15.00 WHERE restaurant_id = 2 AND item_name = 'Butter Roti';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 30.00 WHERE restaurant_id = 2 AND item_name = 'Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 30.00 WHERE restaurant_id = 2 AND item_name = 'Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Butter Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 35.00 WHERE restaurant_id = 2 AND item_name = 'Butter Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 35.00 WHERE restaurant_id = 2 AND item_name = 'Butter Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Masala Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Masala Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Masala Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Aalu Parotha', 'Stuffed spiced potato paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Aalu Parotha');
 UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Aalu Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Paneer_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Paneer Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Paneer Parotha';
+UPDATE menu SET image = 'images/menu/Paneer_Paratha.jpg', price = 70.00 WHERE restaurant_id = 2 AND item_name = 'Paneer Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Naan', 'Soft tandoor-baked naan', 30.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Naan');
@@ -1447,9 +1447,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Kashmiri Naan');
 UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 2 AND item_name = 'Kashmiri Naan';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Kulcha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Kulcha');
-UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 2 AND item_name = 'Kulcha';
+UPDATE menu SET image = 'images/menu/Kulcha.jpg', price = 40.00 WHERE restaurant_id = 2 AND item_name = 'Kulcha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Papad' LIMIT 1), 'Roast Papad', 'Crisp flame-roasted urad papad', 20.00, 'images/menu/Masala_Papad.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Roast Papad');
@@ -1467,25 +1467,25 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Papad Burji');
 UPDATE menu SET image = 'images/menu/Masala_Papad.jpg', price = 50.00 WHERE restaurant_id = 2 AND item_name = 'Papad Burji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Thums_Up.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Thums Up');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Thums Up';
+UPDATE menu SET image = 'images/menu/Thums_Up.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Thums Up';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Limca.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Limca');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Limca';
+UPDATE menu SET image = 'images/menu/Limca.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Limca';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Mango_Juice.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Maaza.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Maaza');
-UPDATE menu SET image = 'images/menu/Mango_Juice.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Maaza';
+UPDATE menu SET image = 'images/menu/Maaza.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Maaza';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Soda_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 15.00 WHERE restaurant_id = 2 AND item_name = 'Soda';
+UPDATE menu SET image = 'images/menu/Soda_Water.jpg', price = 15.00 WHERE restaurant_id = 2 AND item_name = 'Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Jeera_Soda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Jeera Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Jeera Soda';
+UPDATE menu SET image = 'images/menu/Jeera_Soda.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Jeera Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Lassi', 'Creamy chilled sweet Punjabi lassi', 20.00, 'images/menu/Lassi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Lassi');
@@ -1495,9 +1495,9 @@ SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Tak');
 UPDATE menu SET image = 'images/menu/Chaas_Tak.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Tak';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 2, (SELECT category_id FROM category WHERE restaurant_id = 2 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Mineral_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 2 AND item_name = 'Mineral Water');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Mineral Water';
+UPDATE menu SET image = 'images/menu/Mineral_Water.jpg', price = 20.00 WHERE restaurant_id = 2 AND item_name = 'Mineral Water';
 
 -- -----------------------------------------------------
 -- OUTLET 3 CATEGORIES
@@ -1553,25 +1553,25 @@ WHERE NOT EXISTS (SELECT 1 FROM category WHERE restaurant_id = 3 AND category_na
 
 -- OUTLET 3 MENU ITEMS (171 dishes)
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Tawa', 'Mixed vegetables tossed on hot tawa with spices', 150.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Tawa');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Tawa';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Tawa';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Kadhai', 'Seasonal veggies cooked in aromatic kadhai masala', 140.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Kadhai');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Veg Kadhai';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Maharani', 'Rich creamy mixed vegetable royal curry', 150.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Maharani');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Maharani';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Maharani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Haidrabadi', 'Spicy Hyderabadi style green herb vegetable curry', 150.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Haidrabadi');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Haidrabadi';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Haidrabadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Jaipuri', 'Jaipuri style mixed veg gravy with crisp papad', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Jaipuri');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Jaipuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Jaipuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Makkhanwala', 'Mixed vegetables simmered in rich buttery tomato gravy', 150.00, 'images/menu/Paneer_Butter_Masala.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Makkhanwala');
@@ -1581,9 +1581,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Maratha');
 UPDATE menu SET image = 'images/menu/Veg_Maratha.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Maratha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Bhuna', 'Slow-roasted spiced vegetable masala', 130.00, 'images/menu/Veg_Tawa.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Bhuna');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Bhuna';
+UPDATE menu SET image = 'images/menu/Veg_Tawa.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Bhuna';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Dilruba', 'Chef special rich red & golden veg curry', 150.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Dilruba');
@@ -1593,9 +1593,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Banjara');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Banjara';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Handi.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Special Dishes' LIMIT 1), 'Veg Sundari', 'Special Sankalpa signature veg preparation', 150.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Sundari');
-UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Sundari';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 150.00 WHERE restaurant_id = 3 AND item_name = 'Veg Sundari';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Kaju Special' LIMIT 1), 'Kaju Kari', 'Roasted cashews simmered in spiced onion-tomato curry', 130.00, 'images/menu/Kaju_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Kaju Kari');
@@ -1617,9 +1617,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Masala');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Fry', 'Crispy sauteed mushrooms with black pepper and herbs', 160.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 160.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 160.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Mushroom Special' LIMIT 1), 'Mushroom Babycorn', 'Mushrooms and tender babycorn in rich masala', 180.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Babycorn');
@@ -1693,17 +1693,17 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Shev Bhaji');
 UPDATE menu SET image = 'images/menu/Shev_Bhaji.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Shev Bhaji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas', 'Fresh green peas cooked in spiced gravy', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Fry', 'Tossed green peas with onion and Indian spices', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Fry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Fry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Green Peas Dry', 'Dry spiced green peas preparation', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Dry');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Dry';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Chana Masala', 'Chickpeas simmered in tangy Punjabi masala', 70.00, 'images/menu/Chana_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Chana Masala');
@@ -1753,17 +1753,17 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Bhendi Masala');
 UPDATE menu SET image = 'images/menu/Bhindi_Fry.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Bhendi Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Masala', 'Soya chunks simmered in spicy masala gravy', 70.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Soyabin Masala');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Masala';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Fry', 'Pan-tossed spiced soya chunks', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Soyabin Fry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Fry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Veg_Kadhai.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Soyabin Dry', 'Dry roasted spicy soya preparation', 75.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Soyabin Dry');
-UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Dry';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Dry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Mataki Masala', 'Sprouted moth beans in traditional Maharashtrian masala', 70.00, 'images/menu/Matki_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mataki Masala');
@@ -1781,13 +1781,13 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Rajma Fry');
 UPDATE menu SET image = 'images/menu/Rajma_Masala.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Rajma Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Masala', 'Whole brown lentils in spicy Kolhapuri masala', 70.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Masala');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Masala';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Masala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Akkha Masur Fry', 'Rich garlic-tempered whole masoor fry', 75.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Fry');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Fry';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 75.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Fry';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Patiyala', 'Stuffed papad rolls served in rich Punjabi gravy', 130.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Patiyala');
@@ -1817,29 +1817,29 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mix Veg');
 UPDATE menu SET image = 'images/menu/Veg_Kadhai.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Mix Veg';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Khurma', 'Mildly spiced creamy vegetable korma', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Khurma');
-UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Khurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Khurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Singapuri', 'Sweet-spicy Singapuri style vegetable curry', 120.00, 'images/menu/Veg_Jaipuri.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Singapuri');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Veg Singapuri';
+UPDATE menu SET image = 'images/menu/Veg_Jaipuri.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Veg Singapuri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Green Garden', 'Fresh green herbs and vegetable specialty', 140.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Green Garden');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Veg Green Garden';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Veg Green Garden';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Kopta', 'Crispy vegetable koftas in rich gravy', 120.00, 'images/menu/Malai_Kofta.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Veg Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Hariyali', 'Vegetables cooked in vibrant spinach-coriander gravy', 110.00, 'images/menu/Veg_Hyderabadi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Hariyali');
-UPDATE menu SET image = 'images/menu/Palak_Paneer.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Hariyali';
+UPDATE menu SET image = 'images/menu/Veg_Hyderabadi.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Hariyali';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Mumtaj', 'Rich Mughlai style mixed vegetable curry', 110.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Mumtaj');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Mumtaj';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Mumtaj';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Veg Lengcha', 'Special cylindrical veg rolls in spiced gravy', 110.00, 'images/menu/Veg_Patiala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Lengcha');
@@ -1853,29 +1853,29 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Khandala');
 UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Veg Khandala';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Veg_Kolhapuri.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Tamatar Chatani', 'Tangy spiced tomato chutney curry', 90.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Tamatar Chatani');
-UPDATE menu SET image = 'images/menu/Veg_Kolhapuri.png', price = 90.00 WHERE restaurant_id = 3 AND item_name = 'Tamatar Chatani';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 90.00 WHERE restaurant_id = 3 AND item_name = 'Tamatar Chatani';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Stuffed_Shimla.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Punjabi Dishes' LIMIT 1), 'Stuff Tamatar', 'Whole tomatoes stuffed with spiced potato-paneer', 120.00, 'images/menu/Tomato_Chutney.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Stuff Tamatar');
-UPDATE menu SET image = 'images/menu/Stuffed_Shimla.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Stuff Tamatar';
+UPDATE menu SET image = 'images/menu/Tomato_Chutney.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Stuff Tamatar';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Veg Manchurian', 'Crispy vegetable balls tossed in tangy Manchurian sauce', 80.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Manchurian');
 UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Veg Manchurian';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Veg_Manchurian.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Soyabin Chilli', 'Crispy soya chunks tossed with chillies and soy sauce', 85.00, 'images/menu/Soybean_Curry.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Soyabin Chilli');
-UPDATE menu SET image = 'images/menu/Veg_Manchurian.png', price = 85.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Chilli';
+UPDATE menu SET image = 'images/menu/Soybean_Curry.jpg', price = 85.00 WHERE restaurant_id = 3 AND item_name = 'Soyabin Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Paneer Chilli', 'Wok-tossed paneer cubes with peppers and chilli sauce', 110.00, 'images/menu/Paneer_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Paneer Chilli');
 UPDATE menu SET image = 'images/menu/Paneer_Chilli.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Paneer Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Masala.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Mushroom Chilli', 'Crispy mushrooms tossed in spicy garlic chilli sauce', 110.00, 'images/menu/Mushroom_Chilli.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Chilli');
-UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Chilli';
+UPDATE menu SET image = 'images/menu/Mushroom_Chilli.jpg', price = 110.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Chilli';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Chinese' LIMIT 1), 'Veg Hakka Noodles', 'Stir-fried noodles with crunchy vegetables', 100.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Hakka Noodles');
@@ -1885,9 +1885,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Malai Kopta');
 UPDATE menu SET image = 'images/menu/Malai_Kofta.png', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Malai Kopta';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Shahi_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Navratna Kurma', 'Nine-gem mixed vegetables and fruits in creamy korma', 120.00, 'images/menu/Veg_Korma.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Navratna Kurma');
-UPDATE menu SET image = 'images/menu/Shahi_Paneer.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Navratna Kurma';
+UPDATE menu SET image = 'images/menu/Veg_Korma.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Navratna Kurma';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Sweet Bhaji' LIMIT 1), 'Paneer Shan Savera', 'Spinach and paneer koftas in rich golden gravy', 140.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Paneer Shan Savera');
@@ -1909,13 +1909,13 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Dam Aalu Kashmiri');
 UPDATE menu SET image = 'images/menu/Dum_Aloo.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Dam Aalu Kashmiri';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Aalu Special' LIMIT 1), 'Green Peas Aalu', 'Potatoes and green peas in homestyle curry', 80.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Aalu');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Aalu';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Aalu';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Mutter', 'Classic aloo mutter curry', 70.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Aalu Mutter');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Aalu Mutter';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Aalu Mutter';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Aalu Special' LIMIT 1), 'Aalu Palak', 'Potatoes cooked in fresh spiced spinach gravy', 75.00, 'images/menu/Palak_Paneer.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Aalu Palak');
@@ -1993,21 +1993,21 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Handi Half');
 UPDATE menu SET image = 'images/menu/Mushroom_Masala.jpg', price = 180.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Full', 'Full handi of spiced green peas curry', 240.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Full');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 240.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Full';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 240.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Mutter_Paneer.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Green Peas Handi Half', 'Half handi of spiced green peas curry', 120.00, 'images/menu/Green_Peas_Masala.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Half');
-UPDATE menu SET image = 'images/menu/Mutter_Paneer.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Half';
+UPDATE menu SET image = 'images/menu/Green_Peas_Masala.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Full', 'Full handi of Kolhapuri akkha masoor', 240.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Full');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 240.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Full';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 240.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Dal_Makhani.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Akkha Masur Handi Half', 'Half handi of Kolhapuri akkha masoor', 120.00, 'images/menu/Akkha_Masoor.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Half');
-UPDATE menu SET image = 'images/menu/Dal_Makhani.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Half';
+UPDATE menu SET image = 'images/menu/Akkha_Masoor.jpg', price = 120.00 WHERE restaurant_id = 3 AND item_name = 'Akkha Masur Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Handi' LIMIT 1), 'Paneer Tikka Handi Full', 'Full handi of smoky paneer tikka masala', 350.00, 'images/menu/Paneer_Tikka.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Paneer Tikka Handi Full');
@@ -2057,9 +2057,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Handi Half');
 UPDATE menu SET image = 'images/menu/Veg_Handi.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Handi Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Veg Harbhara Kabab', 'Crispy spinach and green pea patties', 140.00, 'images/menu/Hara_Bhara_Kabab.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Harbhara Kabab');
-UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Veg Harbhara Kabab';
+UPDATE menu SET image = 'images/menu/Hara_Bhara_Kabab.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Veg Harbhara Kabab';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Veg Pakoda', 'Crispy assorted vegetable fritters', 90.00, 'images/menu/Pakoda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Pakoda');
@@ -2077,13 +2077,13 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Paneer Pakoda');
 UPDATE menu SET image = 'images/menu/Pakoda.jpg', price = 100.00 WHERE restaurant_id = 3 AND item_name = 'Paneer Pakoda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/French_Fries.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Wafers', 'Crispy salted potato wafers', 10.00, 'images/menu/Potato_Wafers.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Wafers');
-UPDATE menu SET image = 'images/menu/French_Fries.jpg', price = 10.00 WHERE restaurant_id = 3 AND item_name = 'Wafers';
+UPDATE menu SET image = 'images/menu/Potato_Wafers.jpg', price = 10.00 WHERE restaurant_id = 3 AND item_name = 'Wafers';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Upma.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Snacks' LIMIT 1), 'Khichadi', 'Light spiced sabudana / comforting khichdi', 50.00, 'images/menu/Sabudana_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Khichadi');
-UPDATE menu SET image = 'images/menu/Upma.png', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Khichadi';
+UPDATE menu SET image = 'images/menu/Sabudana_Khichdi.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Soup' LIMIT 1), 'Tomato Soup', 'Classic creamy roasted tomato soup with croutons', 60.00, 'images/menu/Tomato_Soup.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Tomato Soup');
@@ -2093,13 +2093,13 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Manchow Soup');
 UPDATE menu SET image = 'images/menu/Manchow_Soup.jpg', price = 60.00 WHERE restaurant_id = 3 AND item_name = 'Veg Manchow Soup';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Full', 'Steamed fluffy basmati rice (Full)', 70.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Plain Rice Full');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Plain Rice Full';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Plain Rice Full';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Plain Rice Half', 'Steamed fluffy basmati rice (Half)', 50.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Plain Rice Half');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Plain Rice Half';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Plain Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Jeera Rice Full', 'Cumin-tempered fragrant basmati rice (Full)', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Jeera Rice Full');
@@ -2109,9 +2109,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Jeera Rice Half');
 UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 60.00 WHERE restaurant_id = 3 AND item_name = 'Jeera Rice Half';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Jeera_Rice.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Steam Rice', 'Aromatic steamed rice', 80.00, 'images/menu/Plain_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Steam Rice');
-UPDATE menu SET image = 'images/menu/Jeera_Rice.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Steam Rice';
+UPDATE menu SET image = 'images/menu/Plain_Rice.jpg', price = 80.00 WHERE restaurant_id = 3 AND item_name = 'Steam Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Masala Rice', 'Spiced Maharashtrian masala bhat', 120.00, 'images/menu/Veg_Pulav.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Masala Rice');
@@ -2129,21 +2129,21 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Green Peas Pulav');
 UPDATE menu SET image = 'images/menu/Veg_Pulav.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Green Peas Pulav';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Veg Fry Rice', 'Wok-tossed vegetable fried rice', 130.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Veg Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Veg Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Veg_Hakka_Noodles.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Shezwan Fry Rice', 'Spicy Schezwan vegetable fried rice', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Shezwan Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Hakka_Noodles.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Shezwan Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Shezwan Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Dal Khichadi', 'Comforting ghee-tempered dal and rice khichdi', 130.00, 'images/menu/Dal_Khichdi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Dal Khichadi');
 UPDATE menu SET image = 'images/menu/Dal_Khichdi.jpg', price = 130.00 WHERE restaurant_id = 3 AND item_name = 'Dal Khichadi';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Veg_Biryani.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Rice' LIMIT 1), 'Mushroom Fry Rice', 'Wok-tossed fried rice with fresh mushrooms', 140.00, 'images/menu/Schezwan_Fried_Rice.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry Rice');
-UPDATE menu SET image = 'images/menu/Veg_Biryani.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry Rice';
+UPDATE menu SET image = 'images/menu/Schezwan_Fried_Rice.jpg', price = 140.00 WHERE restaurant_id = 3 AND item_name = 'Mushroom Fry Rice';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Roti', 'Fresh tandoori wheat roti', 10.00, 'images/menu/Butter_Roti.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Roti');
@@ -2153,25 +2153,25 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Butter Roti');
 UPDATE menu SET image = 'images/menu/Butter_Roti.jpg', price = 15.00 WHERE restaurant_id = 3 AND item_name = 'Butter Roti';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Parotha', 'Layered flaky whole-wheat paratha', 30.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 30.00 WHERE restaurant_id = 3 AND item_name = 'Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 30.00 WHERE restaurant_id = 3 AND item_name = 'Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Butter Parotha', 'Flaky layered paratha with butter', 35.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Butter Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 35.00 WHERE restaurant_id = 3 AND item_name = 'Butter Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 35.00 WHERE restaurant_id = 3 AND item_name = 'Butter Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Masala Parotha', 'Spiced crispy layered paratha', 50.00, 'images/menu/Plain_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Masala Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Masala Parotha';
+UPDATE menu SET image = 'images/menu/Plain_Paratha.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Masala Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Aalu Parotha', 'Stuffed spiced potato paratha', 50.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Aalu Parotha');
 UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Aalu Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Aloo_Paratha.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Paneer Parotha', 'Stuffed spiced cottage cheese paratha', 70.00, 'images/menu/Paneer_Paratha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Paneer Parotha');
-UPDATE menu SET image = 'images/menu/Aloo_Paratha.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Paneer Parotha';
+UPDATE menu SET image = 'images/menu/Paneer_Paratha.jpg', price = 70.00 WHERE restaurant_id = 3 AND item_name = 'Paneer Parotha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Naan', 'Soft tandoor-baked naan', 30.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Naan');
@@ -2185,9 +2185,9 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Kashmiri Naan');
 UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 3 AND item_name = 'Kashmiri Naan';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Butter_Naan.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Roti' LIMIT 1), 'Kulcha', 'Soft tandoor-baked kulcha', 40.00, 'images/menu/Kulcha.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Kulcha');
-UPDATE menu SET image = 'images/menu/Butter_Naan.png', price = 40.00 WHERE restaurant_id = 3 AND item_name = 'Kulcha';
+UPDATE menu SET image = 'images/menu/Kulcha.jpg', price = 40.00 WHERE restaurant_id = 3 AND item_name = 'Kulcha';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Papad' LIMIT 1), 'Roast Papad', 'Crisp flame-roasted urad papad', 20.00, 'images/menu/Masala_Papad.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Roast Papad');
@@ -2205,25 +2205,25 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Papad Burji');
 UPDATE menu SET image = 'images/menu/Masala_Papad.jpg', price = 50.00 WHERE restaurant_id = 3 AND item_name = 'Papad Burji';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Thums Up', 'Chilled Thums Up soft drink', 20.00, 'images/menu/Thums_Up.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Thums Up');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Thums Up';
+UPDATE menu SET image = 'images/menu/Thums_Up.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Thums Up';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Limca', 'Chilled lemon-lime Limca', 20.00, 'images/menu/Limca.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Limca');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Limca';
+UPDATE menu SET image = 'images/menu/Limca.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Limca';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Mango_Juice.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Maaza', 'Chilled mango drink', 20.00, 'images/menu/Maaza.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Maaza');
-UPDATE menu SET image = 'images/menu/Mango_Juice.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Maaza';
+UPDATE menu SET image = 'images/menu/Maaza.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Maaza';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Soda', 'Chilled sparkling soda', 15.00, 'images/menu/Soda_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 15.00 WHERE restaurant_id = 3 AND item_name = 'Soda';
+UPDATE menu SET image = 'images/menu/Soda_Water.jpg', price = 15.00 WHERE restaurant_id = 3 AND item_name = 'Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Virgin_Mojito.png', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Jeera Soda', 'Refreshing cumin-spiced jeera soda', 20.00, 'images/menu/Jeera_Soda.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Jeera Soda');
-UPDATE menu SET image = 'images/menu/Virgin_Mojito.png', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Jeera Soda';
+UPDATE menu SET image = 'images/menu/Jeera_Soda.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Jeera Soda';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
 SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Lassi', 'Creamy chilled sweet Punjabi lassi', 20.00, 'images/menu/Lassi.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Lassi');
@@ -2233,7 +2233,7 @@ SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Tak');
 UPDATE menu SET image = 'images/menu/Chaas_Tak.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Tak';
 INSERT INTO menu (restaurant_id, category_id, item_name, description, price, image, status)
-SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Blue_Lagoon.jpg', 'AVAILABLE'
+SELECT 3, (SELECT category_id FROM category WHERE restaurant_id = 3 AND category_name = 'Cold Drinks' LIMIT 1), 'Mineral Water', 'Packaged 1L mineral drinking water', 20.00, 'images/menu/Mineral_Water.jpg', 'AVAILABLE'
 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE restaurant_id = 3 AND item_name = 'Mineral Water');
-UPDATE menu SET image = 'images/menu/Blue_Lagoon.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Mineral Water';
+UPDATE menu SET image = 'images/menu/Mineral_Water.jpg', price = 20.00 WHERE restaurant_id = 3 AND item_name = 'Mineral Water';
 
