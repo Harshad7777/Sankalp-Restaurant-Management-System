@@ -56,6 +56,7 @@ public class ApiProxyServlet extends HttpServlet {
             this.proxyTarget = normalized;
         }
         this.httpClient = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
                 .connectTimeout(Duration.ofSeconds(30))
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
@@ -131,10 +132,14 @@ public class ApiProxyServlet extends HttpServlet {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            resp.sendError(HttpServletResponse.SC_GATEWAY_TIMEOUT, "Backend request interrupted.");
+            resp.setStatus(HttpServletResponse.SC_GATEWAY_TIMEOUT);
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"error\":\"Backend request interrupted.\"}");
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY,
-                    "Failed to reach backend service: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+            resp.setContentType("application/json");
+            String msg = e.getMessage() != null ? e.getMessage().replace("\"", "'") : e.getClass().getSimpleName();
+            resp.getWriter().write("{\"error\":\"Failed to reach backend service: " + msg + "\"}");
         }
     }
 }
