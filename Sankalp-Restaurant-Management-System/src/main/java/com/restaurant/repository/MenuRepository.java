@@ -58,10 +58,15 @@ public class MenuRepository {
     }
 
     public int delete(int id) {
+        Integer resId = SecurityUtil.getCurrentRestaurantId();
+        jdbcTemplate.update(
+                "DELETE FROM order_details WHERE item_id = ? AND order_id IN (SELECT order_id FROM orders WHERE restaurant_id = ?)",
+                id,
+                resId);
         return jdbcTemplate.update(
                 MenuQueries.DELETE_BY_ID,
                 id,
-                SecurityUtil.getCurrentRestaurantId());
+                resId);
     }
 
     public Menu findById(int id) {
