@@ -61,15 +61,22 @@ public class ApiProxyServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        if (proxyTarget == null || proxyTarget.isBlank()) {
-            resp.sendError(HttpServletResponse.SC_BAD_GATEWAY,
-                    "API_PROXY_TARGET is not configured on the frontend service.");
-            return;
+        String effectiveTarget = proxyTarget;
+        if (effectiveTarget == null || effectiveTarget.isBlank()) {
+            String serverName = req.getServerName();
+            if (serverName != null && serverName.endsWith(".onrender.com")) {
+                effectiveTarget = "https://sankalp-rms-api.onrender.com";
+            } else {
+                resp.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+                resp.setContentType("application/json");
+                resp.getWriter().write("{\"error\":\"API_PROXY_TARGET is not configured on the frontend service.\"}");
+                return;
+            }
         }
 
         String pathInfo = req.getPathInfo() != null ? req.getPathInfo() : "";
         String query = req.getQueryString();
-        String targetUrl = proxyTarget + "/api" + pathInfo + (query != null ? "?" + query : "");
+        String targetUrl = effectiveTarget + "/api" + pathInfo + (query != null ? "?" + query : "");
 
         HttpRequest.BodyPublisher bodyPublisher;
         String method = req.getMethod().toUpperCase();
