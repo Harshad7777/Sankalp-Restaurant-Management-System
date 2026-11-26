@@ -23,7 +23,7 @@ services:
       - key: MAIL_ENABLED
         value: "false"
       - key: SWAGGER_ENABLED
-        value: "true"
+        value: "false"
       - key: DB_URL
         sync: false
       - key: DB_USERNAME
