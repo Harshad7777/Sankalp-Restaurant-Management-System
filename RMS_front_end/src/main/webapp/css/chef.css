@@ -63,7 +63,7 @@ body {
 
 .refresh-btn {
     border: 1px solid var(--border);
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     padding: 9px 18px;
     border-radius: var(--radius-pill);
     cursor: pointer;
@@ -105,7 +105,7 @@ body {
 }
 
 .kitchen-stat-card {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 20px;
@@ -185,7 +185,7 @@ body {
 ========================================================= */
 
 .kitchen-toolbar {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 12px 18px;
@@ -294,7 +294,7 @@ body {
 ========================================================= */
 
 .kitchen-order-card {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -522,7 +522,7 @@ body {
 }
 
 .btn-view {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border: 1px solid var(--border);
     color: var(--text-secondary);
 }
@@ -613,7 +613,8 @@ body {
     width: 650px;
     max-width: calc(100% - 30px);
     margin: 70px auto;
-    background: white;
+    background: var(--card-bg, #ffffff);
+    color: var(--text-primary);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
@@ -774,4 +775,55 @@ body {
         grid-template-columns: 1fr;
     }
 
+}
+
+/* =========================================================
+   DARK MODE OVERRIDES
+   ========================================================= */
+
+[data-theme="dark"] .kitchen-search input {
+    background: var(--card-bg-subtle);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .kitchen-search input::placeholder {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .status-served {
+    background: rgba(148, 163, 184, 0.16);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .order-note {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .btn-view {
+    background: var(--card-bg-subtle);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-close {
+    background: var(--card-bg-subtle);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-item {
+    background: var(--card-bg-subtle);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-note {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .modal-note p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .modal-info-grid label {
+    color: var(--text-muted);
 }

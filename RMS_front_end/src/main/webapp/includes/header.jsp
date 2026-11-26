@@ -130,7 +130,7 @@
 
     <link
         rel="stylesheet"
-        href="${pageContext.request.contextPath}/css/<%= pageCss %>?v=1.0.0">
+        href="${pageContext.request.contextPath}/css/<%= pageCss %>?v=1.0.1">
 
     <script src="${pageContext.request.contextPath}/js/config.js?v=1.0.0"></script>
 
