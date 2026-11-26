@@ -30,7 +30,7 @@
     <link rel="icon" type="image/png" href="<%= contextPath %>/images/logo1.png" id="dynamicFavicon">
 
     <!-- Landing CSS -->
-    <link rel="stylesheet" href="<%= contextPath %>/css/landing.css?v=1.0.1">
+    <link rel="stylesheet" href="<%= contextPath %>/css/landing.css?v=1.0.2">
 </head>
 
 <body>
