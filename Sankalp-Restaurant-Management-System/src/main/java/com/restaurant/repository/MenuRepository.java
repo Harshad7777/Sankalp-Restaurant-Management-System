@@ -60,7 +60,7 @@ public class MenuRepository {
     public int delete(int id) {
         Integer resId = SecurityUtil.getCurrentRestaurantId();
         jdbcTemplate.update(
-                "DELETE FROM order_details WHERE item_id = ? AND order_id IN (SELECT order_id FROM orders WHERE restaurant_id = ?)",
+                "DELETE od FROM order_details od INNER JOIN menu m ON od.item_id = m.item_id WHERE m.item_id = ? AND m.restaurant_id = ?",
                 id,
                 resId);
         return jdbcTemplate.update(
