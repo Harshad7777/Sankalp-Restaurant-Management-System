@@ -31,7 +31,7 @@ USER appuser
 
 ENV PORT=8080
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:+UseSerialGC -Xms128m -Xmx320m -Djava.awt.headless=true -Dfile.encoding=UTF-8"
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xms128m -Xmx320m -Djava.awt.headless=true -Dfile.encoding=UTF-8"
 
 EXPOSE 8080
 
