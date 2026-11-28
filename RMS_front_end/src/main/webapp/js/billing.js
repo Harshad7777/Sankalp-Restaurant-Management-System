@@ -3898,7 +3898,7 @@
         }
         const billId = state.selectedBill.billId;
         try {
-            const res = await fetch(`/api/payment/qr-code/${billId}`);
+            const res = await fetch(`/api/payment/qr-code/${billId}`, { headers: { Authorization: "Bearer " + getToken() } });
             const data = await res.json();
             if (data && data.qrCodeBase64) {
                 document.getElementById("qrModalImg").src = data.qrCodeBase64;

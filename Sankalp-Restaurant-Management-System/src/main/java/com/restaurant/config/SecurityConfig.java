@@ -100,13 +100,12 @@ public class SecurityConfig {
                     "/v3/api-docs",
                     "/integrations/**",
                     "/payment/verify",
-                    "/payment/qr-code/**",
-                    "/accounting/**",
-                    "/api/accounting/**",
-                    "/notifications/**",
-                    "/api/notifications/**",
-                    "/recipe/**",
-                    "/api/recipe/**",
+                    "/api/payment/verify"
+                )
+                .permitAll()
+
+                .requestMatchers(
+                    HttpMethod.GET,
                     "/modifiers/**",
                     "/api/modifiers/**"
                 )
@@ -115,14 +114,9 @@ public class SecurityConfig {
                 .requestMatchers(
                     HttpMethod.POST,
                     "/reservation",
-                    "/reservation/"
-                )
-                .permitAll()
-
-                .requestMatchers(
-                    HttpMethod.GET,
-                    "/reservation",
-                    "/reservation/**"
+                    "/reservation/",
+                    "/reservations",
+                    "/reservations/"
                 )
                 .permitAll()
 
@@ -144,15 +138,27 @@ public class SecurityConfig {
 
 
                 // =================================================
-                // ADMIN ONLY - USERS
+                // ADMIN ONLY - USERS, ACCOUNTING, MODIFIERS WRITE
                 // =================================================
 
                 .requestMatchers("/users/**")
                 .hasRole("ADMIN")
 
+                .requestMatchers(
+                    "/accounting/**",
+                    "/api/accounting/**"
+                )
+                .hasRole("ADMIN")
+
+                .requestMatchers(
+                    "/modifiers/**",
+                    "/api/modifiers/**"
+                )
+                .hasRole("ADMIN")
+
 
                 // =================================================
-                // CATEGORY
+                // CATEGORY & MENU
                 // GET = PUBLIC (for landing page & customers)
                 // POST/PUT/DELETE = ADMIN
                 // =================================================
@@ -164,42 +170,58 @@ public class SecurityConfig {
                 .requestMatchers(
                     HttpMethod.GET,
                     "/category",
-                    "/category/**"
+                    "/category/**",
+                    "/categories",
+                    "/categories/**"
                 )
                 .permitAll()
 
                 .requestMatchers(
                     HttpMethod.POST,
                     "/category",
-                    "/category/**"
+                    "/category/**",
+                    "/categories",
+                    "/categories/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.PUT,
                     "/category",
-                    "/category/**"
+                    "/category/**",
+                    "/categories",
+                    "/categories/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.DELETE,
                     "/category",
-                    "/category/**"
+                    "/category/**",
+                    "/categories",
+                    "/categories/**"
                 )
                 .hasRole("ADMIN")
 
 
                 // =================================================
-                // TABLE & RESERVATIONS
+                // TABLE, RESERVATIONS, NOTIFICATIONS & PAYMENTS
                 // ADMIN + STAFF
                 // =================================================
 
                 .requestMatchers(
                     "/table",
                     "/table/**",
+                    "/tables",
+                    "/tables/**",
                     "/reservation",
-                    "/reservation/**"
+                    "/reservation/**",
+                    "/reservations",
+                    "/reservations/**",
+                    "/notifications/**",
+                    "/api/notifications/**",
+                    "/payment/**",
+                    "/api/payment/**"
                 )
                 .hasAnyRole(
                     "ADMIN",
@@ -216,28 +238,36 @@ public class SecurityConfig {
                 .requestMatchers(
                     HttpMethod.GET,
                     "/menu",
-                    "/menu/**"
+                    "/menu/**",
+                    "/menus",
+                    "/menus/**"
                 )
                 .permitAll()
 
                 .requestMatchers(
                     HttpMethod.POST,
                     "/menu",
-                    "/menu/**"
+                    "/menu/**",
+                    "/menus",
+                    "/menus/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.PUT,
                     "/menu",
-                    "/menu/**"
+                    "/menu/**",
+                    "/menus",
+                    "/menus/**"
                 )
                 .hasRole("ADMIN")
 
                 .requestMatchers(
                     HttpMethod.DELETE,
                     "/menu",
-                    "/menu/**"
+                    "/menu/**",
+                    "/menus",
+                    "/menus/**"
                 )
                 .hasRole("ADMIN")
 
@@ -246,8 +276,21 @@ public class SecurityConfig {
                 // REPORT
                 // =================================================
 
-                .requestMatchers("/report/**")
+                .requestMatchers("/report/**", "/reports/**")
                 .hasRole("ADMIN")
+
+
+                // =================================================
+                // RECIPES (ADMIN + CHEF)
+                // =================================================
+
+                .requestMatchers(
+                    "/recipe/**",
+                    "/recipes/**",
+                    "/api/recipe/**",
+                    "/api/recipes/**"
+                )
+                .hasAnyRole("ADMIN", "CHEF")
 
 
                 // =================================================
@@ -287,7 +330,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF
                 // =================================================
 
-                .requestMatchers("/customer/**")
+                .requestMatchers("/customer/**", "/customers/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF"
@@ -300,7 +343,8 @@ public class SecurityConfig {
                 // =================================================
 
                 .requestMatchers(
-                    "/order/kitchen/**"
+                    "/order/kitchen/**",
+                    "/orders/kitchen/**"
                 )
                 .hasAnyRole(
                     "CHEF",
@@ -313,7 +357,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF + CHEF
                 // =================================================
 
-                .requestMatchers("/order/**")
+                .requestMatchers("/order/**", "/orders/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF",
@@ -326,7 +370,7 @@ public class SecurityConfig {
                 // ADMIN + STAFF
                 // =================================================
 
-                .requestMatchers("/bill/**")
+                .requestMatchers("/bill/**", "/bills/**")
                 .hasAnyRole(
                     "ADMIN",
                     "STAFF"

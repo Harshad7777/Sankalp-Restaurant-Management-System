@@ -49,7 +49,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (!token.isEmpty()) {
                 try {
                     username = jwtUtil.extractUsername(token);
-                    restaurantId = jwtUtil.extractRestaurantId(token);
                 } catch (Exception e) {
                     logger.debug("JWT token error: {}", e.getMessage());
                 }
@@ -58,13 +57,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                if (userDetails instanceof CustomUserDetails customUserDetails) {
-                    restaurantId = customUserDetails.getRestaurantId();
-                }
-
                 if (jwtUtil.validateToken(token)) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                    if (userDetails instanceof CustomUserDetails customUserDetails) {
+                        restaurantId = customUserDetails.getRestaurantId();
+                    } else {
+                        restaurantId = jwtUtil.extractRestaurantId(token);
+                    }
+
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
@@ -77,15 +78,16 @@ public class JwtFilter extends OncePerRequestFilter {
                     );
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    if (restaurantId != null) {
+                        TenantContext.setCurrentRestaurantId(restaurantId);
+                    }
                 }
             } catch (Exception e) {
                 logger.debug("JWT authentication error: {}", e.getMessage());
                 SecurityContextHolder.clearContext();
+                TenantContext.clear();
             }
-        }
-
-        if (restaurantId != null) {
-            TenantContext.setCurrentRestaurantId(restaurantId);
         }
 
         try {

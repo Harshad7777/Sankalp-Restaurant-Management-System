@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -47,11 +43,13 @@ class JwtFilterTest {
     @BeforeEach
     void setUp() {
         SecurityContextHolder.clearContext();
+        TenantContext.clear();
     }
 
     @AfterEach
     void tearDown() {
         SecurityContextHolder.clearContext();
+        TenantContext.clear();
     }
 
     @Test
@@ -61,19 +59,48 @@ class JwtFilterTest {
 
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         when(jwtUtil.extractUsername(token)).thenReturn(username);
+        when(jwtUtil.validateToken(token)).thenReturn(true);
 
-        UserDetails userDetails = new User(
+        CustomUserDetails userDetails = new CustomUserDetails(
+            1,
             username,
             "password",
-            Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
+            "ADMIN",
+            3,
+            "Sankalp - Pune"
         );
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
-        when(jwtUtil.validateToken(token)).thenReturn(true);
+
+        doAnswer(invocation -> {
+            assertEquals(3, TenantContext.getCurrentRestaurantId());
+            return null;
+        }).when(filterChain).doFilter(request, response);
 
         jwtFilter.doFilterInternal(request, response, filterChain);
 
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals(username, SecurityContextHolder.getContext().getAuthentication().getName());
+        assertNull(TenantContext.getCurrentRestaurantId(), "TenantContext must be cleared after request");
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void testDoFilterInternal_InvalidValidationDoesNotSetTenantOrAuth() throws ServletException, IOException {
+        String token = "expired.or.forged.token";
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
+        when(jwtUtil.extractUsername(token)).thenReturn("spoofedUser");
+        when(jwtUtil.validateToken(token)).thenReturn(false);
+
+        doAnswer(invocation -> {
+            assertNull(TenantContext.getCurrentRestaurantId(), "Unvalidated token must never set TenantContext");
+            return null;
+        }).when(filterChain).doFilter(request, response);
+
+        jwtFilter.doFilterInternal(request, response, filterChain);
+
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertNull(TenantContext.getCurrentRestaurantId());
+        verify(userDetailsService, never()).loadUserByUsername(anyString());
         verify(filterChain, times(1)).doFilter(request, response);
     }
 

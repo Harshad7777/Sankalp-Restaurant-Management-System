@@ -70,13 +70,13 @@
 
                 </button>
 
-                <a href="/api/accounting/tally-xml" class="btn-export text-decoration-none bg-success text-white" style="padding: 10px 15px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                <button type="button" id="exportTallyXmlBtn" class="btn-export text-decoration-none bg-success text-white border-0" style="padding: 10px 15px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
                     <i class="fa-solid fa-file-code"></i> Tally XML
-                </a>
+                </button>
 
-                <a href="/api/accounting/quickbooks-csv" class="btn-export text-decoration-none bg-primary text-white" style="padding: 10px 15px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                <button type="button" id="exportQuickBooksCsvBtn" class="btn-export text-decoration-none bg-primary text-white border-0" style="padding: 10px 15px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
                     <i class="fa-solid fa-file-csv"></i> QuickBooks CSV
-                </a>
+                </button>
 
                 <button
                     type="button"

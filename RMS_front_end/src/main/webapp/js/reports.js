@@ -269,6 +269,20 @@ function initializeEvents() {
 
     }
 
+    const tallyBtn = document.getElementById("exportTallyXmlBtn");
+    if (tallyBtn) {
+        tallyBtn.addEventListener("click", function () {
+            downloadAccountingExport("/api/accounting/tally-xml", "Tally_Sales_Vouchers.xml");
+        });
+    }
+
+    const qbBtn = document.getElementById("exportQuickBooksCsvBtn");
+    if (qbBtn) {
+        qbBtn.addEventListener("click", function () {
+            downloadAccountingExport("/api/accounting/quickbooks-csv", "QuickBooks_Sales_Ledger.csv");
+        });
+    }
+
 
     // --------------------------------------------------------
     // PRINT
@@ -4514,3 +4528,30 @@ window.SankalpReports = {
 console.log(
     "Reports JS ready."
 );
+
+async function downloadAccountingExport(endpoint, filename) {
+    try {
+        const token = localStorage.getItem("token") || "";
+        const res = await fetch(endpoint, {
+            headers: token ? { "Authorization": "Bearer " + token } : {}
+        });
+        if (!res.ok) {
+            throw new Error("Export failed (HTTP " + res.status + ")");
+        }
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (err) {
+        if (typeof showToast === "function") {
+            showToast(err.message || "Accounting export failed", "error");
+        } else {
+            alert(err.message || "Accounting export failed");
+        }
+    }
+}
